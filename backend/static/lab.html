@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SnakeBiteRx — model lab (temporary)</title>
+  <style>
+    :root {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      --bg: #0f1419;
+      --card: #1a2332;
+      --muted: #8b9cb3;
+      --text: #e8eef5;
+      --accent: #38bdf8;
+      --ok: #4ade80;
+      --warn: #fbbf24;
+    }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.45; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+    h1 { font-size: 1.35rem; font-weight: 650; margin: 0 0 0.35rem; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.25rem; }
+    a { color: var(--accent); }
+    section {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 1rem 1rem 1.1rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    section h2 { font-size: 1rem; margin: 0 0 0.65rem; color: #cbd5e1; }
+    .hint { font-size: 0.78rem; color: var(--muted); margin: 0.35rem 0 0.6rem; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; color: #94a3b8; }
+    input, select, textarea, button {
+      width: 100%; box-sizing: border-box; margin-top: 3px;
+      padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12);
+      background: #0c1220; color: var(--text); font-size: 13px;
+    }
+    textarea { min-height: 72px; font-family: ui-monospace, monospace; }
+    button {
+      cursor: pointer; margin-top: 0.75rem; font-weight: 600;
+      background: linear-gradient(180deg, #2563eb, #1d4ed8);
+      border: none; color: white;
+    }
+    button:hover { filter: brightness(1.06); }
+    button.secondary { background: #334155; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    pre.out {
+      margin: 0.75rem 0 0; padding: 10px 12px; background: #0c1220;
+      border-radius: 8px; font-size: 11px; overflow: auto; max-height: 320px;
+      white-space: pre-wrap; word-break: break-word;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .bad { color: #f87171; }
+    .good { color: var(--ok); }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.75rem; background: #1e293b; color: var(--warn); }
+    .species li { margin: 4px 0; font-size: 0.88rem; }
+    .topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 1rem; }
+    #healthLine { font-size: 0.85rem; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .toolbar button { width: auto; flex: 1 1 200px; margin-top: 0; }
+    #outAll { max-height: 560px; }
+    #outFull { max-height: 560px; }
+    .symptom-panel { margin-top: 8px; }
+    .symptom-filter { margin-bottom: 8px; }
+    .symptom-meta { font-size: 0.78rem; color: var(--muted); margin: 6px 0 0; }
+    .symptom-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; align-items: center; }
+    .symptom-toolbar button { width: auto; margin-top: 0; flex: 0 1 auto; padding: 6px 10px; font-size: 12px; }
+    .symptom-list {
+      max-height: 320px;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #0c1220;
+    }
+    .symptom-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 5px 0;
+      font-size: 12px;
+      font-weight: normal;
+    }
+    .symptom-row input[type="checkbox"] { width: auto; margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+    .symptom-row label { margin-top: 0; font-weight: 400; color: var(--text); cursor: pointer; flex: 1; line-height: 1.35; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1>SnakeBiteRx model lab</h1>
+      <span class="pill">temporary test page</span>
+    </div>
+    <p class="sub">
+      Atomic tests: each <strong>wound backbone</strong> alone, then <strong>fused ensemble</strong>, then <strong>geo</strong>, <strong>symptoms</strong>, and <strong>full multimodal</strong>.
+      Snake names use <strong>common / generic</strong> labels from your geo CSV when present (scientific name shown as secondary). Not clinical ground truth.
+      · <a href="/ui/">simple UI</a> · <a href="/docs">API</a>
+    </p>
+    <p id="healthLine" class="sub"></p>
+    <p id="backboneHint" class="sub" style="font-size:0.82rem;"></p>
+
+    <section>
+      <h2>Pipeline — sample image &amp; run everything</h2>
+      <p class="hint">
+        <code>GET /test/sample_wound_image</code> returns a JPG from <code>data/geo_data/categories/hemotoxic/</code>.
+        <strong>Run all</strong> loads that sample (if you have not picked a file), then calls wound → geo → symptoms → full fusion in order.
+      </p>
+      <div class="toolbar">
+        <button type="button" id="btnSample" class="secondary">Load sample into wound + fusion file inputs</button>
+        <button type="button" id="btnRunAll">Run all steps (sequential)</button>
+      </div>
+      <pre id="outAll" class="out" hidden></pre>
+    </section>
+
+    <section>
+      <h2>Shared: region + symptoms (used by geo / symptoms / full)</h2>
+      <div class="row2">
+        <div>
+          <label>Country</label>
+          <select id="country"></select>
+        </div>
+        <div>
+          <label>State</label>
+          <select id="state"></select>
+        </div>
+      </div>
+      <label>Signs &amp; symptoms — pick what applies (plain language; same data as <a href="/symptoms" target="_blank">/symptoms</a>)</label>
+      <p class="hint" style="margin-top:4px;">Each line is short wording for the patient. The app still sends the correct medical codes in the background.</p>
+      <input type="search" id="symptomFilter" class="symptom-filter" placeholder="Filter list…" autocomplete="off" />
+      <div class="symptom-toolbar">
+        <button type="button" class="secondary" id="symptomClear">Clear all</button>
+        <button type="button" class="secondary" id="symptomSelectFiltered">Select visible</button>
+        <button type="button" class="secondary" id="symptomClearFiltered">Clear visible</button>
+      </div>
+      <div id="symptomChooser" class="symptom-list" aria-label="Symptom checkboxes"></div>
+      <p id="symptomMeta" class="symptom-meta"></p>
+    </section>
+
+    <section>
+      <h2>Wound image (shared file input)</h2>
+      <p class="hint">Use the same upload for fused ensemble and each backbone below.</p>
+      <input type="file" id="woundFile" accept="image/*" />
+    </section>
+
+    <section>
+      <h2>Wound — atomic (one backbone each)</h2>
+      <p class="hint">POST <code>/test/wound/backbone</code> with <code>backbone</code> = efficientnet_b3 | resnet50 | densenet121. Requires <code>wound_ensemble.pt</code>.</p>
+      <div class="toolbar">
+        <button type="button" class="secondary" id="btnEff">EfficientNet-B3</button>
+        <button type="button" class="secondary" id="btnRes">ResNet50</button>
+        <button type="button" class="secondary" id="btnDen">DenseNet121</button>
+      </div>
+      <pre id="outAtomic" class="out" hidden></pre>
+    </section>
+
+    <section>
+      <h2>Wound — fused ensemble</h2>
+      <p class="hint">POST <code>/test/wound</code> — Equal-weight average of the three softmax vectors; <code>wound_detail.models</code> has per-backbone top class + confidence.</p>
+      <button type="button" id="btnWound">Run fused wound model</button>
+      <pre id="outWound" class="out" hidden></pre>
+    </section>
+
+    <section>
+      <h2>Geo prior only</h2>
+      <p class="hint">POST <code>/test/geo</code> — Venom-type distribution from GBIF counts for country/state; species ranks from that distribution.</p>
+      <button type="button" id="btnGeo" class="secondary">Run geo prior</button>
+      <pre id="outGeo" class="out" hidden></pre>
+    </section>
+
+    <section>
+      <h2>Symptoms only</h2>
+      <p class="hint">POST <code>/test/symptoms</code> — Knowledge-base weights; no image.</p>
+      <button type="button" id="btnSym" class="secondary">Run symptom engine</button>
+      <pre id="outSym" class="out" hidden></pre>
+    </section>
+
+    <section>
+      <h2>Full multimodal fusion</h2>
+      <p class="hint">
+        POST <code>/predict</code> — Wound CNN (weighted average of the three softmax vectors) combined with symptoms, geo, and context in log-space.
+        <strong>Final top class</strong> can differ from each backbone when symptoms/geo/context push another venom type.
+        Blur / low-detail photos get a <strong>retake</strong> hint (sharpness score).
+      </p>
+      <input type="file" id="fullFile" accept="image/*" />
+      <div class="row2" style="margin-top:8px">
+        <div>
+          <label>Time since bite (h)</label>
+          <input type="number" id="time" value="3" min="0" step="0.5" />
+        </div>
+        <div>
+          <label>Circumstance</label>
+          <select id="circ">
+            <option value="unknown">unknown</option>
+            <option value="nocturnal_indoor_sleeping">nocturnal_indoor_sleeping</option>
+            <option value="daytime_outdoor">daytime_outdoor</option>
+            <option value="overnight_emns">overnight_emns</option>
+          </select>
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label>Age</label>
+          <input type="number" id="age" value="35" />
+        </div>
+        <div>
+          <label>Weight (kg)</label>
+          <input type="number" id="wt" value="60" />
+        </div>
+      </div>
+      <button type="button" id="btnFull">Run full fusion</button>
+      <pre id="outFull" class="out" hidden></pre>
+    </section>
+  </div>
+
+  <script>
+    const countryEl = document.getElementById("country");
+    const stateEl = document.getElementById("state");
+    let statesByCountry = {};
+
+    function show(el, obj, ok) {
+      el.hidden = false;
+      el.className = "out " + (ok ? "good" : "bad");
+      el.textContent = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+    }
+
+    function formatSpecies(j) {
+      const rows = j.snake_species_top || [];
+      if (!rows.length) return "";
+      const lines = rows.map((r, idx) => {
+        const common = r.name || r.species || "?";
+        const sci = r.scientific_name ? " — " + r.scientific_name : "";
+        const sc =
+          r.score != null && typeof r.score === "number"
+            ? "  score=" + r.score.toFixed(4)
+            : r.score != null
+              ? "  score=" + r.score
+              : "";
+        const raw = "\n     full: " + JSON.stringify(r);
+        return "  " + (idx + 1) + ". " + common + sci + sc + raw;
+      });
+      return "\nLikely snakes (sorted by score, all fields):\n" + lines.join("\n");
+    }
+
+    function formatRankedSymptoms(j) {
+      const r = j.selected_symptoms_ranked;
+      if (!r || !r.length) return "";
+      const lines = r.map((x, i) => {
+        const lab = x.label ? x.label + " — " : "";
+        const cat = x.category ? "[" + x.category + "] " : "";
+        return "  " + (i + 1) + ". " + cat + lab + "salience=" + x.salience + "  (value: " + x.value + ")";
+      });
+      return "\nYour symptoms — ranked by overlap with the combined symptom profile (higher salience first):\n" + lines.join("\n");
+    }
+
+    function formatWoundDetail(j) {
+      const d = j.wound_detail;
+      if (!d || !d.models) return "";
+      let s = "\nPer-backbone (embedded in fused response):\n";
+      for (const k of Object.keys(d.models)) {
+        const v = d.models[k];
+        s += "  " + k + ": top " + v.top_class + " @ " + (100 * v.top_confidence).toFixed(1) + "%\n";
+      }
+      return s;
+    }
+
+    async function loadRegions() {
+      const r = await fetch("/geo/regions");
+      const d = await r.json();
+      statesByCountry = d.states_by_country || {};
+      countryEl.innerHTML = "";
+      (d.countries || []).forEach((c) => {
+        const o = document.createElement("option");
+        o.value = c;
+        o.textContent = c;
+        countryEl.appendChild(o);
+      });
+      for (let i = 0; i < countryEl.options.length; i++) {
+        if (countryEl.options[i].value === "India") {
+          countryEl.selectedIndex = i;
+          break;
+        }
+      }
+      refreshStates();
+    }
+
+    function refreshStates() {
+      const c = countryEl.value;
+      const list = statesByCountry[c] || [];
+      stateEl.innerHTML = "";
+      const empty = document.createElement("option");
+      empty.value = "";
+      empty.textContent = "(country average)";
+      stateEl.appendChild(empty);
+      list.forEach((s) => {
+        const o = document.createElement("option");
+        o.value = s;
+        o.textContent = s;
+        stateEl.appendChild(o);
+      });
+      const prefer = "Karnataka";
+      for (let i = 0; i < stateEl.options.length; i++) {
+        if (stateEl.options[i].value === prefer) {
+          stateEl.selectedIndex = i;
+          break;
+        }
+      }
+    }
+
+    function selectedSymptomsJson() {
+      const boxes = document.querySelectorAll('#symptomChooser input[type="checkbox"]:checked');
+      const arr = Array.from(boxes).map((cb) => cb.value);
+      return JSON.stringify(arr);
+    }
+
+    function updateSymptomMeta() {
+      const meta = document.getElementById("symptomMeta");
+      const n = document.querySelectorAll('#symptomChooser input[type="checkbox"]:checked').length;
+      const total = document.querySelectorAll('#symptomChooser input[type="checkbox"]').length;
+      if (meta) meta.textContent = total ? n + " selected · " + total + " in catalog" : "";
+    }
+
+    async function loadSymptoms() {
+      const box = document.getElementById("symptomChooser");
+      const r = await fetch("/symptoms");
+      if (!r.ok) throw new Error(await r.text());
+      const d = await r.json();
+      const items =
+        d.items && d.items.length
+          ? d.items
+          : (d.symptoms || []).map((s) => ({ value: s, label: s, category: "" }));
+      items.sort((a, b) => {
+        const ca = (a.category || "").toLowerCase();
+        const cb = (b.category || "").toLowerCase();
+        if (ca !== cb) return ca.localeCompare(cb);
+        return (a.label || "").localeCompare(b.label || "", undefined, { sensitivity: "base" });
+      });
+      box.innerHTML = "";
+      const frag = document.createDocumentFragment();
+      items.forEach((it, i) => {
+        const row = document.createElement("div");
+        row.className = "symptom-row";
+        const display = (it.category ? it.category + " — " : "") + (it.label || it.value);
+        row.dataset.filter = (display + " " + (it.value || "")).toLowerCase();
+        const id = "symptom-cb-" + i;
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.id = id;
+        cb.value = it.value;
+        if (it.value === "ptosis") cb.checked = true;
+        cb.addEventListener("change", updateSymptomMeta);
+        const lab = document.createElement("label");
+        lab.htmlFor = id;
+        lab.textContent = display;
+        lab.title = it.value;
+        row.appendChild(cb);
+        row.appendChild(lab);
+        frag.appendChild(row);
+      });
+      box.appendChild(frag);
+      updateSymptomMeta();
+
+      const filterEl = document.getElementById("symptomFilter");
+      const applyFilter = () => {
+        const q = (filterEl && filterEl.value.trim().toLowerCase()) || "";
+        box.querySelectorAll(".symptom-row").forEach((row) => {
+          const ok = !q || (row.dataset.filter && row.dataset.filter.includes(q));
+          row.style.display = ok ? "" : "none";
+        });
+      };
+      if (filterEl) filterEl.oninput = applyFilter;
+
+      document.getElementById("symptomClear").onclick = () => {
+        box.querySelectorAll('input[type="checkbox"]').forEach((c) => {
+          c.checked = false;
+        });
+        updateSymptomMeta();
+      };
+      document.getElementById("symptomSelectFiltered").onclick = () => {
+        box.querySelectorAll(".symptom-row").forEach((row) => {
+          if (row.style.display === "none") return;
+          const c = row.querySelector('input[type="checkbox"]');
+          if (c) c.checked = true;
+        });
+        updateSymptomMeta();
+      };
+      document.getElementById("symptomClearFiltered").onclick = () => {
+        box.querySelectorAll(".symptom-row").forEach((row) => {
+          if (row.style.display === "none") return;
+          const c = row.querySelector('input[type="checkbox"]');
+          if (c) c.checked = false;
+        });
+        updateSymptomMeta();
+      };
+    }
+
+    function sharedForm() {
+      const fd = new FormData();
+      fd.append("country", countryEl.value);
+      fd.append("state", stateEl.value || "");
+      fd.append("symptoms", selectedSymptomsJson());
+      return fd;
+    }
+
+    async function loadSampleIntoInputs() {
+      const r = await fetch("/test/sample_wound_image");
+      if (!r.ok) throw new Error(await r.text());
+      const blob = await r.blob();
+      const file = new File([blob], "sample_hemotoxic.jpg", { type: blob.type || "image/jpeg" });
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      document.getElementById("woundFile").files = dt.files;
+      document.getElementById("fullFile").files = dt.files;
+    }
+
+    async function postWound() {
+      const f = document.getElementById("woundFile").files[0];
+      if (!f) throw new Error("No image — choose a file or click Load sample.");
+      const fd = sharedForm();
+      fd.append("file", f);
+      const r = await fetch("/test/wound", { method: "POST", body: fd });
+      const t = await r.text();
+      const j = JSON.parse(t);
+      if (!r.ok) throw new Error(t);
+      return j;
+    }
+
+    async function postWoundBackbone(name) {
+      const f = document.getElementById("woundFile").files[0];
+      if (!f) throw new Error("Choose a wound image first.");
+      const buildFd = () => {
+        const fd = sharedForm();
+        fd.append("file", f);
+        fd.append("backbone", name);
+        return fd;
+      };
+      let r = await fetch("/test/wound/backbone", { method: "POST", body: buildFd() });
+      if (r.status === 404) {
+        r = await fetch("/test/wound_backbone", { method: "POST", body: buildFd() });
+      }
+      const t = await r.text();
+      let j;
+      try {
+        j = JSON.parse(t);
+      } catch (_) {
+        throw new Error(t || "non-JSON response");
+      }
+      if (!r.ok) throw new Error(t);
+      if (j.error) throw new Error(j.error + (j.available ? " — have: " + j.available.join(", ") : ""));
+      return j;
+    }
+
+    async function postGeo() {
+      const fd = sharedForm();
+      const r = await fetch("/test/geo", { method: "POST", body: fd });
+      const t = await r.text();
+      const j = JSON.parse(t);
+      if (!r.ok) throw new Error(t);
+      return j;
+    }
+
+    async function postSymptoms() {
+      const fd = sharedForm();
+      const r = await fetch("/test/symptoms", { method: "POST", body: fd });
+      const t = await r.text();
+      const j = JSON.parse(t);
+      if (!r.ok) throw new Error(t);
+      return j;
+    }
+
+    async function postFull() {
+      const f = document.getElementById("fullFile").files[0];
+      if (!f) throw new Error("No image for full fusion — choose a file or click Load sample.");
+      const fd = new FormData();
+      fd.append("file", f);
+      fd.append("symptoms", selectedSymptomsJson());
+      fd.append("country", countryEl.value);
+      fd.append("state", stateEl.value || "");
+      fd.append("time_since_bite_hours", document.getElementById("time").value);
+      fd.append("bite_circumstance", document.getElementById("circ").value);
+      fd.append("age_years", document.getElementById("age").value);
+      fd.append("weight_kg", document.getElementById("wt").value);
+      const r = await fetch("/predict", { method: "POST", body: fd });
+      const t = await r.text();
+      const j = JSON.parse(t);
+      if (!r.ok) throw new Error(t);
+      return j;
+    }
+
+    function summarizeStep(title, j, probKey) {
+      const lines = [];
+      if (title) lines.push(title);
+      lines.push(
+        "  top_class: " + j.top_class + "  (" + (100 * j.top_confidence).toFixed(1) + "%)"
+      );
+      if (probKey && j[probKey] != null) {
+        lines.push("  " + probKey + ": " + JSON.stringify(j[probKey]));
+      }
+      lines.push(formatWoundDetail(j).trim());
+      lines.push(formatRankedSymptoms(j).trim());
+      lines.push(formatSpecies(j).trim());
+      return lines.filter(Boolean).join("\n");
+    }
+
+    function formatImageQualityBanner(j) {
+      const iq = j.image_quality;
+      if (!iq) return "";
+      const parts = [];
+      if (iq.sharpness_score != null) {
+        parts.push("Sharpness score: " + iq.sharpness_score + (iq.blur_threshold != null ? " (threshold " + iq.blur_threshold + ")" : ""));
+      }
+      if (iq.recommend_retake && iq.message) {
+        parts.push("RETAKE / RE-UPLOAD: " + iq.message);
+      }
+      return parts.length ? parts.join("\n") + "\n\n" : "";
+    }
+
+    function formatFullFusionBlock(j) {
+      const lines = [];
+      lines.push(formatImageQualityBanner(j).trim());
+      lines.push("--- Wound branch (EfficientNet-B3 0.5 + ResNet50 0.3 + DenseNet121 0.2 softmax blend) ---");
+      if (j.wound_uncertain === true) {
+        lines.push("  ⚠ wound_uncertain: true  →  wound_effective_class: " + (j.wound_effective_class || "unknown") + " (max prob < 0.60)");
+      } else {
+        lines.push("  wound_uncertain: false  →  wound_effective_class: " + (j.wound_effective_class || j.wound_only_top_class));
+      }
+      if (j.wound_ensemble_max_confidence != null) {
+        lines.push("  wound_ensemble_max_confidence: " + j.wound_ensemble_max_confidence);
+      }
+      lines.push(
+        "  wound argmax (top class): " +
+          (j.wound_only_top_class || "?") +
+          " @ " +
+          (j.wound_only_confidence != null ? (100 * j.wound_only_confidence).toFixed(1) : "?") +
+          "%"
+      );
+      lines.push("  wound_probability: " + JSON.stringify(j.wound_probability));
+      if (j.disclaimer && j.disclaimer.summary) {
+        lines.push("\nDisclaimer: " + j.disclaimer.summary);
+      }
+      lines.push(formatWoundDetail(j).trim());
+      lines.push("--- Other modalities (explain final vs wound-only) ---");
+      lines.push(
+        "  symptom_only_top: " +
+          (j.symptom_only_top_class || "?") +
+          " @ " +
+          (j.symptom_only_confidence != null ? (100 * j.symptom_only_confidence).toFixed(1) : "?") +
+          "%"
+      );
+      lines.push(
+        "  geo_only_top: " +
+          (j.geo_only_top_class || "?") +
+          " @ " +
+          (j.geo_only_confidence != null ? (100 * j.geo_only_confidence).toFixed(1) : "?") +
+          "%"
+      );
+      lines.push("--- Multimodal final (log-blend; NOT sum of three CNNs) ---");
+      lines.push("  top_class: " + j.top_class + "  (" + (100 * j.top_confidence).toFixed(1) + "%)");
+      lines.push("  final_probability: " + JSON.stringify(j.final_probability));
+      if (j.fusion_explanation && j.fusion_explanation.final_multimodal) {
+        lines.push("  " + j.fusion_explanation.final_multimodal);
+      }
+      lines.push(formatRankedSymptoms(j).trim());
+      lines.push(formatSpecies(j).trim());
+      lines.push("\n--- snake_species_debug (fusion details) ---\n" + JSON.stringify(j.snake_species_debug || {}, null, 2));
+      lines.push("\n--- debug (modality fusion) ---\n" + JSON.stringify(j.debug || {}, null, 2));
+      return lines.filter(Boolean).join("\n");
+    }
+
+    async function pingHealth() {
+      const line = document.getElementById("healthLine");
+      const hint = document.getElementById("backboneHint");
+      try {
+        const h = await fetch("/health").then((r) => r.json());
+        const bb = h.wound_backbones || [];
+        line.innerHTML =
+          '<span class="good">API up</span> — wound: ' +
+          (h.wound_model_loaded ? h.wound_mode || "loaded" : "MISSING") +
+          " · classes: " +
+          (h.classes || []).join(", ");
+        hint.textContent = bb.length
+          ? "Atomic backbones available: " + bb.join(", ") + "."
+          : "For per-backbone buttons, train and deploy models/wound_ensemble.pt (make train).";
+      } catch (e) {
+        line.innerHTML = '<span class="bad">Cannot reach /health — start the server (make api)</span>';
+        hint.textContent = "";
+      }
+    }
+
+    document.getElementById("btnSample").onclick = async () => {
+      const out = document.getElementById("outAll");
+      try {
+        await loadSampleIntoInputs();
+        show(out, "Loaded sample hemotoxic JPG into wound + fusion file inputs.", true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+
+    document.getElementById("btnRunAll").onclick = async () => {
+      const out = document.getElementById("outAll");
+      out.hidden = false;
+      out.className = "out";
+      out.textContent = "Running full pipeline…";
+      try {
+        if (!document.getElementById("woundFile").files[0]) await loadSampleIntoInputs();
+        const parts = [];
+        const j1 = await postWound();
+        parts.push(summarizeStep("Wound — fused ensemble", j1, "wound_probability"));
+        show(document.getElementById("outWound"), summarizeStep("Fused ensemble", j1, "wound_probability"), true);
+        const j2 = await postGeo();
+        parts.push(summarizeStep("Geo prior (GBIF)", j2, "geo_probability"));
+        show(document.getElementById("outGeo"), summarizeStep("Geo prior", j2, "geo_probability"), true);
+        const j3 = await postSymptoms();
+        if (j3.error) throw new Error(JSON.stringify(j3));
+        parts.push(summarizeStep("Symptom KB", j3, "symptom_probability") + "\n\n" + JSON.stringify(j3, null, 2));
+        show(
+          document.getElementById("outSym"),
+          summarizeStep("Symptom KB", j3, "symptom_probability") + "\n\n" + JSON.stringify(j3, null, 2),
+          true
+        );
+        const j4 = await postFull();
+        parts.push("Full fusion (/predict)\n" + formatFullFusionBlock(j4));
+        parts.push("\nFull JSON (predict):\n" + JSON.stringify(j4, null, 2));
+        show(
+          document.getElementById("outFull"),
+          formatFullFusionBlock(j4) + "\n\n" + JSON.stringify(j4, null, 2),
+          true
+        );
+        show(out, parts.join("\n\n"), true);
+      } catch (e) {
+        out.className = "out bad";
+        out.textContent = String(e);
+      }
+    };
+
+    function showAtomic(j) {
+      const lines = [
+        j.backbone + " — top: " + j.top_class + " @ " + (100 * j.top_confidence).toFixed(1) + "%",
+        "probability: " + JSON.stringify(j.wound_probability),
+        formatSpecies(j).trim(),
+        "\nraw: " + JSON.stringify(j.wound_backbone_detail || {}, null, 2),
+      ];
+      return lines.filter(Boolean).join("\n");
+    }
+
+    document.getElementById("btnEff").onclick = async () => {
+      const out = document.getElementById("outAtomic");
+      try {
+        const j = await postWoundBackbone("efficientnet_b3");
+        show(out, showAtomic(j), true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+    document.getElementById("btnRes").onclick = async () => {
+      const out = document.getElementById("outAtomic");
+      try {
+        const j = await postWoundBackbone("resnet50");
+        show(out, showAtomic(j), true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+    document.getElementById("btnDen").onclick = async () => {
+      const out = document.getElementById("outAtomic");
+      try {
+        const j = await postWoundBackbone("densenet121");
+        show(out, showAtomic(j), true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+
+    document.getElementById("btnWound").onclick = async () => {
+      const out = document.getElementById("outWound");
+      try {
+        const j = await postWound();
+        show(out, summarizeStep("Fused ensemble", j, "wound_probability") + "\n\n" + JSON.stringify(j, null, 2), true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+
+    document.getElementById("btnGeo").onclick = async () => {
+      const out = document.getElementById("outGeo");
+      try {
+        const j = await postGeo();
+        show(out, summarizeStep("Geo prior", j, "geo_probability"), true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+
+    document.getElementById("btnSym").onclick = async () => {
+      const out = document.getElementById("outSym");
+      try {
+        const j = await postSymptoms();
+        if (j.error) {
+          show(out, j, false);
+          return;
+        }
+        show(out, summarizeStep("Symptom KB", j, "symptom_probability"), true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+
+    document.getElementById("btnFull").onclick = async () => {
+      const out = document.getElementById("outFull");
+      try {
+        const j = await postFull();
+        show(out, formatFullFusionBlock(j) + "\n\n" + JSON.stringify(j, null, 2), true);
+      } catch (e) {
+        show(out, String(e), false);
+      }
+    };
+
+    countryEl.onchange = refreshStates;
+    Promise.all([loadRegions(), loadSymptoms()])
+      .then(() => pingHealth())
+      .catch((e) => {
+        console.error(e);
+        const line = document.getElementById("healthLine");
+        if (line) line.innerHTML = '<span class="bad">Failed to load regions or symptoms: ' + String(e) + "</span>";
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "generated_by": "scripts/build_symptom_dataset_from_who.py",
+  "outputs": {
+    "long_form": "../processed/symptom_dataset.csv",
+    "symptom_only_catalog": "../processed/symptom_catalog.csv",
+    "build_meta": "symptom_build_meta.json"
+  },
+  "who_pdf_local": "who_trs1004_annex5.pdf",
+  "who_pdf_url": "https://cdn.who.int/media/docs/default-source/biologicals/blood-products/document-migration/antivenomglrevwho_trs_1004_web_annex_5.pdf?sfvrsn=ef4b2aa5_3",
+  "who_fact_sheet_url": "https://www.who.int/news-room/fact-sheets/detail/snakebite-envenoming",
+  "coverage_note": "Snake list = ALL binomial/trinomial names successfully parsed from WHO TRS Annex 5 Appendix 1 in this PDF (medically important species). This is NOT every snake species on Earth (~4000+). Hydrophiidae may be absent as a separate family label in this appendix edition.",
+  "symptom_note": "Symptom rows = WHO TRS §19.3 / §20.2.3 + WHO fact sheet wording only (see symptom_catalog.csv).",
+  "rebuild_command": "python3 scripts/build_symptom_dataset_from_who.py"
+}

@@ -1,0 +1,17 @@
+{
+  "who_pdf": "/Users/nrnavaneet/Documents/Projects/SnakeBite/data_pipeline_snakebite/symptom_data/original/who_trs1004_annex5.pdf",
+  "who_pdf_url": "https://cdn.who.int/media/docs/default-source/biologicals/blood-products/document-migration/antivenomglrevwho_trs_1004_web_annex_5.pdf?sfvrsn=ef4b2aa5_3",
+  "who_fact_sheet_url": "https://www.who.int/news-room/fact-sheets/detail/snakebite-envenoming",
+  "species_per_family": {
+    "Elapidae": 80,
+    "Viperidae": 134,
+    "Colubridae": 6,
+    "Atractaspididae": 5,
+    "Hydrophiidae": 0
+  },
+  "total_unique_species": 225,
+  "symptom_concepts": 21,
+  "total_csv_rows": 3553,
+  "coverage_scope": "Medically important snake species listed in WHO TRS No.1004 Annex 5 Appendix 1 (not every snake species worldwide). Sea-snake genera are not labelled as Hydrophiidae in this appendix edition; many marine elapids may appear under Elapidae in regional lists.",
+  "method": "Symptoms enumerated from WHO TRS \u00a719.3 / \u00a720.2.3 and WHO snakebite fact sheet only. Species parsed from Appendix 1 PDF text with comma/semicolon splitting and genus blocklists to remove geographic false positives. Rows = symptom \u00d7 species (family-filtered join)."
+}

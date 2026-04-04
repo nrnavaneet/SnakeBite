@@ -1,0 +1,44 @@
+{
+  "output_csv": "/Users/nrnavaneet/Documents/Projects/SnakeBite/data_pipeline_snakebite/symptom_data/processed/symptom_dataset.csv",
+  "row_count": 99,
+  "context_features_csv": "/Users/nrnavaneet/Documents/Projects/SnakeBite/data_pipeline_snakebite/symptom_data/processed/context_features.csv",
+  "context_row_count": 3,
+  "venom_types": [
+    "cytotoxic",
+    "hemotoxic",
+    "myotoxic",
+    "neurotoxic",
+    "non_venomous",
+    "unknown"
+  ],
+  "families": [
+    "Colubridae",
+    "Elapidae",
+    "Hydrophiidae",
+    "Viperidae",
+    "multiple"
+  ],
+  "columns": [
+    "feature_type",
+    "venom_type",
+    "symptom",
+    "severity",
+    "importance_rank",
+    "weight_tier",
+    "weight",
+    "possible_snakes",
+    "family",
+    "onset_min_hours",
+    "onset_max_hours",
+    "local_signs_absent_or_minimal",
+    "source"
+  ],
+  "onset_hours_semantics": "onset_min_hours and onset_max_hours are numeric bounds (hours post-exposure) for symptom onset or presentation delay where applicable; empty cells mean unknown or not applicable (e.g. clock-time epidemiology without symptom-onset interval, or insufficient data).",
+  "local_signs_semantics": "yes = prominent local bite findings often absent or minimal; no = prominent local findings typical; variable = context-dependent; na = not applicable.",
+  "importance_semantics": "importance_rank 1\u20137 is an ordinal training label derived from legacy per-row priors: rank = ceil(legacy_weight * 7) clamped to [1,7], except optional importance_rank overrides on classifier rows. Exported weight = rank/7 (uniform steps; not venom prevalence). For mentor review: do not interpret decimals as epidemiological proportions.",
+  "sources_policy": "Each row's source column lists WHO and/or PubMed URLs.",
+  "big_four_india": "Explicit rows for Bungarus caeruleus and Echis carinatus as before.",
+  "scope_exclusions": "Bite circumstance and cohort-level timing metadata live in symptom_data/processed/context_features.csv (feature_type=context), not in symptom_dataset.csv (feature_type=symptom only). Join or fuse for models that need bite context.",
+  "global_species_coverage": "Added symptom-level rows for major WHO/PubMed-cited taxa across Africa, Americas, Asia, MENA, and Australia. Some sources are species-specific case series; others cite genus-level or regional cohorts \u2014 see each row's source field. This list is not exhaustive of all world species.",
+  "verified_taxonomic_scope": "Thousands of snake species are described globally. A row appears here ONLY if a WHO or PubMed-indexed source supports the clinical or venom-toxicology statement. Species with no usable published envenoming or venom data for syndrome mapping are omitted \u2014 not from lack of interest, but because invented symptom rows would be non-factual. A complete species checklist is a separate taxonomy product; this file is a verified symptom\u2013taxon association catalog."
+}

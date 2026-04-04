@@ -1,0 +1,18 @@
+# Render Blueprint: deploy the FastAPI backend (Python + PyTorch).
+# https://render.com/docs/blueprint-spec
+#
+# Before deploy: model weights (*.pt) must exist in the service (see README).
+# After deploy: set mobile/snakebite_rx/web/api_config.json "apiBase" to this service URL, redeploy Vercel.
+
+services:
+  - type: web
+    name: snakebite-api
+    runtime: python
+    plan: starter
+    region: oregon
+    buildCommand: pip install --no-cache-dir -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"

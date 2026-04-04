@@ -1,0 +1,1146 @@
+{
+  "classes": [
+    "cytotoxic",
+    "hemotoxic",
+    "neurotoxic",
+    "non_venomous",
+    "not_snakebite"
+  ],
+  "symptoms": [
+    "Australian elapid envenoming (rough-scaled snake in venom-detected cohort)",
+    "VICC / procoagulant envenoming (Egyptian saw-scaled viper)",
+    "VICC / thrombocytopenia (rattlesnake envenoming)",
+    "VICC / venom-induced consumption coagulopathy (Asian pit viper cohort)",
+    "acute kidney injury",
+    "bleeding (gums, nose, bite site, mucosal)",
+    "bleeding and coagulopathy (early presentation)",
+    "blistering / bullae",
+    "bulbar palsy (speech and swallow dysfunction)",
+    "coagulopathy / cytotoxic venom effects (systemic and local)",
+    "coagulopathy / incoagulable blood",
+    "coagulopathy / prolonged clotting screen (Hypnale envenoming)",
+    "coagulopathy and bleeding diathesis (Malayan pit viper)",
+    "coagulopathy, thrombocytopenia, systemic bleeding (keelback cohort)",
+    "crotoxin-related neurotoxic / myotoxic venom phenotype (Type II)",
+    "dark urine (myoglobinuria)",
+    "delayed-onset myotoxicity with rhabdomyolysis (red-bellied black snake)",
+    "diplopia",
+    "documented human bite (pelagic sea snake \u2014 case report context)",
+    "ecchymosis / bruising (local)",
+    "facial paralysis",
+    "hematemesis",
+    "hematuria",
+    "hemorrhagic / coagulopathic effects (Cerastes spp.)",
+    "hemorrhagic / coagulopathic envenoming (Bothrops spp.)",
+    "hemorrhagic / proteolytic venom phenotype (Type I) \u2014 management implications",
+    "hemorrhagic and coagulopathic envenoming (Russell's viper SE Asia)",
+    "hemorrhagic and procoagulant venom effects (Echis spp.)",
+    "hypotension",
+    "intracranial hemorrhage",
+    "krait-type neuroparalysis / bulbar involvement (Bungarus spp.)",
+    "local manifestations (pain, swelling, tissue injury risk; Hypnale)",
+    "local myonecrosis / prolonged muscle damage (viperid envenoming)",
+    "local myotoxic / tissue injury (pit viper envenoming)",
+    "local necrosis (Naja spp. cytotoxic venom components)",
+    "local necrosis / swelling (Calloselasma rhodostoma)",
+    "local oedema and limb complications (e.g. compartment syndrome) \u2014 paediatric viper cohort",
+    "local pain",
+    "local pain and edema with hypofibrinogenemia / coagulopathy (eyelash viper)",
+    "local pain and progressive swelling (Mamushi bite \u2014 prospective cohort)",
+    "local swelling, coagulopathy, compartment syndrome risk (paediatric cohort)",
+    "local tissue injury (pit viper bite)",
+    "localized pain and swelling (early local envenoming)",
+    "medically important blunt-nosed viper envenoming (Palearctic)",
+    "mild local pain at bite site only",
+    "minimal or absent local swelling at bite site (syndromic vs many other venomous snakes in same cohort)",
+    "muscle pain",
+    "muscle weakness",
+    "myotoxicity (muscle injury)",
+    "myotoxicity / rhabdomyolysis risk (tiger snake)",
+    "nausea and/or vomiting",
+    "neurotoxic and local tissue effects (monocled cobra)",
+    "neurotoxic envenoming (death adder \u2014 distinct presynaptic syndrome)",
+    "neurotoxicity (Australian brown snake envenoming)",
+    "neurotoxicity (coral snake envenoming)",
+    "neurotoxicity (tiger snake envenoming)",
+    "no significant systemic symptoms",
+    "ophthalmoplegia",
+    "paralysis (reported in some sea snake envenoming)",
+    "pre-synaptic neurotoxin-mediated neurotoxicity (Russell's viper venom variation)",
+    "presynaptic neurotoxin-rich venom (many-banded krait \u2014 intervention research)",
+    "procoagulant venom effects / VICC (Australian brown snakes)",
+    "progressive local and systemic envenoming (Palestine viper)",
+    "progressive muscle weakness",
+    "ptosis",
+    "rapid neurotoxic envenoming (mamba species)",
+    "rapid paralysis / neurotoxicity (taipan)",
+    "renal impairment / acute kidney injury (systemic envenoming)",
+    "respiratory failure",
+    "respiratory muscle weakness (neuroparalytic)",
+    "rhabdomyolysis",
+    "rhabdomyolysis / myotoxicity (some crotalid envenomings)",
+    "secondary bacterial infection of wound",
+    "severe local pain",
+    "severe neurotoxic envenoming (king cobra)",
+    "severe neurotoxicity (ptosis, respiratory compromise risk)",
+    "severe neurotoxicity course with intubation often within hours of bite (hospital cohort)",
+    "severe regional viper envenoming (Morocco \u2014 antivenom neutralization context)",
+    "severe systemic envenoming (bushmaster)",
+    "shock",
+    "swelling (local envenoming)",
+    "swelling (local)",
+    "systemic neurotoxicity after bite (Naja spp. elapid)",
+    "tissue necrosis / dermonecrosis",
+    "ulceration",
+    "venom ophthalmia / ocular surface injury (spitting cobra defense)",
+    "venom-induced consumption coagulopathy (VICC)"
+  ],
+  "weight_rows": [
+    [
+      0.0,
+      0.0,
+      0.8571,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.7143,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      2.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.4286,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.5714,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.7143,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.8571,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.7143,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.8571,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.8571,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.8571,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.5714,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.8571,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.7143,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.7143,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.4286,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.7143,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.4286,
+      1.1428,
+      0.5714,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      0.2857,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.7142,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      2.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      2.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.5714,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.7143,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.8571,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.5714,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.5714,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      2.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.8571,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.8571,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      2.8571,
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "items": [
+    {
+      "value": "Australian elapid envenoming (rough-scaled snake in venom-detected cohort)",
+      "label": "Very unwell with muscle or nerve effects (Australia)",
+      "category": "Regional notes"
+    },
+    {
+      "value": "VICC / procoagulant envenoming (Egyptian saw-scaled viper)",
+      "label": "Blood clotting problems (saw-scaled viper type)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "VICC / thrombocytopenia (rattlesnake envenoming)",
+      "label": "Bleeding with low platelets (rattlesnake-type)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "VICC / venom-induced consumption coagulopathy (Asian pit viper cohort)",
+      "label": "Blood clotting failure (Asian pit viper context)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "acute kidney injury",
+      "label": "Kidney problems / less urine",
+      "category": "Kidneys & urine"
+    },
+    {
+      "value": "bleeding (gums, nose, bite site, mucosal)",
+      "label": "Bleeding from gums, nose, or bite area",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "bleeding and coagulopathy (early presentation)",
+      "label": "Bleeding with clotting problems (early on)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "blistering / bullae",
+      "label": "Blisters or large blisters on skin",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "bulbar palsy (speech and swallow dysfunction)",
+      "label": "Trouble speaking or swallowing",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "coagulopathy / cytotoxic venom effects (systemic and local)",
+      "label": "Clotting problems with tissue damage",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "coagulopathy / incoagulable blood",
+      "label": "Blood not clotting normally",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "coagulopathy / prolonged clotting screen (Hypnale envenoming)",
+      "label": "Clotting tests very abnormal (Hypnale-type)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "coagulopathy and bleeding diathesis (Malayan pit viper)",
+      "label": "Bleeding tendency (Malayan pit viper context)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "coagulopathy, thrombocytopenia, systemic bleeding (keelback cohort)",
+      "label": "Bleeding with low platelets (keelback context)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "crotoxin-related neurotoxic / myotoxic venom phenotype (Type II)",
+      "label": "Muscle and nerve effects together",
+      "category": "Nerves & muscles"
+    },
+    {
+      "value": "dark urine (myoglobinuria)",
+      "label": "Dark or cola-colored urine",
+      "category": "Kidneys & urine"
+    },
+    {
+      "value": "delayed-onset myotoxicity with rhabdomyolysis (red-bellied black snake)",
+      "label": "Muscle breakdown appearing later",
+      "category": "Muscles"
+    },
+    {
+      "value": "diplopia",
+      "label": "Double vision",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "documented human bite (pelagic sea snake \u2014 case report context)",
+      "label": "Sea snake bite (known case)",
+      "category": "Regional notes"
+    },
+    {
+      "value": "ecchymosis / bruising (local)",
+      "label": "Bruising around the bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "facial paralysis",
+      "label": "Face weakness or drooping",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "hematemesis",
+      "label": "Vomiting blood",
+      "category": "Stomach"
+    },
+    {
+      "value": "hematuria",
+      "label": "Blood in urine",
+      "category": "Kidneys & urine"
+    },
+    {
+      "value": "hemorrhagic / coagulopathic effects (Cerastes spp.)",
+      "label": "Bleeding problems (sand viper type)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "hemorrhagic / coagulopathic envenoming (Bothrops spp.)",
+      "label": "Bleeding problems (lancehead type)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "hemorrhagic / proteolytic venom phenotype (Type I) \u2014 management implications",
+      "label": "Severe tissue bleeding (some vipers)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "hemorrhagic and coagulopathic envenoming (Russell's viper SE Asia)",
+      "label": "Bleeding problems (Russell\u2019s viper type)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "hemorrhagic and procoagulant venom effects (Echis spp.)",
+      "label": "Bleeding problems (saw-scaled viper type)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "hypotension",
+      "label": "Very low blood pressure",
+      "category": "Shock & circulation"
+    },
+    {
+      "value": "intracranial hemorrhage",
+      "label": "Stroke-like bleeding in the brain",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "krait-type neuroparalysis / bulbar involvement (Bungarus spp.)",
+      "label": "Paralysis like a krait bite (throat/face)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "local manifestations (pain, swelling, tissue injury risk; Hypnale)",
+      "label": "Pain, swelling, or tissue damage at bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local myonecrosis / prolonged muscle damage (viperid envenoming)",
+      "label": "Severe muscle damage at bite (viper)",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local myotoxic / tissue injury (pit viper envenoming)",
+      "label": "Muscle or tissue damage at bite (pit viper)",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local necrosis (Naja spp. cytotoxic venom components)",
+      "label": "Tissue death at bite (cobra-type)",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local necrosis / swelling (Calloselasma rhodostoma)",
+      "label": "Tissue death or bad swelling (Malayan pit viper)",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local oedema and limb complications (e.g. compartment syndrome) \u2014 paediatric viper cohort",
+      "label": "Very swollen limb or compartment risk (child)",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local pain",
+      "label": "Pain at bite site",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local pain and edema with hypofibrinogenemia / coagulopathy (eyelash viper)",
+      "label": "Pain and swelling with clotting problems",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local pain and progressive swelling (Mamushi bite \u2014 prospective cohort)",
+      "label": "Pain and swelling getting worse",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local swelling, coagulopathy, compartment syndrome risk (paediatric cohort)",
+      "label": "Swelling with clotting risk (child)",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "local tissue injury (pit viper bite)",
+      "label": "Tissue damage at bite (pit viper)",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "localized pain and swelling (early local envenoming)",
+      "label": "Pain and swelling soon after bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "medically important blunt-nosed viper envenoming (Palearctic)",
+      "label": "Serious viper bite (blunt-nosed type)",
+      "category": "Regional notes"
+    },
+    {
+      "value": "mild local pain at bite site only",
+      "label": "Only mild pain at bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "minimal or absent local swelling at bite site (syndromic vs many other venomous snakes in same cohort)",
+      "label": "Almost no swelling at bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "muscle pain",
+      "label": "Muscle aches",
+      "category": "Muscles"
+    },
+    {
+      "value": "muscle weakness",
+      "label": "Weakness in muscles",
+      "category": "Muscles"
+    },
+    {
+      "value": "myotoxicity (muscle injury)",
+      "label": "Muscle damage from venom",
+      "category": "Muscles"
+    },
+    {
+      "value": "myotoxicity / rhabdomyolysis risk (tiger snake)",
+      "label": "Muscle breakdown risk (tiger snake)",
+      "category": "Muscles"
+    },
+    {
+      "value": "nausea and/or vomiting",
+      "label": "Nausea or vomiting",
+      "category": "Stomach"
+    },
+    {
+      "value": "neurotoxic and local tissue effects (monocled cobra)",
+      "label": "Nerve symptoms with skin damage (cobra-type)",
+      "category": "Nerves & muscles"
+    },
+    {
+      "value": "neurotoxic envenoming (death adder \u2014 distinct presynaptic syndrome)",
+      "label": "Nerve paralysis (death adder type)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "neurotoxicity (Australian brown snake envenoming)",
+      "label": "Nerve symptoms (brown snake, Australia)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "neurotoxicity (coral snake envenoming)",
+      "label": "Nerve symptoms (coral snake)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "neurotoxicity (tiger snake envenoming)",
+      "label": "Nerve symptoms (tiger snake)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "no significant systemic symptoms",
+      "label": "No major body symptoms",
+      "category": "General"
+    },
+    {
+      "value": "ophthalmoplegia",
+      "label": "Eye movement problems",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "paralysis (reported in some sea snake envenoming)",
+      "label": "Paralysis (sea snake)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "pre-synaptic neurotoxin-mediated neurotoxicity (Russell's viper venom variation)",
+      "label": "Nerve paralysis (Russell\u2019s viper type)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "presynaptic neurotoxin-rich venom (many-banded krait \u2014 intervention research)",
+      "label": "Severe nerve paralysis (krait-type)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "procoagulant venom effects / VICC (Australian brown snakes)",
+      "label": "Clotting problems (brown snake, Australia)",
+      "category": "Bleeding & clotting"
+    },
+    {
+      "value": "progressive local and systemic envenoming (Palestine viper)",
+      "label": "Getting worse locally and overall (viper)",
+      "category": "General"
+    },
+    {
+      "value": "progressive muscle weakness",
+      "label": "Weakness getting worse",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "ptosis",
+      "label": "Drooping eyelids",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "rapid neurotoxic envenoming (mamba species)",
+      "label": "Very fast nerve symptoms (mamba)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "rapid paralysis / neurotoxicity (taipan)",
+      "label": "Very fast paralysis (taipan)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "renal impairment / acute kidney injury (systemic envenoming)",
+      "label": "Kidney problems from venom",
+      "category": "Kidneys & urine"
+    },
+    {
+      "value": "respiratory failure",
+      "label": "Severe breathing problem / respiratory failure",
+      "category": "Breathing"
+    },
+    {
+      "value": "respiratory muscle weakness (neuroparalytic)",
+      "label": "Weak breathing muscles",
+      "category": "Breathing"
+    },
+    {
+      "value": "rhabdomyolysis",
+      "label": "Severe muscle breakdown",
+      "category": "Muscles"
+    },
+    {
+      "value": "rhabdomyolysis / myotoxicity (some crotalid envenomings)",
+      "label": "Muscle breakdown (some rattlesnakes)",
+      "category": "Muscles"
+    },
+    {
+      "value": "secondary bacterial infection of wound",
+      "label": "Infection at wound",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "severe local pain",
+      "label": "Severe pain at bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "severe neurotoxic envenoming (king cobra)",
+      "label": "Severe nerve effects (king cobra)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "severe neurotoxicity (ptosis, respiratory compromise risk)",
+      "label": "Severe nerve symptoms (eyelids, breathing)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "severe neurotoxicity course with intubation often within hours of bite (hospital cohort)",
+      "label": "Needed breathing support soon after bite",
+      "category": "Breathing"
+    },
+    {
+      "value": "severe regional viper envenoming (Morocco \u2014 antivenom neutralization context)",
+      "label": "Severe viper bite (North Africa context)",
+      "category": "Regional notes"
+    },
+    {
+      "value": "severe systemic envenoming (bushmaster)",
+      "label": "Very severe whole-body illness (bushmaster)",
+      "category": "General"
+    },
+    {
+      "value": "shock",
+      "label": "Collapse or shock",
+      "category": "Shock & circulation"
+    },
+    {
+      "value": "swelling (local envenoming)",
+      "label": "Swelling around bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "swelling (local)",
+      "label": "Local swelling",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "systemic neurotoxicity after bite (Naja spp. elapid)",
+      "label": "Nerve symptoms after cobra bite",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "tissue necrosis / dermonecrosis",
+      "label": "Dead skin / deep wound damage",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "ulceration",
+      "label": "Open sore or ulcer at bite",
+      "category": "Bite & skin"
+    },
+    {
+      "value": "venom ophthalmia / ocular surface injury (spitting cobra defense)",
+      "label": "Venom in the eyes (spitting cobra)",
+      "category": "Nerves, eyes & face"
+    },
+    {
+      "value": "venom-induced consumption coagulopathy (VICC)",
+      "label": "Blood clotting failure (VICC)",
+      "category": "Bleeding & clotting"
+    }
+  ]
+}

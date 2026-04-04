@@ -1,0 +1,1 @@
+Optional: add logo_mark.png or logo.svg here and reference from pubspec.

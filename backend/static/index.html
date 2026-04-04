@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SnakeBiteRx — test UI</title>
+  <style>
+    :root { font-family: system-ui, sans-serif; max-width: 640px; margin: 1rem auto; padding: 0 12px; }
+    h1 { font-size: 1.25rem; }
+    label { display: block; margin-top: 0.75rem; font-weight: 600; font-size: 0.85rem; }
+    input, select, button { width: 100%; box-sizing: border-box; margin-top: 4px; padding: 8px; }
+    button.secondary { background: #64748b; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+    button.secondary:hover { filter: brightness(1.05); }
+    .symptom-filter { margin-bottom: 6px; }
+    .symptom-toolbar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
+    .symptom-toolbar button { width: auto; margin-top: 0; font-size: 12px; padding: 6px 10px; }
+    .symptom-list {
+      max-height: 240px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px;
+      background: #fff;
+      font-size: 12px;
+    }
+    .symptom-row { display: flex; align-items: flex-start; gap: 8px; margin: 4px 0; }
+    .symptom-row input { width: auto; margin-top: 2px; flex-shrink: 0; }
+    .symptom-row label { margin-top: 0; font-weight: 400; cursor: pointer; flex: 1; line-height: 1.35; }
+    .symptom-meta { font-size: 11px; color: #666; margin: 6px 0 0; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .out { background: #f4f4f5; padding: 12px; border-radius: 8px; margin-top: 16px; white-space: pre-wrap; font-size: 13px; }
+    .err { color: #b91c1c; }
+    .ok { color: #15803d; }
+    .hint { font-size: 12px; color: #666; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <h1>SnakeBiteRx test (browser)</h1>
+  <p style="font-size: 13px; color: #555;">Educational prototype — not a medical device. Geo prior uses GBIF occurrence counts by country/state.</p>
+
+  <form id="f">
+    <label>Wound image *</label>
+    <input type="file" id="file" accept="image/*" required />
+
+    <label>Country *</label>
+    <select id="country" required></select>
+    <p class="hint">Venom-type prior is derived from snake occurrence data in that region (see <a href="/geo/regions" target="_blank">/geo/regions</a>).</p>
+
+    <label>State / region</label>
+    <select id="state"></select>
+    <p class="hint">Leave empty to use country-level average only.</p>
+
+    <div class="row">
+      <div>
+        <label>Time since bite (hours)</label>
+        <input type="number" id="time" value="3" min="0" max="720" step="0.5" />
+      </div>
+      <div>
+        <label>Bite circumstance</label>
+        <select id="circ">
+          <option value="unknown">unknown</option>
+          <option value="nocturnal_indoor_sleeping">nocturnal_indoor_sleeping</option>
+          <option value="daytime_outdoor">daytime_outdoor</option>
+          <option value="overnight_emns">overnight_emns</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Age (years)</label>
+        <input type="number" id="age" value="35" min="0" max="120" />
+      </div>
+      <div>
+        <label>Weight (kg)</label>
+        <input type="number" id="wt" value="60" min="1" max="250" />
+      </div>
+    </div>
+
+    <label>Signs &amp; symptoms — tick what applies (short wording; technical terms only on hover)</label>
+    <p class="hint">Each option is written in everyday language. Your selection is still matched to the medical knowledge base.</p>
+    <input type="search" id="symptomFilter" class="symptom-filter" placeholder="Filter…" autocomplete="off" />
+    <div class="symptom-toolbar">
+      <button type="button" id="symptomClear" class="secondary">Clear all</button>
+      <button type="button" id="symptomSelectFiltered" class="secondary">Select visible</button>
+      <button type="button" id="symptomClearFiltered" class="secondary">Clear visible</button>
+    </div>
+    <div id="symptomChooser" class="symptom-list"></div>
+    <p id="symptomMeta" class="symptom-meta"></p>
+
+    <button type="submit" style="margin-top: 16px;">Analyze</button>
+  </form>
+
+  <div id="out" class="out" hidden></div>
+
+  <script>
+    const out = document.getElementById("out");
+    const countryEl = document.getElementById("country");
+    const stateEl = document.getElementById("state");
+    let statesByCountry = {};
+
+    function selectedSymptomsJson() {
+      const boxes = document.querySelectorAll('#symptomChooser input[type="checkbox"]:checked');
+      return JSON.stringify(Array.from(boxes).map((cb) => cb.value));
+    }
+
+    function updateSymptomMeta() {
+      const meta = document.getElementById("symptomMeta");
+      const n = document.querySelectorAll('#symptomChooser input[type="checkbox"]:checked').length;
+      const total = document.querySelectorAll('#symptomChooser input[type="checkbox"]').length;
+      if (meta) meta.textContent = total ? n + " selected · " + total + " in catalog" : "";
+    }
+
+    async function loadSymptoms() {
+      const box = document.getElementById("symptomChooser");
+      const r = await fetch("/symptoms");
+      if (!r.ok) throw new Error(await r.text());
+      const d = await r.json();
+      const items =
+        d.items && d.items.length
+          ? d.items
+          : (d.symptoms || []).map((s) => ({ value: s, label: s, category: "" }));
+      items.sort((a, b) => {
+        const ca = (a.category || "").toLowerCase();
+        const cb = (b.category || "").toLowerCase();
+        if (ca !== cb) return ca.localeCompare(cb);
+        return (a.label || "").localeCompare(b.label || "", undefined, { sensitivity: "base" });
+      });
+      box.innerHTML = "";
+      const frag = document.createDocumentFragment();
+      items.forEach((it, i) => {
+        const row = document.createElement("div");
+        row.className = "symptom-row";
+        const display = (it.category ? it.category + " — " : "") + (it.label || it.value);
+        row.dataset.filter = (display + " " + (it.value || "")).toLowerCase();
+        const id = "symptom-cb-" + i;
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.id = id;
+        cb.value = it.value;
+        if (it.value === "ptosis") cb.checked = true;
+        cb.addEventListener("change", updateSymptomMeta);
+        const lab = document.createElement("label");
+        lab.htmlFor = id;
+        lab.textContent = display;
+        lab.title = it.value;
+        row.appendChild(cb);
+        row.appendChild(lab);
+        frag.appendChild(row);
+      });
+      box.appendChild(frag);
+      updateSymptomMeta();
+
+      const filterEl = document.getElementById("symptomFilter");
+      const applyFilter = () => {
+        const q = (filterEl && filterEl.value.trim().toLowerCase()) || "";
+        box.querySelectorAll(".symptom-row").forEach((row) => {
+          const ok = !q || (row.dataset.filter && row.dataset.filter.includes(q));
+          row.style.display = ok ? "" : "none";
+        });
+      };
+      if (filterEl) filterEl.oninput = applyFilter;
+
+      document.getElementById("symptomClear").onclick = () => {
+        box.querySelectorAll('input[type="checkbox"]').forEach((c) => {
+          c.checked = false;
+        });
+        updateSymptomMeta();
+      };
+      document.getElementById("symptomSelectFiltered").onclick = () => {
+        box.querySelectorAll(".symptom-row").forEach((row) => {
+          if (row.style.display === "none") return;
+          const c = row.querySelector('input[type="checkbox"]');
+          if (c) c.checked = true;
+        });
+        updateSymptomMeta();
+      };
+      document.getElementById("symptomClearFiltered").onclick = () => {
+        box.querySelectorAll(".symptom-row").forEach((row) => {
+          if (row.style.display === "none") return;
+          const c = row.querySelector('input[type="checkbox"]');
+          if (c) c.checked = false;
+        });
+        updateSymptomMeta();
+      };
+    }
+
+    async function loadRegions() {
+      const r = await fetch("/geo/regions");
+      const d = await r.json();
+      statesByCountry = d.states_by_country || {};
+      countryEl.innerHTML = "";
+      (d.countries || []).forEach((c) => {
+        const o = document.createElement("option");
+        o.value = c;
+        o.textContent = c;
+        countryEl.appendChild(o);
+      });
+      if (!countryEl.options.length) {
+        const o = document.createElement("option");
+        o.value = "India";
+        o.textContent = "India";
+        countryEl.appendChild(o);
+      }
+      // default India if present
+      const prefer = "India";
+      for (let i = 0; i < countryEl.options.length; i++) {
+        if (countryEl.options[i].value === prefer) {
+          countryEl.selectedIndex = i;
+          break;
+        }
+      }
+      refreshStates();
+    }
+
+    function refreshStates() {
+      const c = countryEl.value;
+      const list = statesByCountry[c] || [];
+      stateEl.innerHTML = "";
+      const empty = document.createElement("option");
+      empty.value = "";
+      empty.textContent = "(country average)";
+      stateEl.appendChild(empty);
+      list.forEach((s) => {
+        const o = document.createElement("option");
+        o.value = s;
+        o.textContent = s;
+        stateEl.appendChild(o);
+      });
+    }
+
+    countryEl.onchange = refreshStates;
+    Promise.all([loadRegions(), loadSymptoms()]).catch((e) => {
+      out.hidden = false;
+      out.className = "out err";
+      out.textContent = "Failed to load /geo/regions or /symptoms: " + e;
+    });
+
+    document.getElementById("f").onsubmit = async (e) => {
+      e.preventDefault();
+      out.hidden = false;
+      out.className = "out";
+      out.textContent = "Loading…";
+      const fd = new FormData();
+      const file = document.getElementById("file").files[0];
+      if (!file) {
+        out.textContent = "Choose an image.";
+        out.classList.add("err");
+        return;
+      }
+      fd.append("file", file);
+      fd.append("symptoms", selectedSymptomsJson());
+      fd.append("country", countryEl.value);
+      fd.append("state", stateEl.value || "");
+      fd.append("time_since_bite_hours", document.getElementById("time").value);
+      fd.append("bite_circumstance", document.getElementById("circ").value);
+      fd.append("age_years", document.getElementById("age").value);
+      fd.append("weight_kg", document.getElementById("wt").value);
+
+      try {
+        const r = await fetch("/predict", { method: "POST", body: fd });
+        const t = await r.text();
+        if (!r.ok) throw new Error(t || r.statusText);
+        const j = JSON.parse(t);
+        out.classList.add("ok");
+        let head = "";
+        const iq = j.image_quality;
+        if (iq && iq.recommend_retake && iq.message) {
+          head += "⚠ RETAKE PHOTO: " + iq.message + "\n";
+          if (iq.sharpness_score != null) head += "(sharpness score " + iq.sharpness_score + ")\n";
+          head += "\n";
+        }
+        head +=
+          "Final (multimodal): " + j.top_class + " (" + (100 * j.top_confidence).toFixed(1) + "%)\n" +
+          "Wound CNN only: " +
+          (j.wound_only_top_class || "?") +
+          " (" +
+          (j.wound_only_confidence != null ? (100 * j.wound_only_confidence).toFixed(1) : "?") +
+          "%) — can differ after blending symptoms/geo/context.\n" +
+          "Region: " + JSON.stringify(j.geo_input) + "\n\n";
+        out.textContent = head + JSON.stringify(j, null, 2);
+      } catch (err) {
+        out.classList.add("err");
+        out.textContent = String(err);
+      }
+    };
+  </script>
+</body>
+</html>
