@@ -1,5 +1,5 @@
 # SnakeBiteRx — common tasks (run from repo root)
-.PHONY: setup verify assets train train-fast train-both api web-build serve-web tunnel-api tunnel-web dev-all
+.PHONY: setup verify assets train train-fast train-both api lab web-build serve-web tunnel-api tunnel-web dev-all stop kill
 
 # Fresh clone: venv, pip install, build assets, flutter pub get (if flutter on PATH)
 setup:
@@ -25,9 +25,19 @@ train-both:
 api:
 	uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 
+# Lab browser UI (/ui/lab.html) + Cloudflare tunnel — no Flutter. Lighter than dev-all (full stack).
+lab:
+	bash scripts/lab.sh
+
 # Clean scratch files, free ports, start API + tunnels + Flutter web, open Terminal tails (see script for flags).
 dev-all:
 	bash scripts/dev_all.sh
+
+# Kill API + tunnels + Flutter + static serve (pid files + ports 8000/37555/8090). Same as cleanup before lab/dev-all.
+stop:
+	bash scripts/stop.sh
+
+kill: stop
 
 # Public HTTPS URL to local API (needs: brew install cloudflared). Run in a second terminal after `make api`.
 tunnel-api:

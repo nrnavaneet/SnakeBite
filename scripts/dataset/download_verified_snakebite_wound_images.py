@@ -436,7 +436,7 @@ def main() -> None:
     ap.add_argument(
         "--out",
         type=Path,
-        default=Path(__file__).resolve().parents[1] / "snakebite_wound_corpus",
+        default=Path(__file__).resolve().parents[2] / "snakebite_wound_corpus",
         help="Output root (default: project/snakebite_wound_corpus)",
     )
     ap.add_argument(

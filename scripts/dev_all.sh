@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
-# Start local API + HTTPS tunnels (phone) + Flutter web-server, after cleaning scratch files.
+# Start local API + HTTPS tunnels (phone) + Flutter web-server.
+# First: kill prior SnakeBite/tunnel PIDs, free ports, clean scratch — then start fresh.
 # macOS: optionally opens Terminal.app with tail -f on all logs.
+# Browser: opens **Flutter web** public HTTPS URL only (use `make lab` for /ui/lab.html).
 #
 # Usage (from repo root):
 #   bash scripts/dev_all.sh
 #   bash scripts/dev_all.sh --no-tunnels     # API + Flutter only (LAN / localhost)
 #   bash scripts/dev_all.sh --no-flutter     # API + tunnels only
-#   bash scripts/dev_all.sh --no-terminals    # do not open Terminal for log tail
+#   bash scripts/dev_all.sh --no-terminals   # do not open Terminal for log tail
+#   bash scripts/dev_all.sh --no-open        # do not auto-open browser (Flutter web only)
 #   bash scripts/dev_all.sh --debug-web      # huge/slow JS (debug) — only for hot reload; default is --release for phone
+# Env: DEV_ALL_OPEN=0 — same as --no-open
+#      LAB_OPEN_DELAY_SEC (default 10) — seconds to wait before opening browser (tunnel + app warm-up)
 #
 set -euo pipefail
 
@@ -19,6 +24,7 @@ WEB_PORT="${WEB_PORT:-37555}"
 RUN_TUNNELS=1
 RUN_FLUTTER=1
 OPEN_TERMINALS=1
+OPEN_BROWSER=1
 # release = small minified bundle; debug = slow over tunnel (large unoptimized JS)
 FLUTTER_WEB_PROFILE="release"
 
@@ -27,17 +33,33 @@ for arg in "$@"; do
     --no-tunnels) RUN_TUNNELS=0 ;;
     --no-flutter) RUN_FLUTTER=0 ;;
     --no-terminals) OPEN_TERMINALS=0 ;;
+    --no-open) OPEN_BROWSER=0 ;;
     --debug-web) FLUTTER_WEB_PROFILE="debug" ;;
     -h|--help)
-      grep '^#' "$0" | head -24 | sed 's/^# \{0,1\}//'
+      grep '^#' "$0" | head -28 | sed 's/^# \{0,1\}//'
       exit 0
       ;;
   esac
 done
 
+[[ "${DEV_ALL_OPEN:-1}" == "0" ]] && OPEN_BROWSER=0
+
 log() { printf '%s\n' "$*"; }
 
 die() { log "ERROR: $*"; exit 1; }
+
+# --- 0) Stop prior runs (same as make lab: kill pids + ports, then clean logs) ---
+kill_snakebite_pids() {
+  log "Stopping previous SnakeBite / tunnel / Flutter processes…"
+  for f in /tmp/snakebite_api.pid /tmp/snakebite_tunnel_api.pid /tmp/snakebite_flutter_web.pid /tmp/snakebite_tunnel_web.pid \
+    /tmp/snakebite_lab_api.pid /tmp/snakebite_lab_tunnel.pid; do
+    if [[ -f "$f" ]]; then
+      pid=$(cat "$f" 2>/dev/null || true)
+      [[ -n "${pid:-}" ]] && kill -9 "$pid" 2>/dev/null || true
+    fi
+  done
+  sleep 0.4
+}
 
 # --- 1) Scratch / stale dev files ---
 clean_scratch() {
@@ -47,6 +69,9 @@ clean_scratch() {
   rm -f /tmp/snakebite_tunnel_api.log /tmp/snakebite_tunnel_api.pid
   rm -f /tmp/snakebite_flutter_web.log /tmp/snakebite_flutter_web.pid
   rm -f /tmp/snakebite_tunnel_web.log /tmp/snakebite_tunnel_web.pid
+  rm -f /tmp/snakebite_lab_api.log /tmp/snakebite_lab_api.pid
+  rm -f /tmp/snakebite_lab_tunnel.log /tmp/snakebite_lab_tunnel.pid
+  rm -f /tmp/snakebite_lab_urls.txt
   rm -f /tmp/snakebite_dev_all_urls.txt
   log "  removed upload temp, /tmp/snakebite_* logs+pids"
 }
@@ -101,8 +126,35 @@ wait_for_tunnel_url() {
   echo ""
 }
 
+wait_for_ngrok_public_url() {
+  local url=""
+  for _ in $(seq 1 60); do
+    url=$(
+      curl -sf http://127.0.0.1:4040/api/tunnels 2>/dev/null | python3 -c "
+import json, sys
+try:
+    d = json.load(sys.stdin)
+    for t in d.get('tunnels') or []:
+        u = (t.get('public_url') or '').strip()
+        if u.startswith('https://'):
+            print(u)
+            sys.exit(0)
+except Exception:
+    pass
+" 2>/dev/null || true
+    )
+    if [[ -n "$url" ]]; then
+      echo "$url"
+      return 0
+    fi
+    sleep 0.5
+  done
+  echo ""
+}
+
 # --- 4) Tunnels (cloudflared preferred) ---
 API_PUBLIC_URL=""
+WEB_PUBLIC_URL=""
 
 start_tunnel_api() {
   command -v cloudflared >/dev/null 2>&1 || return 1
@@ -124,8 +176,13 @@ start_tunnel_ngrok_api() {
   log "Starting ngrok → ${API_PORT}…"
   nohup ngrok http "${API_PORT}" --log=stdout >> /tmp/snakebite_tunnel_api.log 2>&1 &
   echo $! > /tmp/snakebite_tunnel_api.pid
-  log "  ngrok running — open http://127.0.0.1:4040 for the public URL, or read /tmp/snakebite_tunnel_api.log"
-  API_PUBLIC_URL=""
+  sleep 1
+  API_PUBLIC_URL="$(wait_for_ngrok_public_url)"
+  if [[ -n "$API_PUBLIC_URL" ]]; then
+    log "  Public API URL (ngrok): $API_PUBLIC_URL"
+  else
+    log "  ngrok running — open http://127.0.0.1:4040 if URL not parsed yet"
+  fi
   return 0
 }
 
@@ -170,15 +227,15 @@ start_flutter_web() {
 }
 
 start_tunnel_web() {
+  WEB_PUBLIC_URL=""
   command -v cloudflared >/dev/null 2>&1 || return 1
   log "Starting Cloudflare tunnel → http://127.0.0.1:${WEB_PORT}…"
   nohup cloudflared tunnel --url "http://127.0.0.1:${WEB_PORT}" \
     >> /tmp/snakebite_tunnel_web.log 2>&1 &
   echo $! > /tmp/snakebite_tunnel_web.pid
-  local wurl
-  wurl="$(wait_for_tunnel_url /tmp/snakebite_tunnel_web.log)"
-  if [[ -n "$wurl" ]]; then
-    log "  Public web URL: $wurl"
+  WEB_PUBLIC_URL="$(wait_for_tunnel_url /tmp/snakebite_tunnel_web.log)"
+  if [[ -n "$WEB_PUBLIC_URL" ]]; then
+    log "  Public web URL: $WEB_PUBLIC_URL"
   else
     log "  (Parse URL from /tmp/snakebite_tunnel_web.log when ready.)"
   fi
@@ -191,10 +248,7 @@ write_summary() {
     echo "API local:    http://127.0.0.1:${API_PORT}"
     [[ -n "$API_PUBLIC_URL" ]] && echo "API public:   $API_PUBLIC_URL"
     echo "Flutter web:  http://127.0.0.1:${WEB_PORT}"
-    if [[ -f /tmp/snakebite_tunnel_web.log ]]; then
-      grep -oE 'https://[a-zA-Z0-9.-]+\.trycloudflare\.com' /tmp/snakebite_tunnel_web.log 2>/dev/null | head -1 \
-        | sed 's/^/Web public:  /' || true
-    fi
+    [[ -n "${WEB_PUBLIC_URL:-}" ]] && echo "Web public:   $WEB_PUBLIC_URL"
     echo ""
     echo "Logs: tail -f /tmp/snakebite_api.log /tmp/snakebite_tunnel_api.log /tmp/snakebite_flutter_web.log /tmp/snakebite_tunnel_web.log"
   } | tee "$f"
@@ -214,8 +268,9 @@ EOF
 }
 
 # --- run ---
-clean_scratch
+kill_snakebite_pids
 free_ports
+clean_scratch
 start_api
 
 API_BASE_FOR_FLUTTER="http://127.0.0.1:${API_PORT}"
@@ -252,6 +307,34 @@ log "Done. PIDs: api=$(cat /tmp/snakebite_api.pid 2>/dev/null || echo '?')"
 
 if [[ "$(uname -s)" == "Darwin" ]] && [[ "$OPEN_TERMINALS" == 1 ]]; then
   open_log_terminal_macos || log "(Could not open Terminal for logs — run: tail -f /tmp/snakebite_*.log)"
+fi
+
+# Auto-open **Flutter web** only (lab: `make lab`). Skips if --no-flutter or Flutter did not start.
+if [[ "$OPEN_BROWSER" == 1 ]]; then
+  if [[ "$RUN_FLUTTER" != 1 ]]; then
+    log ""
+    log "→ Browser: skipped (--no-flutter). For /ui/lab.html run: make lab"
+  elif [[ ! -f /tmp/snakebite_flutter_web.pid ]]; then
+    log ""
+    log "→ Browser: skipped (Flutter web did not start — /tmp/snakebite_flutter_web.log). For lab UI: make lab"
+  else
+    WEB_URL="http://127.0.0.1:${WEB_PORT}/"
+    if [[ "$RUN_TUNNELS" == 1 ]]; then
+      [[ -n "${WEB_PUBLIC_URL:-}" ]] && WEB_URL="${WEB_PUBLIC_URL}/"
+    fi
+    _delay="${LAB_OPEN_DELAY_SEC:-10}"
+    log ""
+    log "→ Waiting ${_delay}s for tunnels / Flutter to be ready, then opening browser…"
+    sleep "$_delay"
+    log "→ Opening: $WEB_URL"
+    if command -v python3 >/dev/null 2>&1; then
+      python3 -c "import webbrowser; webbrowser.open('$WEB_URL')" 2>/dev/null || true
+    elif [[ "$(uname -s)" == Darwin ]]; then
+      open "$WEB_URL" 2>/dev/null || true
+    elif command -v xdg-open >/dev/null 2>&1; then
+      xdg-open "$WEB_URL" 2>/dev/null || true
+    fi
+  fi
 fi
 
 log ""

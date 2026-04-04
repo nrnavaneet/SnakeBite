@@ -1,5 +1,21 @@
 # Tunnels: quick vs permanent access
 
+## Quick lab + tunnel (browser only)
+
+For **`/ui/lab.html`** without the full Flutter stack:
+
+```bash
+make lab
+```
+
+**Kills** previous SnakeBite/tunnel PIDs and frees ports, then starts API + tunnel fresh. Prints local + public URLs and **opens the public HTTPS lab** (`…trycloudflare.com/ui/lab.html`) in your browser (falls back to localhost if the URL is not ready yet). `LAB_OPEN=0 make lab` skips the browser. By default the script **waits 10 seconds** (`LAB_OPEN_DELAY_SEC`, e.g. `LAB_OPEN_DELAY_SEC=15 make lab`) before opening the URL so the tunnel and first load can settle. Logs: `/tmp/snakebite_lab_tunnel.log`, `/tmp/snakebite_lab_api.log`. See `scripts/lab.sh`.
+
+**`make dev-all`** does the same cleanup, then opens the **Flutter web** tunnel URL only (not the lab — use **`make lab`** for `/ui/lab.html`). `--no-tunnels` uses localhost for the opened tab.
+
+Use **`make dev-all`** when you need API + tunnels **+ Flutter web** (heavier “full” dev).
+
+---
+
 ## What the repo uses today
 
 `scripts/dev_tunnel.sh` runs **Cloudflare quick tunnels**:

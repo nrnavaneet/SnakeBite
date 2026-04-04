@@ -120,6 +120,7 @@ Run all commands from the **repo root** with `source .venv/bin/activate` (except
 | Command | Purpose |
 |---------|---------|
 | `make setup` | **Bootstrap:** venv, `pip install`, `make assets`, `flutter pub get` if available (`scripts/setup_dev.sh`) |
+| `make lab` | **Lab + tunnel:** kills prior PIDs + ports, starts fresh, waits **10s** (override: `LAB_OPEN_DELAY_SEC`) then **opens public HTTPS lab URL** (`LAB_OPEN=0` skips). No Flutter. |
 | `make verify` | Smoke-test stack (requires checkpoint + `data/` samples — see script output) |
 | `make assets` | Rebuild symptom/geo JSON + `geo_index.pkl` (`python3 -m ml.build_assets`) |
 | `make train` | Train wound ensemble → `models/wound_ensemble.pt` |
@@ -130,7 +131,8 @@ Run all commands from the **repo root** with `source .venv/bin/activate` (except
 | `make serve-web` | Static server for `build/web` (default port **8090**; needs API separately) |
 | `make tunnel-api` | Public HTTPS tunnel to local port 8000 (`scripts/dev_tunnel.sh`; needs `cloudflared` etc.) |
 | `make tunnel-web` | Tunnel Flutter web-server port (see script) |
-| `make dev-all` | Multi-process dev (API + tunnels + Flutter; `scripts/dev_all.sh`) |
+| `make dev-all` | **Full stack:** same cleanup, then API + tunnels + Flutter; waits **`LAB_OPEN_DELAY_SEC` (default 10s)** then opens **Flutter web** only on the tunnel URL (`make lab` for lab UI; `--no-open` / `DEV_ALL_OPEN=0` to skip) (`scripts/dev_all.sh`) |
+| `make stop` | **Stop dev stack:** kill processes from SnakeBite pid files + free ports **8000 / 37555 / 8090** (`make kill` is the same) (`scripts/stop.sh`) |
 
 Underlying scripts live in **`scripts/`**.
 
@@ -158,13 +160,16 @@ SnakeBite/
 ├── requirements-core.txt
 ├── requirements-render.txt
 ├── scripts/
+│   ├── lab.sh                # make lab — API + tunnel for /ui/lab.html
 │   ├── setup_dev.sh          # clone → ready dev env
 │   ├── verify_stack.py
 │   ├── dev_all.sh
 │   ├── dev_tunnel.sh
 │   ├── build_web.sh
 │   ├── serve_web.sh
-│   └── train_both_checkpoints.sh
+│   ├── stop.sh               # make stop — kill API/tunnels/flutter/static listeners
+│   ├── train_both_checkpoints.sh
+│   └── dataset/              # optional wound/label maintenance (not used by Makefile)
 ├── ml/
 ├── backend/
 ├── models/                   # checkpoints + generated JSON/PKL (see .gitattributes)

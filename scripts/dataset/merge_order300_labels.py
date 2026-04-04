@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Merge compact label chunks into snake_wounds_labels.json, move files, rebalance CNN splits.
 
-Examples:
-  python3 merge_order300_labels.py --order-file ../snake_wounds/order_batch.txt \\
-    --chunks ../snake_wounds/compact_labels_part1.json ...
+Examples (from repo root):
+  python3 scripts/dataset/merge_order300_labels.py --order-file PATH/order_batch.txt \\
+    --chunks PART1.json PART2.json ...
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import json
 import shutil
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 WOUNDS = ROOT / "data" / "geo_data"
 SRC = WOUNDS / "snake_images"
 CAT = WOUNDS / "categories"
