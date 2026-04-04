@@ -24,10 +24,20 @@ flutter config --no-analytics
 flutter pub get
 
 API="${API_BASE:-}"
-echo "Building web (API_BASE length: ${#API})"
+# On Vercel, default to same-origin /api/proxy → Render (vercel.json) to avoid cross-origin "Failed to fetch".
+# Set API_BASE to https://YOUR_CUSTOM_DOMAIN/api/proxy if you use a custom domain on Vercel.
+if [[ -n "${VERCEL:-}" && -n "${VERCEL_URL:-}" ]]; then
+  if [[ -n "${API_BASE:-}" && "${API_BASE}" == *"/api/proxy"* ]]; then
+    API="${API_BASE}"
+  else
+    API="https://${VERCEL_URL}/api/proxy"
+  fi
+  echo "Vercel: API base = ${API}"
+fi
+echo "Building web (effective API base length: ${#API})"
 
 if [[ -z "${API}" && -n "${VERCEL:-}" ]]; then
-  echo "WARNING: API_BASE is unset. Add it under Vercel → Settings → Environment Variables (Production), then redeploy."
+  echo "WARNING: No API URL. Use Git-integrated deploy so VERCEL_URL is set, or set API_BASE."
 fi
 if [[ -z "${API}" && "${RENDER:-}" == "true" ]]; then
   echo "WARNING: API_BASE is unset. For Render static, set API_BASE on the static site (see render.yaml) or point web/api_config.json at your API."

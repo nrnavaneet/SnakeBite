@@ -150,9 +150,11 @@ Model files (`*.pt`) are gitignored; upload them to the API instance or use an a
 
 You can still host only the Flutter static output on [Vercel](https://vercel.com/) and run the API on Render or elsewhere. **Example:** [https://snakebiterx.vercel.app](https://snakebiterx.vercel.app).
 
-1. Deploy the API and note its public HTTPS URL.
-2. In Vercel → **Settings → Environment Variables**, set **`API_BASE`** to that URL (Production), then redeploy. **`vercel.json`** runs **`scripts/vercel_build_web.sh`**, which delegates to **`scripts/build_web.sh`**.
-3. Or commit **`mobile/snakebite_rx/web/api_config.json`** with `"apiBase": "https://…"` when `API_BASE` is not set in Vercel.
+**CORS / “Failed to fetch”:** **`vercel.json`** rewrites **`/api/proxy/*`** to your Render API host so the browser calls **the same origin as the site** (e.g. `https://….vercel.app/api/proxy/predict`), which avoids cross-origin issues on **`/predict`**. Edit the **`destination`** URL in **`vercel.json`** if your Render hostname changes. The build script sets **`API_BASE`** to **`https://$VERCEL_URL/api/proxy`** on Vercel unless you set **`API_BASE`** to a full URL that contains **`/api/proxy`** (for a custom domain).
+
+1. Deploy the API on Render and keep **`vercel.json`** proxy **`destination`** in sync with that URL.
+2. Deploy from Vercel (Git integration supplies **`VERCEL_URL`** during build). You do **not** need **`API_BASE`** pointing at Render for the default `*.vercel.app` setup.
+3. Or commit **`mobile/snakebite_rx/web/api_config.json`** when not using the Vercel env flow.
 4. Without a configured API URL, the hosted app shows a configuration message (localhost is not used on public hosts).
 
 On a phone: open the site, **Gallery** / **Camera**, fill fields, **Run analysis**.

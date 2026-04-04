@@ -4,5 +4,11 @@
   "buildCommand": "bash scripts/vercel_build_web.sh",
   "outputDirectory": "mobile/snakebite_rx/build/web",
   "framework": null,
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api/proxy/:path*",
+      "destination": "https://snakebite-eag1.onrender.com/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
