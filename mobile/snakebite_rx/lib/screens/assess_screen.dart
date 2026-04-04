@@ -269,54 +269,74 @@ class _AssessScreenState extends State<AssessScreen> {
       _error = null;
     });
     try {
-      final uri = Uri.parse('$base/predict');
-      final req = http.MultipartRequest('POST', uri);
-      req.files.add(http.MultipartFile.fromBytes('file', _imageBytes!, filename: 'wound.jpg'));
-      req.fields['symptoms'] = jsonEncode(_selectedSymptoms.toList());
-      req.fields['country'] = _country;
-      req.fields['state'] = _state;
-      req.fields['time_since_bite_hours'] = _timeHours.toString();
-      req.fields['bite_circumstance'] = _circumstance;
-      req.fields['age_years'] = _age.toString();
-      req.fields['weight_kg'] = _weight.toString();
+    const maxAttempts = 2;
+    for (var attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        if (attempt > 0 && mounted) {
+          setState(() => _error = 'Retrying (server may have been waking up)…');
+        }
+        final uri = Uri.parse('$base/predict');
+        final req = http.MultipartRequest('POST', uri);
+        req.files.add(http.MultipartFile.fromBytes('file', _imageBytes!, filename: 'wound.jpg'));
+        req.fields['symptoms'] = jsonEncode(_selectedSymptoms.toList());
+        req.fields['country'] = _country;
+        req.fields['state'] = _state;
+        req.fields['time_since_bite_hours'] = _timeHours.toString();
+        req.fields['bite_circumstance'] = _circumstance;
+        req.fields['age_years'] = _age.toString();
+        req.fields['weight_kg'] = _weight.toString();
 
-      final streamed = await req.send().timeout(const Duration(seconds: 180));
-      final body = await streamed.stream.bytesToString();
-      if (streamed.statusCode != 200) {
-        throw Exception('HTTP ${streamed.statusCode}: $body');
-      }
-      final result = jsonDecode(body) as Map<String, dynamic>;
-      if (!mounted) return;
-      await Navigator.of(context).push<void>(
-        PageRouteBuilder<void>(
-          transitionDuration: const Duration(milliseconds: 380),
-          pageBuilder: (_, animation, __) => ResultScreen(result: result, imageBytes: _imageBytes),
-          transitionsBuilder: (_, animation, __, child) {
-            return FadeTransition(
-              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
-              child: SlideTransition(
-                position: Tween<Offset>(begin: const Offset(0, 0.04), end: Offset.zero).animate(
-                  CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+        final streamed = await req.send().timeout(const Duration(seconds: 180));
+        final body = await streamed.stream.bytesToString();
+        if (streamed.statusCode != 200) {
+          throw Exception('HTTP ${streamed.statusCode}: $body');
+        }
+        final result = jsonDecode(body) as Map<String, dynamic>;
+        if (!mounted) return;
+        await Navigator.of(context).push<void>(
+          PageRouteBuilder<void>(
+            transitionDuration: const Duration(milliseconds: 380),
+            pageBuilder: (_, animation, __) => ResultScreen(result: result, imageBytes: _imageBytes),
+            transitionsBuilder: (_, animation, __, child) {
+              return FadeTransition(
+                opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+                child: SlideTransition(
+                  position: Tween<Offset>(begin: const Offset(0, 0.04), end: Offset.zero).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+                  ),
+                  child: child,
                 ),
-                child: child,
-              ),
-            );
-          },
-        ),
-      );
-    } catch (e) {
-      var msg = e.toString();
-      if (kIsWeb &&
-          (msg.contains('Failed to fetch') ||
-              msg.contains('ClientException') ||
-              msg.contains('XMLHttpRequest'))) {
-        msg =
-            '$msg\n\n'
-            'Often happens if the API host closed the connection: Render Free can be slow to wake, '
-            'or run out of RAM during image analysis. Wait a minute after opening the app, try a '
-            'smaller photo, check your API service Logs on Render, or upgrade the instance RAM.';
+              );
+            },
+          ),
+        );
+        break;
+      } catch (e) {
+        final msg = e.toString();
+        final canRetry = kIsWeb &&
+            attempt < maxAttempts - 1 &&
+            (msg.contains('Failed to fetch') ||
+                msg.contains('ClientException') ||
+                msg.contains('XMLHttpRequest'));
+        if (canRetry) {
+          await Future<void>.delayed(const Duration(seconds: 5));
+          continue;
+        }
+        var display = msg;
+        if (kIsWeb &&
+            (msg.contains('Failed to fetch') ||
+                msg.contains('ClientException') ||
+                msg.contains('XMLHttpRequest'))) {
+          display =
+              '$msg\n\n'
+              'Often happens if the API host closed the connection: Render Free can be slow to wake, '
+              'or run out of RAM during image analysis. Wait a minute after opening the app, try a '
+              'smaller photo, check your API service Logs on Render, or upgrade the instance RAM.';
+        }
+        if (mounted) setState(() => _error = display);
+        break;
       }
-      setState(() => _error = msg);
+    }
     } finally {
       if (mounted) setState(() => _loading = false);
     }

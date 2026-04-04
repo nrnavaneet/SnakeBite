@@ -24,8 +24,8 @@ from ml.config import CLASSES
 from ml.fusion import fuse_multimodal, top_prediction
 from ml.image_quality import assess_image_quality
 from ml.geo_regions import geo_prior_from_region, load_geo_region_payload
+from ml.checkpoint_util import pick_wound_checkpoint
 from ml.geo_species import load_geo_species_payload, rank_snake_species
-from ml.infer import load_wound_predictor, pick_wound_checkpoint, predict_wound_probs
 from ml.symptom_engine import load_catalog, rank_selected_symptoms, score_symptoms
 
 from backend.disclaimer import PRODUCT_DISCLAIMER
@@ -91,8 +91,14 @@ def _startup() -> None:
     _symptoms, _symptom_mat, _symptom_items = load_catalog()
     _geo_payload = load_geo_region_payload()
     _species_payload = load_geo_species_payload()
+    # Only import PyTorch when a checkpoint exists (saves hundreds of MB on Render Free when models/*.pt are absent).
     ck = pick_wound_checkpoint(ROOT)
-    _wound_predictor, _wound_dev = load_wound_predictor(ck)
+    if ck is not None:
+        from ml.infer import load_wound_predictor
+
+        _wound_predictor, _wound_dev = load_wound_predictor(ck)
+    else:
+        _wound_predictor, _wound_dev = None, None
 
 
 @app.get("/symptoms")
@@ -174,6 +180,8 @@ async def predict(
         wound_p = np.ones(len(CLASSES), dtype=np.float64) / len(CLASSES)
         wound_detail = None
     else:
+        from ml.infer import predict_wound_probs
+
         wound_p, wound_detail = predict_wound_probs(
             _wound_predictor, _wound_dev, tmp, return_meta=True
         )
@@ -332,6 +340,8 @@ async def test_wound_only(
         wound_p = np.ones(len(CLASSES), dtype=np.float64) / len(CLASSES)
         wound_detail = None
     else:
+        from ml.infer import predict_wound_probs
+
         wound_p, wound_detail = predict_wound_probs(
             _wound_predictor, _wound_dev, tmp, return_meta=True
         )
