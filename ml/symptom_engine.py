@@ -62,7 +62,10 @@ def build_symptom_catalog(df: pd.DataFrame) -> tuple[list[str], np.ndarray]:
         rows.append((str(sym).strip(), vec))
     rows.sort(key=lambda x: x[0])
     symptoms = [r[0] for r in rows]
-    mat = np.stack([r[1] for r in rows], axis=0)
+    if not rows:
+        mat = np.zeros((0, len(CLASSES)), dtype=np.float64)
+    else:
+        mat = np.stack([r[1] for r in rows], axis=0)
     return symptoms, mat
 
 

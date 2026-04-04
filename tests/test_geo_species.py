@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from ml import geo_species as geo_species_mod
+from ml import symptom_engine as symptom_engine_mod
 from ml.config import CLASSES
 from ml.geo_species import load_geo_species_payload, rank_snake_species
 
@@ -39,3 +41,15 @@ def test_full_class_vector_length() -> None:
     ranked, dbg = rank_snake_species(u, "India", "", [], p)
     assert "venom_weights_applied" in dbg
     assert isinstance(ranked, list)
+
+
+def test_rank_snake_species_when_symptom_csv_missing(monkeypatch, tmp_path) -> None:
+    """Deploy bundles often omit *.csv; species ranking must not crash (symptom boost degrades)."""
+    monkeypatch.setattr(symptom_engine_mod, "SYMPTOM_CSV", tmp_path / "missing_symptom_dataset.csv")
+    geo_species_mod._symptom_hints_blob.cache_clear()
+    p = load_geo_species_payload()
+    venom = np.array([0.05, 0.1, 0.7, 0.1, 0.05], dtype=np.float64)
+    venom /= venom.sum()
+    ranked, dbg = rank_snake_species(venom, "India", "Karnataka", ["ptosis"], p, top_k=5)
+    assert isinstance(ranked, list)
+    assert "venom_weights_applied" in dbg

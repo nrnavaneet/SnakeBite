@@ -7,6 +7,7 @@ Run from repo root:
 from __future__ import annotations
 
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -29,6 +30,8 @@ from ml.geo_species import load_geo_species_payload, rank_snake_species
 from ml.symptom_engine import load_catalog, rank_selected_symptoms, score_symptoms
 
 from backend.disclaimer import PRODUCT_DISCLAIMER
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="SnakeBiteRx API", version="0.1.0")
 
@@ -165,103 +168,113 @@ async def predict(
     """Multipart: wound image + country/state + clinical/context fields."""
     raw = await file.read()
     tmp = ROOT / "models" / "_upload_tmp.jpg"
-    tmp.write_bytes(raw)
-
     try:
-        sym_list = json.loads(symptoms)
-        if not isinstance(sym_list, list):
+        tmp.parent.mkdir(parents=True, exist_ok=True)
+        tmp.write_bytes(raw)
+
+        try:
+            sym_list = json.loads(symptoms)
+            if not isinstance(sym_list, list):
+                sym_list = []
+        except json.JSONDecodeError:
             sym_list = []
-    except json.JSONDecodeError:
-        sym_list = []
 
-    image_quality = assess_image_quality(tmp)
+        image_quality = assess_image_quality(tmp)
 
-    if _wound_predictor is None:
-        wound_p = np.ones(len(CLASSES), dtype=np.float64) / len(CLASSES)
-        wound_detail = None
-    else:
-        from ml.infer import predict_wound_probs
+        if _wound_predictor is None:
+            wound_p = np.ones(len(CLASSES), dtype=np.float64) / len(CLASSES)
+            wound_detail = None
+        else:
+            from ml.infer import predict_wound_probs
 
-        wound_p, wound_detail = predict_wound_probs(
-            _wound_predictor, _wound_dev, tmp, return_meta=True
+            wound_p, wound_detail = predict_wound_probs(
+                _wound_predictor, _wound_dev, tmp, return_meta=True
+            )
+
+        wd = wound_detail or {}
+        w_top, w_conf = top_prediction(wound_p)
+
+        assert _symptoms is not None and _symptom_mat is not None
+        assert _geo_payload is not None
+        sym_p = score_symptoms(sym_list, _symptoms, _symptom_mat)
+        g_p = geo_prior_from_region(country, state, _geo_payload)
+
+        final, dbg = fuse_multimodal(
+            wound_p,
+            sym_p,
+            g_p,
+            time_since_bite_hours=time_since_bite_hours,
+            bite_circumstance=bite_circumstance,
+            age_years=age_years,
+            weight_kg=weight_kg,
+        )
+        top, conf = top_prediction(final)
+
+        assert _species_payload is not None
+        species_rank, sp_dbg = rank_snake_species(
+            final,
+            country.strip(),
+            (state or "").strip(),
+            sym_list,
+            _species_payload,
         )
 
-    wd = wound_detail or {}
-    w_top, w_conf = top_prediction(wound_p)
+        sym_top, sym_conf = top_prediction(sym_p)
+        geo_top, geo_conf = top_prediction(g_p)
 
-    assert _symptoms is not None and _symptom_mat is not None
-    assert _geo_payload is not None
-    sym_p = score_symptoms(sym_list, _symptoms, _symptom_mat)
-    g_p = geo_prior_from_region(country, state, _geo_payload)
+        selected_ranked = rank_selected_symptoms(
+            sym_list,
+            _symptoms,
+            _symptom_mat,
+            sym_p,
+            label_by_value=_symptom_label_by_value(),
+        )
 
-    final, dbg = fuse_multimodal(
-        wound_p,
-        sym_p,
-        g_p,
-        time_since_bite_hours=time_since_bite_hours,
-        bite_circumstance=bite_circumstance,
-        age_years=age_years,
-        weight_kg=weight_kg,
-    )
-    top, conf = top_prediction(final)
-
-    assert _species_payload is not None
-    species_rank, sp_dbg = rank_snake_species(
-        final,
-        country.strip(),
-        (state or "").strip(),
-        sym_list,
-        _species_payload,
-    )
-
-    sym_top, sym_conf = top_prediction(sym_p)
-    geo_top, geo_conf = top_prediction(g_p)
-
-    selected_ranked = rank_selected_symptoms(
-        sym_list,
-        _symptoms,
-        _symptom_mat,
-        sym_p,
-        label_by_value=_symptom_label_by_value(),
-    )
-
-    return {
-        "classes": list(CLASSES),
-        "disclaimer": PRODUCT_DISCLAIMER,
-        "image_quality": image_quality,
-        "final_probability": final.tolist(),
-        "wound_probability": wound_p.tolist(),
-        "wound_only_top_class": w_top,
-        "wound_only_confidence": w_conf,
-        "wound_uncertain": wd.get("wound_uncertain", True),
-        "wound_effective_class": wd.get("wound_effective_class", "unknown"),
-        "wound_ensemble_max_confidence": wd.get("ensemble_max_confidence"),
-        "wound_detail": wound_detail,
-        "symptom_probability": sym_p.tolist(),
-        "symptom_only_top_class": sym_top,
-        "symptom_only_confidence": sym_conf,
-        "selected_symptoms_ranked": selected_ranked,
-        "geo_probability": g_p.tolist(),
-        "geo_only_top_class": geo_top,
-        "geo_only_confidence": geo_conf,
-        "geo_input": {"country": country.strip(), "state": (state or "").strip()},
-        "top_class": top,
-        "top_confidence": conf,
-        "fusion_explanation": {
-            "wound_branch": (
-                "Ensemble: weighted average of softmax vectors — EfficientNet-B3 0.5, ResNet50 0.3, "
-                "DenseNet121 0.2. If ensemble max confidence < 0.60, wound_effective_class is 'unknown'."
-            ),
-            "final_multimodal": (
-                "final_probability blends wound + symptoms + geo + context in log-space "
-                f"(weights: {dbg.get('modality_weights', {})}). "
-                "It is not the sum of the three CNN outputs; symptoms/geo/context can change the top class."
-            ),
-        },
-        "snake_species_top": species_rank,
-        "snake_species_debug": sp_dbg,
-        "debug": dbg,
-    }
+        return {
+            "classes": list(CLASSES),
+            "disclaimer": PRODUCT_DISCLAIMER,
+            "image_quality": image_quality,
+            "final_probability": final.tolist(),
+            "wound_probability": wound_p.tolist(),
+            "wound_only_top_class": w_top,
+            "wound_only_confidence": w_conf,
+            "wound_uncertain": wd.get("wound_uncertain", True),
+            "wound_effective_class": wd.get("wound_effective_class", "unknown"),
+            "wound_ensemble_max_confidence": wd.get("ensemble_max_confidence"),
+            "wound_detail": wound_detail,
+            "symptom_probability": sym_p.tolist(),
+            "symptom_only_top_class": sym_top,
+            "symptom_only_confidence": sym_conf,
+            "selected_symptoms_ranked": selected_ranked,
+            "geo_probability": g_p.tolist(),
+            "geo_only_top_class": geo_top,
+            "geo_only_confidence": geo_conf,
+            "geo_input": {"country": country.strip(), "state": (state or "").strip()},
+            "top_class": top,
+            "top_confidence": conf,
+            "fusion_explanation": {
+                "wound_branch": (
+                    "Ensemble: weighted average of softmax vectors — EfficientNet-B3 0.5, ResNet50 0.3, "
+                    "DenseNet121 0.2. If ensemble max confidence < 0.60, wound_effective_class is 'unknown'."
+                ),
+                "final_multimodal": (
+                    "final_probability blends wound + symptoms + geo + context in log-space "
+                    f"(weights: {dbg.get('modality_weights', {})}). "
+                    "It is not the sum of the three CNN outputs; symptoms/geo/context can change the top class."
+                ),
+            },
+            "snake_species_top": species_rank,
+            "snake_species_debug": sp_dbg,
+            "debug": dbg,
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception("POST /predict failed")
+        raise HTTPException(
+            status_code=500,
+            detail=f"{type(e).__name__}: {e}",
+        ) from e
 
 
 @app.post("/test/wound/backbone")

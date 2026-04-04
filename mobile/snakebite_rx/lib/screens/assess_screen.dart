@@ -289,7 +289,16 @@ class _AssessScreenState extends State<AssessScreen> {
         final streamed = await req.send().timeout(const Duration(seconds: 180));
         final body = await streamed.stream.bytesToString();
         if (streamed.statusCode != 200) {
-          throw Exception('HTTP ${streamed.statusCode}: $body');
+          var err = body.trim();
+          if (err.startsWith('{')) {
+            try {
+              final o = jsonDecode(body);
+              if (o is Map && o['detail'] != null) {
+                err = o['detail'].toString();
+              }
+            } catch (_) {}
+          }
+          throw Exception('HTTP ${streamed.statusCode}: $err');
         }
         final result = jsonDecode(body) as Map<String, dynamic>;
         if (!mounted) return;
