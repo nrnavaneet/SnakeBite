@@ -12,7 +12,11 @@ from PIL import Image
 from torchvision import transforms
 
 from ml.checkpoint_util import pick_wound_checkpoint
-from ml.config import CLASSES, WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD
+from ml.config import (
+    CLASSES,
+    WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD,
+    WOUND_UNCERTAIN_TOP2_MARGIN,
+)
 from ml.wound_arch import (
     DEFAULT_ENSEMBLE_WEIGHTS,
     ENSEMBLE_ARCHS,
@@ -81,8 +85,11 @@ class WoundPredictor:
         final = np.sum(np.stack(stacked, axis=0), axis=0)
         final = np.maximum(final, 1e-12)
         final = final / final.sum()
-        max_conf = float(np.max(final))
-        uncertain = max_conf < WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD
+        sorted_desc = np.sort(final)[::-1]
+        max_conf = float(sorted_desc[0])
+        second_conf = float(sorted_desc[1]) if len(sorted_desc) > 1 else 0.0
+        top2_gap = max_conf - second_conf
+        uncertain = max_conf < WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD or top2_gap < WOUND_UNCERTAIN_TOP2_MARGIN
         ti = int(np.argmax(final))
         meta = {
             "kind": self.kind,
@@ -90,9 +97,11 @@ class WoundPredictor:
             "ensemble_weights": self.fusion_weights,
             "models": per,
             "ensemble_max_confidence": max_conf,
+            "wound_top2_gap": top2_gap,
             "wound_uncertain": uncertain,
             "wound_effective_class": "unknown" if uncertain else CLASSES[ti],
             "wound_uncertain_threshold": WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD,
+            "wound_uncertain_margin": WOUND_UNCERTAIN_TOP2_MARGIN,
         }
         return final.astype(np.float64), meta
 
@@ -181,9 +190,11 @@ def predict_wound_probs(
             "models": {},
             "fusion": "uniform",
             "ensemble_max_confidence": float(np.max(u)),
+            "wound_top2_gap": 0.0,
             "wound_uncertain": True,
             "wound_effective_class": "unknown",
             "wound_uncertain_threshold": WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD,
+            "wound_uncertain_margin": WOUND_UNCERTAIN_TOP2_MARGIN,
         }
         if return_meta:
             return u, meta

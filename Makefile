@@ -1,5 +1,9 @@
 # SnakeBiteRx — common tasks (run from repo root)
-.PHONY: verify assets train train-fast train-both api web-build
+.PHONY: setup verify assets train train-fast train-both api web-build serve-web tunnel-api tunnel-web dev-all
+
+# Fresh clone: venv, pip install, build assets, flutter pub get (if flutter on PATH)
+setup:
+	bash scripts/setup_dev.sh
 
 verify:
 	python3 scripts/verify_stack.py
@@ -21,7 +25,22 @@ train-both:
 api:
 	uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 
-# Flutter web (same script as Vercel / Render). Example:
-#   make web-build API_BASE=https://snakebite-api.onrender.com
+# Clean scratch files, free ports, start API + tunnels + Flutter web, open Terminal tails (see script for flags).
+dev-all:
+	bash scripts/dev_all.sh
+
+# Public HTTPS URL to local API (needs: brew install cloudflared). Run in a second terminal after `make api`.
+tunnel-api:
+	bash scripts/dev_tunnel.sh 8000
+
+# Tunnel a Flutter web-server port (run `flutter run -d web-server --web-hostname 0.0.0.0 --web-port 37555` first).
+tunnel-web:
+	bash scripts/dev_tunnel.sh 37555
+
+# Flutter web release build → mobile/snakebite_rx/build/web (default API http://127.0.0.1:8000)
 web-build:
 	API_BASE="$(API_BASE)" bash scripts/build_web.sh
+
+# Serve Flutter build/web (like static hosting). Default PORT=8090. Needs: make api in another terminal.
+serve-web:
+	bash scripts/serve_web.sh

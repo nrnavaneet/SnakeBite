@@ -5,9 +5,39 @@ import 'package:provider/provider.dart';
 
 import '../api_config.dart';
 import '../theme/app_theme.dart';
+import '../theme/breakpoints.dart';
+import '../widgets/shell_menu_leading.dart';
 import '../runtime/open_model_lab_stub.dart' if (dart.library.html) '../runtime/open_model_lab_web.dart' as model_lab;
+import '../runtime/fullscreen_stub.dart' if (dart.library.html) '../runtime/fullscreen_web.dart' as fullscreen;
 import '../state/api_session.dart';
 import '../widgets/tactile_pressable.dart';
+
+/// Dark card + readable ListTile text on the HUD background.
+Widget _settingsCard(BuildContext context, {required Widget child}) {
+  return Theme(
+    data: Theme.of(context).copyWith(
+      listTileTheme: ListTileThemeData(
+        titleTextStyle: const TextStyle(
+          color: AppTheme.ink,
+          fontWeight: FontWeight.w700,
+          fontSize: 16,
+          height: 1.25,
+        ),
+        subtitleTextStyle: TextStyle(
+          color: AppTheme.ink.withValues(alpha: 0.78),
+          fontSize: 13,
+          height: 1.4,
+        ),
+      ),
+    ),
+    child: Card(
+      clipBehavior: Clip.antiAlias,
+      color: const Color(0xFF121924),
+      shadowColor: Colors.black.withValues(alpha: 0.4),
+      child: child,
+    ),
+  );
+}
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -15,50 +45,58 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final session = context.watch<ApiSession>();
-    final cs = Theme.of(context).colorScheme;
+    final gx = shellPageHorizontalPadding(context);
+    final gb = shellScrollBottomPadding(context);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: CustomScrollView(
+    return Material(
+      color: Colors.transparent,
+      child: CustomScrollView(
         slivers: [
           SliverAppBar(
             pinned: true,
             elevation: 0,
             scrolledUnderElevation: 0,
-            backgroundColor: AppTheme.surfaceElevated.withValues(alpha: 0.55),
+            backgroundColor: AppTheme.shellAppBarBackground,
             surfaceTintColor: Colors.transparent,
             toolbarHeight: 64,
-            title: const Text('Settings'),
+            automaticallyImplyLeading: false,
+            leading: shellMenuLeadingButton(context),
+            title: Text(
+              'Settings',
+              style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
+                    color: AppTheme.ink,
+                    fontWeight: FontWeight.w800,
+                  ),
+            ),
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(1),
               child: Divider(height: 1, thickness: 1, color: AppTheme.neon.withValues(alpha: 0.15)),
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
+            padding: EdgeInsets.fromLTRB(gx, 12, gx, gb),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 Text(
                   'API & device',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w800,
-                        color: cs.primary,
+                        color: AppTheme.neon,
                       ),
                 ),
                 const SizedBox(height: 12),
                 TactilePressable(
-                  child: Card(
-                    clipBehavior: Clip.antiAlias,
+                  child: _settingsCard(
+                    context,
                     child: ListTile(
-                      leading: Icon(Icons.dns_rounded, color: cs.primary),
+                      leading: Icon(Icons.dns_rounded, color: AppTheme.neon),
                       title: const Text('Backend base URL'),
                       subtitle: Text(
                         session.baseUrl.isEmpty ? '(not configured)' : session.baseUrl,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 12.5),
                       ),
-                      trailing: const Icon(Icons.chevron_right_rounded),
+                      trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.ink.withValues(alpha: 0.5)),
                       onTap: () => _openApiEditor(context),
                     ),
                   ),
@@ -66,16 +104,30 @@ class SettingsScreen extends StatelessWidget {
                 if (kIsWeb) ...[
                   const SizedBox(height: 12),
                   TactilePressable(
-                    child: Card(
-                      clipBehavior: Clip.antiAlias,
+                    child: _settingsCard(
+                      context,
                       child: ListTile(
-                        leading: Icon(Icons.science_outlined, color: cs.primary),
+                        leading: Icon(Icons.fullscreen_rounded, color: AppTheme.neon),
+                        title: const Text('Full screen'),
+                        subtitle: const Text(
+                          'Hides browser toolbars (Chrome / Edge / Android). iOS Safari: use Share → Add to Home Screen for an app-style, chromeless window.',
+                        ),
+                        trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.ink.withValues(alpha: 0.5)),
+                        onTap: () => fullscreen.requestWebFullscreen(),
+                      ),
+                    ),
+                  ).animate().fadeIn(duration: 350.ms).slideX(begin: -0.02),
+                  const SizedBox(height: 12),
+                  TactilePressable(
+                    child: _settingsCard(
+                      context,
+                      child: ListTile(
+                        leading: Icon(Icons.science_outlined, color: AppTheme.neon),
                         title: const Text('Model lab (atomic tests)'),
                         subtitle: const Text(
                           'Wound backbones, fusion, geo, symptoms, full /predict — opens lab.html',
-                          style: TextStyle(fontSize: 12.5),
                         ),
-                        trailing: const Icon(Icons.open_in_new_rounded),
+                        trailing: Icon(Icons.open_in_new_rounded, color: AppTheme.ink.withValues(alpha: 0.5)),
                         onTap: () => model_lab.openModelLab(context, session.baseUrl),
                       ),
                     ),
@@ -86,36 +138,56 @@ class SettingsScreen extends StatelessWidget {
                   'Legal',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w800,
-                        color: cs.primary,
+                        color: AppTheme.neon,
                       ),
                 ),
                 const SizedBox(height: 12),
                 TactilePressable(
-                  child: Card(
-                    clipBehavior: Clip.antiAlias,
+                  child: _settingsCard(
+                    context,
                     child: ListTile(
-                      leading: Icon(Icons.gavel_rounded, color: cs.primary),
+                      leading: Icon(Icons.gavel_rounded, color: AppTheme.neon),
                       title: const Text('Disclaimer & limitations'),
                       subtitle: const Text('Educational use, model uncertainty, emergency guidance'),
-                      trailing: const Icon(Icons.chevron_right_rounded),
+                      trailing: Icon(Icons.chevron_right_rounded, color: AppTheme.ink.withValues(alpha: 0.5)),
                       onTap: () => _showLegal(context),
                     ),
                   ),
                 ),
-                const SizedBox(height: 28),
-                Text(
-                  'Tip',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  kIsWeb
-                      ? 'Production: set "apiBase" in web/api_config.json (then redeploy), or set API_BASE in '
-                        'Vercel. You can override below in this browser for testing. HTTPS only for real use.'
-                      : 'On a physical phone, set the URL to your computer\'s LAN address, e.g. '
-                        'http://192.168.1.10:8000, same Wi Fi as the dev machine. '
-                        'Android emulator: 10.0.2.2:8000.',
-                  style: TextStyle(height: 1.45, color: cs.onSurfaceVariant, fontSize: 14),
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF161E2E),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppTheme.neon.withValues(alpha: 0.28)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Tip',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: AppTheme.neon,
+                            ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        kIsWeb
+                            ? 'Local default is http://127.0.0.1:8000 (see web/api_config.json). Change Backend base URL above if the API runs elsewhere (tunnel, LAN IP, etc.).'
+                            : 'On a physical phone, set the URL to your computer\'s LAN address, e.g. '
+                                'http://192.168.1.10:8000, same Wi‑Fi as the dev machine. '
+                                'Android emulator: http://10.0.2.2:8000',
+                        style: TextStyle(
+                          height: 1.5,
+                          fontSize: 14,
+                          color: AppTheme.ink.withValues(alpha: 0.92),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ]),
             ),
@@ -131,7 +203,8 @@ class SettingsScreen extends StatelessWidget {
     await showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('API server'),
+        backgroundColor: const Color(0xFF1A2332),
+        title: Text('API server', style: TextStyle(color: AppTheme.ink, fontWeight: FontWeight.w800)),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +212,7 @@ class SettingsScreen extends StatelessWidget {
             children: [
               Text(
                 'Use your machine\'s IP and port where uvicorn runs (e.g. make api).',
-                style: TextStyle(fontSize: 13, color: Theme.of(ctx).colorScheme.onSurfaceVariant, height: 1.4),
+                style: TextStyle(fontSize: 13, color: AppTheme.ink.withValues(alpha: 0.88), height: 1.4),
               ),
               const SizedBox(height: 12),
               TextField(
@@ -185,6 +258,7 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
+      backgroundColor: const Color(0xFF141B26),
       builder: (ctx) => DraggableScrollableSheet(
         expand: false,
         initialChildSize: 0.72,
@@ -195,18 +269,24 @@ class SettingsScreen extends StatelessWidget {
           child: ListView(
             controller: scroll,
             children: [
-              Text('Legal & limitations', style: Theme.of(ctx).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
+              Text(
+                'Legal & limitations',
+                style: Theme.of(ctx).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: AppTheme.ink,
+                    ),
+              ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'SnakeBiteRx is educational software only. It is NOT a medical device and does NOT '
                 'diagnose or treat snakebite. Models can make mistakes. Always follow local emergency protocols.',
-                style: TextStyle(height: 1.5),
+                style: TextStyle(height: 1.5, color: AppTheme.ink.withValues(alpha: 0.92)),
               ),
               const SizedBox(height: 16),
               Text(
                 'Wound stack: EfficientNet-B3, ResNet50, DenseNet121 with softmax fusion (default 58% / 26% / 16%). '
                 'Below 60% ensemble confidence the wound read is treated as uncertain and fusion leans on symptoms/geo.',
-                style: TextStyle(height: 1.5, color: Theme.of(ctx).colorScheme.onSurfaceVariant),
+                style: TextStyle(height: 1.5, color: AppTheme.ink.withValues(alpha: 0.78)),
               ),
             ],
           ),

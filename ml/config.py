@@ -25,6 +25,12 @@ CLASSES: tuple[str, ...] = (
 
 CLASS_TO_IDX = {c: i for i, c in enumerate(CLASSES)}
 
-# Wound ensemble softmax: if max probability is below this, the wound branch is flagged
-# uncertain and `wound_effective_class` becomes "unknown" (display / triage only).
-WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD = 0.60
+# Wound ensemble: uncertain if (a) max softmax is below the threshold, OR (b) the gap
+# between 1st and 2nd place is below WOUND_UNCERTAIN_TOP2_MARGIN (flat distribution / junk).
+# Slightly stricter max than 0.60 reduces confident wrong labels on non–snake-bite photos.
+WOUND_UNCERTAIN_CONFIDENCE_THRESHOLD = 0.65
+WOUND_UNCERTAIN_TOP2_MARGIN = 0.12
+
+# Fused multimodal distribution: if the top class is below this, API returns display_top_class
+# "unknown" so the app does not present a specific venom type as a firm result.
+FINAL_PREDICTION_UNCERTAIN_THRESHOLD = 0.60

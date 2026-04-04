@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# Vercel invokes this (see vercel.json). Delegates to scripts/build_web.sh.
-set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-export VERCEL=1
-exec bash "${ROOT}/scripts/build_web.sh"

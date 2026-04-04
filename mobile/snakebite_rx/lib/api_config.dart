@@ -41,7 +41,7 @@ String defaultApiBaseForPlatform() {
   return 'http://127.0.0.1:8000';
 }
 
-/// Same-origin `web/api_config.json`. On the live site set "apiBase" to your public HTTPS API.
+/// Same-origin `web/api_config.json` — default local API in repo: http://127.0.0.1:8000
 Future<String?> _tryWebApiConfigFile() async {
   if (!kIsWeb) return null;
   try {
@@ -79,7 +79,7 @@ Future<String> resolveApiBaseUrl() async {
     final onPublicHost = web_host.isPublicWebHost();
 
     if (onPublicHost) {
-      // Hosted site (e.g. vercel.app): never use 127.0.0.1 from prefs or defaults.
+      // Non-loopback HTTPS host: do not fall back to 127.0.0.1 from prefs or defaults.
       if (saved.isNotEmpty && !_isLoopbackUrl(saved)) return saved;
       if (fromSite != null) return fromSite;
       return '';

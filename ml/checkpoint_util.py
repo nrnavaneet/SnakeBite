@@ -1,4 +1,4 @@
-"""Checkpoint paths only — no PyTorch import (keeps Render free-tier RAM usable when no *.pt is deployed)."""
+"""Checkpoint paths only — no PyTorch import (keeps API startup light when no *.pt is present)."""
 from __future__ import annotations
 
 from pathlib import Path

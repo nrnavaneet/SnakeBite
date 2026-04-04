@@ -1,4 +1,4 @@
-"""Optional download of wound ensemble weights before PyTorch load (e.g. Render: *.pt not in git)."""
+"""Optional download of wound ensemble weights before PyTorch load (when local file is missing)."""
 from __future__ import annotations
 
 import logging
@@ -21,7 +21,7 @@ def ensure_wound_checkpoint_from_env(root: Path) -> None:
     ``models/wound_ensemble.pt`` when the file is missing or too small.
 
     This makes production match a local dev machine that has the same file under ``models/``.
-    Use a release asset URL (GitHub, S3, etc.); keep the link private via Render env vars.
+    Use a release asset URL (GitHub, S3, etc.); keep the link private in your environment.
     """
     url = (os.environ.get("WOUND_ENSEMBLE_URL") or os.environ.get("WOUND_CHECKPOINT_URL") or "").strip()
     if not url:

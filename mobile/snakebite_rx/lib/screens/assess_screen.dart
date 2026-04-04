@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -11,7 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../state/api_session.dart';
 import '../theme/app_theme.dart';
+import '../theme/breakpoints.dart';
 import '../widgets/section_card.dart';
+import '../widgets/shell_menu_leading.dart';
+import '../utils/image_quality_local.dart';
 import '../widgets/tactile_pressable.dart';
 import 'result_screen.dart';
 
@@ -26,7 +30,6 @@ class SymptomItem {
   final String value;
   final String label;
   final String category;
-  String get display => category.isEmpty ? label : '$category · $label';
 }
 
 class AssessScreen extends StatefulWidget {
@@ -41,6 +44,8 @@ class _AssessScreenState extends State<AssessScreen> {
   ApiSession? _apiSession;
 
   Uint8List? _imageBytes;
+  LocalImageQualityResult? _localImageQuality;
+  bool _assessingImageQuality = false;
   bool _loading = false;
   String? _error;
 
@@ -139,9 +144,8 @@ class _AssessScreenState extends State<AssessScreen> {
       setState(() {
         _regionsLoading = false;
         _error = kIsWeb
-            ? 'No API URL is configured for this site. Add "apiBase" in web/api_config.json to your '
-                'public HTTPS API (then redeploy), or set API_BASE in Vercel. You can also set the URL '
-                'in Settings on this device.'
+            ? 'No API URL is configured. For local use, set "apiBase" in web/api_config.json to '
+                'http://127.0.0.1:8000 (or your LAN URL), or open Settings and paste the backend URL.'
             : 'No API URL is configured. Open Settings and set your backend base URL.';
       });
       return;
@@ -173,9 +177,8 @@ class _AssessScreenState extends State<AssessScreen> {
       setState(() {
         _regionsLoading = false;
         _error = kIsWeb
-            ? 'Cannot reach the API ($base). On the deployed site, set your public HTTPS URL in '
-                'web/api_config.json as "apiBase", or add API_BASE in Vercel → Environment Variables, then redeploy. '
-                'Details: $e'
+            ? 'Cannot reach the API ($base). Start the backend (make api), check web/api_config.json '
+                '"apiBase", or set the URL in Settings. Details: $e'
             : 'Could not reach API at $base. Start the server (make api). $e';
       });
     }
@@ -213,9 +216,6 @@ class _AssessScreenState extends State<AssessScreen> {
       setState(() {
         _symptomItems = items;
         _symptomsLoading = false;
-        for (final it in items) {
-          if (it.value == 'ptosis') _selectedSymptoms.add(it.value);
-        }
       });
     } catch (e) {
       if (!mounted) return;
@@ -239,12 +239,71 @@ class _AssessScreenState extends State<AssessScreen> {
   List<SymptomItem> get _filteredSymptoms {
     final q = _symptomQuery.trim().toLowerCase();
     if (q.isEmpty) return _symptomItems;
-    return _symptomItems
-        .where(
-          (it) =>
-              it.display.toLowerCase().contains(q) || it.value.toLowerCase().contains(q),
-        )
-        .toList();
+    return _symptomItems.where((it) {
+      return it.label.toLowerCase().contains(q) ||
+          it.category.toLowerCase().contains(q) ||
+          it.value.toLowerCase().contains(q);
+    }).toList();
+  }
+
+  /// Grouped by category; plain [SymptomItem.label] as title (catalog already has friendly labels).
+  List<Widget> _symptomTilesGrouped(ColorScheme cs) {
+    final items = List<SymptomItem>.from(_filteredSymptoms)
+      ..sort((a, b) {
+        final ca = a.category.trim().isEmpty ? '\uFFFF' : a.category.toLowerCase();
+        final cb = b.category.trim().isEmpty ? '\uFFFF' : b.category.toLowerCase();
+        final c = ca.compareTo(cb);
+        if (c != 0) return c;
+        return a.label.toLowerCase().compareTo(b.label.toLowerCase());
+      });
+    if (items.isEmpty) return const [];
+    final out = <Widget>[];
+    String? lastCat;
+    for (final it in items) {
+      final cat = it.category.trim().isEmpty ? 'General' : it.category.trim();
+      if (cat != lastCat) {
+        lastCat = cat;
+        out.add(
+          Padding(
+            padding: EdgeInsets.only(top: out.isEmpty ? 0 : 18, bottom: 6),
+            child: Text(
+              cat,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.35,
+                color: cs.primary,
+              ),
+            ),
+          ),
+        );
+      }
+      final sel = _selectedSymptoms.contains(it.value);
+      out.add(
+        TactilePressable(
+          scale: 0.994,
+          child: CheckboxListTile(
+            value: sel,
+            onChanged: (on) {
+              setState(() {
+                if (on == true) {
+                  _selectedSymptoms.add(it.value);
+                } else {
+                  _selectedSymptoms.remove(it.value);
+                }
+              });
+            },
+            title: Text(
+              it.label,
+              style: const TextStyle(fontSize: 14, height: 1.3, fontWeight: FontWeight.w600),
+            ),
+            dense: true,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+        ),
+      );
+    }
+    return out;
   }
 
   Future<void> _pickImage(ImageSource src) async {
@@ -252,7 +311,38 @@ class _AssessScreenState extends State<AssessScreen> {
     if (x == null) return;
     final bytes = await x.readAsBytes();
     if (!mounted) return;
-    setState(() => _imageBytes = bytes);
+    setState(() {
+      _imageBytes = bytes;
+      _localImageQuality = null;
+      _assessingImageQuality = true;
+      _error = null;
+    });
+    final q = await assessImageQualityLocal(bytes);
+    if (!mounted) return;
+    setState(() {
+      _localImageQuality = q;
+      _assessingImageQuality = false;
+    });
+  }
+
+  void _resetAll() {
+    setState(() {
+      _imageBytes = null;
+      _localImageQuality = null;
+      _assessingImageQuality = false;
+      _selectedSymptoms.clear();
+      _symptomQuery = '';
+      _timeHours = 3;
+      _age = 35;
+      _weight = 60;
+      _circumstance = 'unknown';
+      _error = null;
+      if (_countries.contains('India')) {
+        _country = 'India';
+      }
+      _state = '';
+      _ensureStateValid();
+    });
   }
 
   Future<void> _analyze() async {
@@ -263,6 +353,20 @@ class _AssessScreenState extends State<AssessScreen> {
     }
     if (_imageBytes == null) {
       setState(() => _error = 'Add a clear photo of the bite area first.');
+      return;
+    }
+    if (_localImageQuality?.blocksProceed == true) {
+      setState(
+        () => _error = 'This photo is too blurry to use. Pick a clearer picture, then try again.',
+      );
+      return;
+    }
+    if (_selectedSymptoms.isEmpty) {
+      setState(
+        () => _error =
+            'Select at least one sign or symptom in the list below (use search if needed). '
+            'The symptom layer is required for a meaningful fusion.',
+      );
       return;
     }
     setState(() {
@@ -339,9 +443,8 @@ class _AssessScreenState extends State<AssessScreen> {
                 msg.contains('XMLHttpRequest'))) {
           display =
               '$msg\n\n'
-              'Often happens if the API host closed the connection: Render Free can be slow to wake, '
-              'or run out of RAM during image analysis. Wait a minute after opening the app, try a '
-              'smaller photo, check your API service Logs on Render, or upgrade the instance RAM.';
+              'Often the API is not running or closed the connection. Start it with: make api '
+              '(http://127.0.0.1:8000). For large images, try a smaller photo or wait and retry.';
         }
         if (mounted) setState(() => _error = display);
         break;
@@ -358,11 +461,12 @@ class _AssessScreenState extends State<AssessScreen> {
     final session = context.watch<ApiSession>();
     final stateList = _statesForCountry(_country);
     final busy = _loading || _regionsLoading || _bootstrapping;
+    final imageBlocksAnalyze = _localImageQuality?.blocksProceed == true;
 
     if (_bootstrapping) {
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
+      return Material(
+        color: Colors.transparent,
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -380,9 +484,12 @@ class _AssessScreenState extends State<AssessScreen> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: CustomScrollView(
+    final gx = shellPageHorizontalPadding(context);
+    final gb = shellScrollBottomPadding(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: CustomScrollView(
         slivers: [
           // SliverAppBar.large duplicates title + subtitle when scrolling — use single pinned bar.
           SliverAppBar(
@@ -390,17 +497,26 @@ class _AssessScreenState extends State<AssessScreen> {
             floating: false,
             elevation: 0,
             scrolledUnderElevation: 0,
-            backgroundColor: AppTheme.surfaceElevated.withValues(alpha: 0.55),
+            backgroundColor: AppTheme.shellAppBarBackground,
             surfaceTintColor: Colors.transparent,
-            toolbarHeight: 72,
+            toolbarHeight: isShellCompactWidth(context) ? 64 : 72,
+            automaticallyImplyLeading: false,
+            leading: shellMenuLeadingButton(context),
             title: const _AppBarBrand(),
+            actions: [
+              IconButton(
+                tooltip: 'Reset all',
+                onPressed: _loading ? null : _resetAll,
+                icon: const Icon(Icons.restart_alt_rounded),
+              ),
+            ],
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(1),
               child: Divider(height: 1, thickness: 1, color: AppTheme.neon.withValues(alpha: 0.15)),
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
+            padding: EdgeInsets.fromLTRB(gx, 12, gx, gb),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 Container(
@@ -468,7 +584,9 @@ class _AssessScreenState extends State<AssessScreen> {
                   delayMs: 0,
                   step: 1,
                   title: 'Wound photo',
-                  subtitle: 'Bright, steady, in focus. The clearer the photo, the more the models can use.',
+                  subtitle:
+                      'Only extremely blurry photos are blocked — normal phone shots are fine. '
+                      'If blocked, reupload a clearer picture to run analysis.',
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -493,16 +611,78 @@ class _AssessScreenState extends State<AssessScreen> {
                       ),
                       if (_imageBytes != null) ...[
                         const SizedBox(height: 16),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(18),
-                          child: AspectRatio(
-                            aspectRatio: 4 / 3,
-                            child: Hero(
-                              tag: 'wound_photo',
-                              child: Image.memory(_imageBytes!, fit: BoxFit.cover),
-                            ),
-                          ),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final mq = MediaQuery.sizeOf(context);
+                            final h = (mq.height * 0.22).clamp(160.0, 240.0);
+                            final w = math.min(constraints.maxWidth, 420.0);
+                            return Align(
+                              alignment: Alignment.center,
+                              child: Hero(
+                                tag: 'wound_photo',
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(18),
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: cs.surfaceContainerHighest.withValues(alpha: 0.55),
+                                        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(alpha: 0.25),
+                                            blurRadius: 16,
+                                            offset: const Offset(0, 6),
+                                          ),
+                                        ],
+                                      ),
+                                      child: SizedBox(
+                                        width: w,
+                                        height: h,
+                                        child: Image.memory(
+                                          _imageBytes!,
+                                          fit: BoxFit.contain,
+                                          alignment: Alignment.center,
+                                          gaplessPlayback: true,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
+                        if (_assessingImageQuality) ...[
+                          const SizedBox(height: 14),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: cs.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  'Checking photo clarity…',
+                                  style: TextStyle(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.w600,
+                                    color: cs.onSurfaceVariant,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                        if (!_assessingImageQuality && _localImageQuality != null) ...[
+                          const SizedBox(height: 14),
+                          _PhotoQualityBanner(result: _localImageQuality!, cs: cs),
+                        ],
                       ],
                     ],
                   ),
@@ -595,7 +775,9 @@ class _AssessScreenState extends State<AssessScreen> {
                   delayMs: 180,
                   step: 4,
                   title: 'Signs & symptoms',
-                  subtitle: 'Select everything that applies.',
+                  subtitle:
+                      'Grouped by topic. Short names for quick reading — every option still maps to the full '
+                      'clinical codes for the model.',
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -604,40 +786,18 @@ class _AssessScreenState extends State<AssessScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Search',
                           prefixIcon: Icon(Icons.search_rounded),
-                          hintText: 'Filter symptoms…',
+                          hintText: 'e.g. pain, swelling, bleeding, drooping eyelids',
                         ),
                         onChanged: (v) => setState(() => _symptomQuery = v),
                       ),
                       const SizedBox(height: 8),
                       SizedBox(
-                        height: 300,
+                        height: 360,
                         child: _symptomItems.isEmpty && !_symptomsLoading
                             ? const Center(child: Text('No symptoms loaded'))
-                            : ListView.separated(
-                                itemCount: _filteredSymptoms.length,
-                                separatorBuilder: (_, __) => Divider(height: 1, color: cs.outlineVariant.withValues(alpha: 0.35)),
-                                itemBuilder: (ctx, i) {
-                                  final it = _filteredSymptoms[i];
-                                  final sel = _selectedSymptoms.contains(it.value);
-                                  return TactilePressable(
-                                    scale: 0.994,
-                                    child: CheckboxListTile(
-                                      value: sel,
-                                      onChanged: (on) {
-                                        setState(() {
-                                          if (on == true) {
-                                            _selectedSymptoms.add(it.value);
-                                          } else {
-                                            _selectedSymptoms.remove(it.value);
-                                          }
-                                        });
-                                      },
-                                      title: Text(it.display, style: const TextStyle(fontSize: 13.5, height: 1.25)),
-                                      dense: true,
-                                      controlAffinity: ListTileControlAffinity.leading,
-                                    ),
-                                  );
-                                },
+                            : ListView(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                children: _symptomTilesGrouped(cs),
                               ),
                       ),
                       const SizedBox(height: 6),
@@ -645,13 +805,33 @@ class _AssessScreenState extends State<AssessScreen> {
                         '${_selectedSymptoms.length} selected',
                         style: TextStyle(fontSize: 12, color: cs.onSurfaceVariant),
                       ),
+                      if (!_symptomsLoading && _selectedSymptoms.isEmpty) ...[
+                        const SizedBox(height: 10),
+                        Text(
+                          'Select at least one sign or symptom — required for the symptom layer in fusion.',
+                          style: TextStyle(fontSize: 12.5, height: 1.35, color: cs.primary, fontWeight: FontWeight.w700),
+                        ),
+                      ],
                     ],
                   ),
                 ),
                 const SizedBox(height: 24),
+                TextButton.icon(
+                  onPressed: _loading ? null : _resetAll,
+                  icon: Icon(Icons.restart_alt_rounded, size: 20, color: cs.onSurfaceVariant),
+                  label: Text(
+                    'Reset all fields',
+                    style: TextStyle(color: cs.onSurfaceVariant, fontWeight: FontWeight.w700),
+                  ),
+                ),
+                const SizedBox(height: 8),
                 Builder(
                   builder: (context) {
-                    final disabled = busy || _symptomsLoading;
+                    final disabled = busy ||
+                        _symptomsLoading ||
+                        _selectedSymptoms.isEmpty ||
+                        _assessingImageQuality ||
+                        imageBlocksAnalyze;
                     final cta = ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
@@ -732,6 +912,63 @@ class _AssessScreenState extends State<AssessScreen> {
   }
 }
 
+class _PhotoQualityBanner extends StatelessWidget {
+  const _PhotoQualityBanner({required this.result, required this.cs});
+
+  final LocalImageQualityResult result;
+  final ColorScheme cs;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!result.blocksProceed) return const SizedBox.shrink();
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF161E2E),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: cs.error.withValues(alpha: 0.55)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.add_a_photo_rounded, color: cs.error, size: 26),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Too blurry — pick another photo',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 14,
+                    color: AppTheme.ink,
+                  ),
+                ),
+                if (result.sharpnessScore != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    'Sharpness ${result.sharpnessScore!.toStringAsFixed(1)} (extreme blur threshold ${kExtremeBlurLaplacianMax.toStringAsFixed(0)})',
+                    style: TextStyle(fontSize: 12, color: cs.onSurfaceVariant, height: 1.35),
+                  ),
+                ],
+                if (result.message != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    result.message!,
+                    style: const TextStyle(fontSize: 13.5, height: 1.45, color: AppTheme.ink),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _AppBarBrand extends StatelessWidget {
   const _AppBarBrand();
 
@@ -739,7 +976,7 @@ class _AppBarBrand extends StatelessWidget {
     try {
       final u = Uri.parse(url);
       if (u.host == '127.0.0.1' || u.host == 'localhost') {
-        return 'API: local only. Set web/api_config.json or Vercel API_BASE for the live site';
+        return 'API: localhost — ensure make api is running';
       }
       return 'API · ${u.host}';
     } catch (_) {

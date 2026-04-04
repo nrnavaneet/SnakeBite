@@ -15,6 +15,9 @@ class AppTheme {
   static const Color void_ = Color(0xFF05080D);
   static const Color surface = Color(0xFF0C1118);
   static const Color surfaceElevated = Color(0xFF141B26);
+  /// Opaque bars so scrolling content does not show through app / drawer headers.
+  static const Color shellAppBarBackground = Color(0xFF080C12);
+  static const Color shellNavBarBackground = Color(0xFF141B26);
   static const Color glass = Color(0x1AFFFFFF);
   static const Color ink = Color(0xFFE8EEF5);
   static const Color inkMuted = Color(0xFF94A3B8);
@@ -95,7 +98,7 @@ class AppTheme {
         centerTitle: false,
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: shellAppBarBackground,
         foregroundColor: ink,
         surfaceTintColor: Colors.transparent,
         titleTextStyle: GoogleFonts.outfit(

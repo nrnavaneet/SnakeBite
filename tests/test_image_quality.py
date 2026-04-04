@@ -25,4 +25,5 @@ def test_assess_image_quality_returns_keys(tmp_path) -> None:
     q = assess_image_quality(p)
     assert "sharpness_score" in q
     assert "recommend_retake" in q
+    assert "severe_blur" in q
     assert q["sharpness_score"] is not None

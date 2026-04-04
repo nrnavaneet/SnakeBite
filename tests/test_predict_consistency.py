@@ -49,6 +49,26 @@ def test_fuse_multimodal_sums():
     assert "context_prior" in dbg
 
 
+def test_confident_wound_wins_over_one_hot_symptom_when_they_disagree():
+    """Peaked symptom KB must not override a confident non_venomous wound read."""
+    from ml.config import CLASSES
+    from ml.fusion import fuse_multimodal, modality_weights_for_predict, top_prediction
+
+    wound = np.array(
+        [0.01762, 0.02591, 0.01770, 0.91350, 0.02526],
+        dtype=np.float64,
+    )
+    symptom = np.array([1e-8, 1.0 - 1e-7, 1e-8, 1e-8, 1e-8], dtype=np.float64)
+    geo = np.array([1e-12, 0.369, 0.297, 0.286, 0.048], dtype=np.float64)
+
+    mw = modality_weights_for_predict(wound_model_loaded=True, wound_uncertain=False)
+    final, dbg = fuse_multimodal(wound, symptom, geo, modality_weights=mw)
+    top, conf = top_prediction(final)
+    assert top == "non_venomous"
+    assert conf > 0.5
+    assert "conflict" in dbg.get("fusion_note", "")
+
+
 @pytest.mark.skipif(
     not _has_any_wound_checkpoint(),
     reason="no wound checkpoint (wound_ensemble.pt or wound_mobilenet.pt)",

@@ -8,7 +8,9 @@ import numpy as np
 from PIL import Image
 
 # Laplacian variance on grayscale (higher = sharper). Tunable; depends on resize.
-_DEFAULT_BLUR_MAX = 95.0  # below this → recommend retake
+# Lenient policy: only **extreme** softness triggers retake / messaging (unusable detail).
+# Typical: >~120 sharp phone; ~50–90 acceptable; <~32 effectively unusable.
+_EXTREME_BLUR_MAX = 32.0
 
 
 def _gray_array(path: Path, *, max_side: int = 768) -> np.ndarray:
@@ -39,12 +41,13 @@ def laplacian_variance(gray: np.ndarray) -> float:
 def assess_image_quality(
     image_path: Path,
     *,
-    blur_threshold: float = _DEFAULT_BLUR_MAX,
+    blur_threshold: float = _EXTREME_BLUR_MAX,
 ) -> dict[str, Any]:
     """
-    Returns sharpness score and whether to ask the user to retake the photo.
+    Returns sharpness score and whether the photo is **extremely** soft (unusable).
 
-    ``sharpness_score`` is Laplacian variance (typical: <~80 very soft, >~150 sharp).
+    ``sharpness_score`` is Laplacian variance. ``recommend_retake`` is True only for
+    extreme blur (below ``blur_threshold``), not for mild softness.
     """
     try:
         gray = _gray_array(image_path)
@@ -58,18 +61,20 @@ def assess_image_quality(
             "message": "Could not read the image — try again with a standard JPG/PNG.",
         }
 
-    is_blurry = score < blur_threshold
+    extreme_blur = score < blur_threshold
     msg = None
-    if is_blurry:
+    if extreme_blur:
         msg = (
-            "This photo looks blurry, too dark, or low detail. "
-            "Retake with steady hands, good light, and the wound in focus."
+            "This image is extremely blurry or lacks usable detail — please reupload a clearer photo. "
+            "Use bright, even light, hold the phone steady, and tap the wound to focus."
         )
     return {
         "sharpness_score": round(score, 2),
         "blur_threshold": blur_threshold,
-        "is_blurry": is_blurry,
-        "recommend_retake": is_blurry,
-        "reason": "low_sharpness" if is_blurry else None,
+        "severe_blur_threshold": blur_threshold,
+        "severe_blur": extreme_blur,
+        "is_blurry": extreme_blur,
+        "recommend_retake": extreme_blur,
+        "reason": "extreme_blur" if extreme_blur else None,
         "message": msg,
     }

@@ -21,7 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from ml.config import CLASSES
+from ml.config import CLASSES, FINAL_PREDICTION_UNCERTAIN_THRESHOLD
 from ml.fusion import (
     fuse_multimodal,
     modality_weights_for_predict,
@@ -107,7 +107,7 @@ def _startup() -> None:
     # Production: if models/wound_ensemble.pt is absent, set WOUND_ENSEMBLE_URL (or WOUND_CHECKPOINT_URL)
     # to download the same ensemble as local dev so /predict matches lab.html against localhost.
     ensure_wound_checkpoint_from_env(ROOT)
-    # Only import PyTorch when a checkpoint exists (saves hundreds of MB on Render Free when models/*.pt are absent).
+    # Only import PyTorch when a checkpoint exists (saves RAM when models/*.pt are absent).
     ck = pick_wound_checkpoint(ROOT)
     if ck is not None:
         from ml.infer import load_wound_predictor
@@ -233,6 +233,8 @@ async def predict(
             wound_uncertain=w_uncertain,
         )
         top, conf = top_prediction(final)
+        prediction_uncertain = conf < FINAL_PREDICTION_UNCERTAIN_THRESHOLD
+        display_top_class = "unknown" if prediction_uncertain else top
 
         fusion_warning: str | None = None
         if not wound_loaded:
@@ -286,19 +288,29 @@ async def predict(
             "geo_input": {"country": country.strip(), "state": (state or "").strip()},
             "top_class": top,
             "top_confidence": conf,
+            "prediction_uncertain": prediction_uncertain,
+            "display_top_class": display_top_class,
+            "final_prediction_uncertain_threshold": FINAL_PREDICTION_UNCERTAIN_THRESHOLD,
             "wound_model_loaded": wound_loaded,
             "fusion_warning": fusion_warning,
             "fusion_explanation": {
                 "wound_branch": (
                     "Ensemble: weighted average of softmax vectors — EfficientNet-B3 0.58, ResNet50 0.26, "
-                    "DenseNet121 0.16 (defaults; checkpoint may override). If ensemble max confidence < 0.60, "
+                    "DenseNet121 0.16 (defaults; checkpoint may override). The wound branch is uncertain if "
+                    "ensemble max < ~0.65 or the gap between 1st and 2nd class is small (flat softmax); then "
                     "wound_effective_class is 'unknown' and fusion uses lower wound / higher symptom+geo weights."
+                ),
+                "final_display": (
+                    f"If fused top confidence is below {FINAL_PREDICTION_UNCERTAIN_THRESHOLD:.2f}, "
+                    "`display_top_class` is 'unknown' so the UI should not present a single venom type as certain."
                 ),
                 "final_multimodal": (
                     "final_probability blends wound + symptoms + geo + context in log-space "
                     f"(weights: {dbg.get('modality_weights', {})}, reason={dbg.get('modality_weights_reason', '')}). "
-                    "Confident wound runs use a higher wound share; uncertain wound runs favor symptoms/geo. "
-                    "Without a deployed wound model, the image branch is uniform and does not affect ranking."
+                    "When the wound model is confident, wound gets ~80% log-weight; symptoms ~7%. "
+                    "Symptom KB is floor-smoothed and, if it disagrees with a confident wound argmax, blended toward "
+                    "uniform so a one-hot checklist cannot override imaging. Geo uses a smaller floor. "
+                    "Uncertain wound uses more symptom/geo. Without a wound checkpoint, the image branch is uniform."
                 ),
             },
             "snake_species_top": species_rank,

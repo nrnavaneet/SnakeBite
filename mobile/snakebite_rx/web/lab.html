@@ -105,13 +105,12 @@
     <section class="api-bar" id="apiBar" aria-label="API configuration">
       <h2>Backend base URL</h2>
       <p class="hint" style="margin-top:0">
-        Use this when the page is on <strong>Vercel</strong> and the API on <strong>Render</strong> (or any cross-origin setup). Paste the same origin you use in the app Settings.
-        Optional query: <code>?api=https://your-api.onrender.com</code>. Saved in session storage as you click Apply.
+        Default local API: <strong>http://127.0.0.1:8000</strong> (run <code>make api</code> from the repo root). Change below if your backend is on another host or port. Optional query: <code>?api=http://127.0.0.1:8000</code>. Saved in session storage when you click Apply.
       </p>
       <div class="row-api">
         <div>
           <label for="apiBaseInput">API origin (no trailing slash)</label>
-          <input type="url" id="apiBaseInput" placeholder="https://snakebite-xxxx.onrender.com" autocomplete="off" />
+          <input type="url" id="apiBaseInput" placeholder="http://127.0.0.1:8000" autocomplete="off" />
         </div>
         <button type="button" id="btnApiApply" class="secondary">Apply &amp; reload</button>
       </div>

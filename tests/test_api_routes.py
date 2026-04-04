@@ -89,6 +89,9 @@ def test_post_predict_image_quality_and_fusion_fields(client: TestClient) -> Non
     assert "wound_uncertain" in j
     assert "wound_effective_class" in j
     assert "disclaimer" in j
+    assert "prediction_uncertain" in j
+    assert "display_top_class" in j
+    assert j["display_top_class"] == ("unknown" if j["prediction_uncertain"] else j["top_class"])
 
 
 def test_post_wound_fused(client: TestClient) -> None:

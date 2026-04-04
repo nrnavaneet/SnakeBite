@@ -10,4 +10,3 @@ venv/
 mobile/**/build/
 mobile/**/.dart_tool/
 mobile/**/pubspec.lock
-.vercel
