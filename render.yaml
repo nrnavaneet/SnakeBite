@@ -21,6 +21,8 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.9"
+      # Optional: HTTPS URL to wound_ensemble.pt (GitHub Release asset, S3, etc.) so production matches local lab.
+      # Set in the Render dashboard: WOUND_ENSEMBLE_URL=https://.../wound_ensemble.pt
 
   - type: web
     name: snakebite-web

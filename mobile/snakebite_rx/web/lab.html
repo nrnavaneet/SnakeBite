@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SnakeBiteRx — model lab (temporary)</title>
+  <title>SnakeBiteRx — model lab (atomic tests)</title>
   <style>
     :root {
       font-family: ui-sans-serif, system-ui, sans-serif;
@@ -83,18 +83,43 @@
     }
     .symptom-row input[type="checkbox"] { width: auto; margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
     .symptom-row label { margin-top: 0; font-weight: 400; color: var(--text); cursor: pointer; flex: 1; line-height: 1.35; }
+    .api-bar {
+      background: var(--card);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 1rem;
+    }
+    .api-bar h2 { font-size: 0.95rem; margin: 0 0 8px; color: #94a3b8; }
+    .row-api { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+    .api-bar .row-api > div { flex: 1 1 280px; }
+    .api-bar button { width: auto; margin-top: 0; flex: 0 0 auto; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="topbar">
       <h1>SnakeBiteRx model lab</h1>
-      <span class="pill">temporary test page</span>
+      <span class="pill">atomic model tests</span>
     </div>
+    <section class="api-bar" id="apiBar" aria-label="API configuration">
+      <h2>Backend base URL</h2>
+      <p class="hint" style="margin-top:0">
+        Use this when the page is on <strong>Vercel</strong> and the API on <strong>Render</strong> (or any cross-origin setup). Paste the same origin you use in the app Settings.
+        Optional query: <code>?api=https://your-api.onrender.com</code>. Saved in session storage as you click Apply.
+      </p>
+      <div class="row-api">
+        <div>
+          <label for="apiBaseInput">API origin (no trailing slash)</label>
+          <input type="url" id="apiBaseInput" placeholder="https://snakebite-xxxx.onrender.com" autocomplete="off" />
+        </div>
+        <button type="button" id="btnApiApply" class="secondary">Apply &amp; reload</button>
+      </div>
+    </section>
     <p class="sub">
       Atomic tests: each <strong>wound backbone</strong> alone, then <strong>fused ensemble</strong>, then <strong>geo</strong>, <strong>symptoms</strong>, and <strong>full multimodal</strong>.
       Snake names use <strong>common / generic</strong> labels from your geo CSV when present (scientific name shown as secondary). Not clinical ground truth.
-      · <a href="/ui/">simple UI</a> · <a href="/docs">API</a>
+      · <a href="./" id="linkHome">Flutter app</a> · <a href="#" id="linkDocs" target="_blank" rel="noopener">API docs</a>
     </p>
     <p id="healthLine" class="sub"></p>
     <p id="backboneHint" class="sub" style="font-size:0.82rem;"></p>
@@ -124,7 +149,7 @@
           <select id="state"></select>
         </div>
       </div>
-      <label>Signs &amp; symptoms — pick what applies (plain language; same data as <a href="/symptoms" target="_blank">/symptoms</a>)</label>
+      <label>Signs &amp; symptoms — pick what applies (plain language; same data as <a href="#" id="symptomsLinkKb" target="_blank" rel="noopener">/symptoms</a>)</label>
       <p class="hint" style="margin-top:4px;">Each line is short wording for the patient. The app still sends the correct medical codes in the background.</p>
       <input type="search" id="symptomFilter" class="symptom-filter" placeholder="Filter list…" autocomplete="off" />
       <div class="symptom-toolbar">
@@ -149,6 +174,7 @@
         <button type="button" class="secondary" id="btnEff">EfficientNet-B3</button>
         <button type="button" class="secondary" id="btnRes">ResNet50</button>
         <button type="button" class="secondary" id="btnDen">DenseNet121</button>
+        <button type="button" id="btnAllBackbones">Run all three (sequential)</button>
       </div>
       <pre id="outAtomic" class="out" hidden></pre>
     </section>
@@ -213,6 +239,51 @@
   </div>
 
   <script>
+    function normalizeBase(u) {
+      let s = (u || "").trim();
+      if (!s) return "";
+      if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+      return s.replace(/\/+$/, "");
+    }
+
+    function apiUrl(path) {
+      const p = path.startsWith("/") ? path : "/" + path;
+      const b = window.API_BASE || "";
+      return b + p;
+    }
+
+    function getApiBaseFromQuery() {
+      const q = new URLSearchParams(window.location.search).get("api");
+      return q ? normalizeBase(q) : "";
+    }
+
+    async function resolveInitialApiBase() {
+      let base = getApiBaseFromQuery();
+      if (!base) {
+        try {
+          base = normalizeBase(sessionStorage.getItem("snakebite_lab_api") || "");
+        } catch (_) {}
+      }
+      if (!base) {
+        try {
+          const r = await fetch("api_config.json?t=" + Date.now());
+          if (r.ok) {
+            const j = await r.json();
+            if (j.apiBase) base = normalizeBase(String(j.apiBase));
+          }
+        } catch (_) {}
+      }
+      if (!base) base = "http://127.0.0.1:8000";
+      window.API_BASE = base;
+      const input = document.getElementById("apiBaseInput");
+      if (input) input.value = base;
+      const ld = document.getElementById("linkDocs");
+      const sk = document.getElementById("symptomsLinkKb");
+      if (ld) ld.href = apiUrl("/docs");
+      if (sk) sk.href = apiUrl("/symptoms");
+      return base;
+    }
+
     const countryEl = document.getElementById("country");
     const stateEl = document.getElementById("state");
     let statesByCountry = {};
@@ -264,7 +335,7 @@
     }
 
     async function loadRegions() {
-      const r = await fetch("/geo/regions");
+      const r = await fetch(apiUrl("/geo/regions"));
       const d = await r.json();
       statesByCountry = d.states_by_country || {};
       countryEl.innerHTML = "";
@@ -321,7 +392,7 @@
 
     async function loadSymptoms() {
       const box = document.getElementById("symptomChooser");
-      const r = await fetch("/symptoms");
+      const r = await fetch(apiUrl("/symptoms"));
       if (!r.ok) throw new Error(await r.text());
       const d = await r.json();
       const items =
@@ -402,7 +473,7 @@
     }
 
     async function loadSampleIntoInputs() {
-      const r = await fetch("/test/sample_wound_image");
+      const r = await fetch(apiUrl("/test/sample_wound_image"));
       if (!r.ok) throw new Error(await r.text());
       const blob = await r.blob();
       const file = new File([blob], "sample_hemotoxic.jpg", { type: blob.type || "image/jpeg" });
@@ -417,7 +488,7 @@
       if (!f) throw new Error("No image — choose a file or click Load sample.");
       const fd = sharedForm();
       fd.append("file", f);
-      const r = await fetch("/test/wound", { method: "POST", body: fd });
+      const r = await fetch(apiUrl("/test/wound"), { method: "POST", body: fd });
       const t = await r.text();
       const j = JSON.parse(t);
       if (!r.ok) throw new Error(t);
@@ -433,9 +504,9 @@
         fd.append("backbone", name);
         return fd;
       };
-      let r = await fetch("/test/wound/backbone", { method: "POST", body: buildFd() });
+      let r = await fetch(apiUrl("/test/wound/backbone"), { method: "POST", body: buildFd() });
       if (r.status === 404) {
-        r = await fetch("/test/wound_backbone", { method: "POST", body: buildFd() });
+        r = await fetch(apiUrl("/test/wound_backbone"), { method: "POST", body: buildFd() });
       }
       const t = await r.text();
       let j;
@@ -451,7 +522,7 @@
 
     async function postGeo() {
       const fd = sharedForm();
-      const r = await fetch("/test/geo", { method: "POST", body: fd });
+      const r = await fetch(apiUrl("/test/geo"), { method: "POST", body: fd });
       const t = await r.text();
       const j = JSON.parse(t);
       if (!r.ok) throw new Error(t);
@@ -460,7 +531,7 @@
 
     async function postSymptoms() {
       const fd = sharedForm();
-      const r = await fetch("/test/symptoms", { method: "POST", body: fd });
+      const r = await fetch(apiUrl("/test/symptoms"), { method: "POST", body: fd });
       const t = await r.text();
       const j = JSON.parse(t);
       if (!r.ok) throw new Error(t);
@@ -479,10 +550,18 @@
       fd.append("bite_circumstance", document.getElementById("circ").value);
       fd.append("age_years", document.getElementById("age").value);
       fd.append("weight_kg", document.getElementById("wt").value);
-      const r = await fetch("/predict", { method: "POST", body: fd });
+      const r = await fetch(apiUrl("/predict"), { method: "POST", body: fd });
       const t = await r.text();
-      const j = JSON.parse(t);
-      if (!r.ok) throw new Error(t);
+      let j;
+      try {
+        j = JSON.parse(t);
+      } catch (_) {
+        throw new Error("HTTP " + r.status + ": " + (t || "non-JSON"));
+      }
+      if (!r.ok) {
+        const d = j && j.detail != null ? j.detail : t;
+        throw new Error("HTTP " + r.status + ": " + (typeof d === "string" ? d : JSON.stringify(d)));
+      }
       return j;
     }
 
@@ -570,7 +649,7 @@
       const line = document.getElementById("healthLine");
       const hint = document.getElementById("backboneHint");
       try {
-        const h = await fetch("/health").then((r) => r.json());
+        const h = await fetch(apiUrl("/health")).then((r) => r.json());
         const bb = h.wound_backbones || [];
         line.innerHTML =
           '<span class="good">API up</span> — wound: ' +
@@ -581,7 +660,12 @@
           ? "Atomic backbones available: " + bb.join(", ") + "."
           : "For per-backbone buttons, train and deploy models/wound_ensemble.pt (make train).";
       } catch (e) {
-        line.innerHTML = '<span class="bad">Cannot reach /health — start the server (make api)</span>';
+        line.innerHTML =
+          '<span class="bad">Cannot reach health at ' +
+          apiUrl("/health") +
+          " — check API base URL above and CORS. (" +
+          String(e) +
+          ")</span>";
         hint.textContent = "";
       }
     }
@@ -634,8 +718,11 @@
     };
 
     function showAtomic(j) {
+      if (j.error) {
+        return "API: " + j.error + (j.available ? "\nAvailable backbones: " + j.available.join(", ") : "") + "\n\n" + JSON.stringify(j, null, 2);
+      }
       const lines = [
-        j.backbone + " — top: " + j.top_class + " @ " + (100 * j.top_confidence).toFixed(1) + "%",
+        (j.backbone || "?") + " — top: " + j.top_class + " @ " + (100 * j.top_confidence).toFixed(1) + "%",
         "probability: " + JSON.stringify(j.wound_probability),
         formatSpecies(j).trim(),
         "\nraw: " + JSON.stringify(j.wound_backbone_detail || {}, null, 2),
@@ -647,7 +734,7 @@
       const out = document.getElementById("outAtomic");
       try {
         const j = await postWoundBackbone("efficientnet_b3");
-        show(out, showAtomic(j), true);
+        show(out, showAtomic(j), !j.error);
       } catch (e) {
         show(out, String(e), false);
       }
@@ -656,7 +743,7 @@
       const out = document.getElementById("outAtomic");
       try {
         const j = await postWoundBackbone("resnet50");
-        show(out, showAtomic(j), true);
+        show(out, showAtomic(j), !j.error);
       } catch (e) {
         show(out, String(e), false);
       }
@@ -665,9 +752,31 @@
       const out = document.getElementById("outAtomic");
       try {
         const j = await postWoundBackbone("densenet121");
-        show(out, showAtomic(j), true);
+        show(out, showAtomic(j), !j.error);
       } catch (e) {
         show(out, String(e), false);
+      }
+    };
+
+    document.getElementById("btnAllBackbones").onclick = async () => {
+      const out = document.getElementById("outAtomic");
+      out.hidden = false;
+      out.className = "out";
+      out.textContent = "Running EfficientNet-B3 → ResNet50 → DenseNet121…";
+      const names = [
+        ["efficientnet_b3", "EfficientNet-B3"],
+        ["resnet50", "ResNet50"],
+        ["densenet121", "DenseNet121"],
+      ];
+      const blocks = [];
+      try {
+        for (const [id, label] of names) {
+          const j = await postWoundBackbone(id);
+          blocks.push("=== " + label + " ===\n" + showAtomic(j));
+        }
+        show(out, blocks.join("\n\n"), true);
+      } catch (e) {
+        show(out, blocks.length ? blocks.join("\n\n") + "\n\n--- error ---\n" + String(e) : String(e), false);
       }
     };
 
@@ -715,14 +824,39 @@
       }
     };
 
+    async function applyApiBase() {
+      window.API_BASE = normalizeBase(document.getElementById("apiBaseInput").value);
+      try {
+        sessionStorage.setItem("snakebite_lab_api", window.API_BASE);
+      } catch (_) {}
+      const ld = document.getElementById("linkDocs");
+      const sk = document.getElementById("symptomsLinkKb");
+      if (ld) ld.href = apiUrl("/docs");
+      if (sk) sk.href = apiUrl("/symptoms");
+      try {
+        await Promise.all([loadRegions(), loadSymptoms()]);
+        await pingHealth();
+      } catch (e) {
+        console.error(e);
+        const line = document.getElementById("healthLine");
+        if (line) line.innerHTML = '<span class="bad">Failed after API change: ' + String(e) + "</span>";
+      }
+    }
+
     countryEl.onchange = refreshStates;
-    Promise.all([loadRegions(), loadSymptoms()])
-      .then(() => pingHealth())
-      .catch((e) => {
+
+    (async function boot() {
+      await resolveInitialApiBase();
+      document.getElementById("btnApiApply").onclick = () => applyApiBase();
+      try {
+        await Promise.all([loadRegions(), loadSymptoms()]);
+        await pingHealth();
+      } catch (e) {
         console.error(e);
         const line = document.getElementById("healthLine");
         if (line) line.innerHTML = '<span class="bad">Failed to load regions or symptoms: ' + String(e) + "</span>";
-      });
+      }
+    })();
   </script>
 </body>
 </html>

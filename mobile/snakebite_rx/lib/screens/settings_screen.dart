@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
 import '../api_config.dart';
+import '../runtime/open_model_lab_stub.dart' if (dart.library.html) '../runtime/open_model_lab_web.dart' as model_lab;
 import '../state/api_session.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -46,6 +47,21 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => _openApiEditor(context),
                   ),
                 ).animate().fadeIn(duration: 350.ms).slideX(begin: -0.02),
+                if (kIsWeb) ...[
+                  const SizedBox(height: 12),
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.science_outlined, color: cs.primary),
+                      title: const Text('Model lab (atomic tests)'),
+                      subtitle: const Text(
+                        'Wound backbones, fusion, geo, symptoms, full /predict — opens lab.html',
+                        style: TextStyle(fontSize: 12.5),
+                      ),
+                      trailing: const Icon(Icons.open_in_new_rounded),
+                      onTap: () => model_lab.openModelLab(context, session.baseUrl),
+                    ),
+                  ).animate().fadeIn(duration: 350.ms).slideX(begin: -0.02),
+                ],
                 const SizedBox(height: 20),
                 Text(
                   'Legal',
@@ -166,8 +182,8 @@ class SettingsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Wound stack: EfficientNet-B3, ResNet50, DenseNet121 with softmax fusion. '
-                'Below 60% ensemble confidence the wound read is treated as uncertain.',
+                'Wound stack: EfficientNet-B3, ResNet50, DenseNet121 with softmax fusion (default 58% / 26% / 16%). '
+                'Below 60% ensemble confidence the wound read is treated as uncertain and fusion leans on symptoms/geo.',
                 style: TextStyle(height: 1.5, color: Theme.of(ctx).colorScheme.onSurfaceVariant),
               ),
             ],

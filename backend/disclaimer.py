@@ -15,8 +15,8 @@ PRODUCT_DISCLAIMER = {
         "Do not delay care because of this app."
     ),
     "ensemble_note": (
-        "The wound model combines EfficientNet-B3 (50%), ResNet50 (30%), and DenseNet121 (20%) "
-        "softmax outputs. When the combined confidence is below 60%, the wound prediction is "
-        "treated as uncertain."
+        "The wound model combines EfficientNet-B3 (58%), ResNet50 (26%), and DenseNet121 (16%) "
+        "softmax outputs by default. When the combined confidence is below 60%, the wound prediction is "
+        "treated as uncertain and multimodal fusion relies more on symptoms and geography."
     ),
 }

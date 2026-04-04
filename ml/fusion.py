@@ -1,18 +1,71 @@
 """Fuse wound / symptom / geo logits with context: time since bite, circumstance, age, weight."""
 from __future__ import annotations
 
-import math
 from typing import Any
 
 import numpy as np
 
 from ml.config import CLASSES, CLASS_TO_IDX
 
-# Default modality weights (sum ~1)
+# Default modality weights (sum ~1) — used when wound model missing or wound read is uncertain.
 W_WOUND = 0.42
 W_SYMPTOM = 0.28
 W_GEO = 0.18
 W_CTX = 0.12
+
+# When wound ensemble is confident (max softmax ≥ uncertainty threshold), trust image more in log fusion.
+W_WOUND_CONFIDENT = 0.58
+W_SYMPTOM_CONFIDENT = 0.22
+W_GEO_CONFIDENT = 0.14
+W_CTX_CONFIDENT = 0.06
+
+# When wound model runs but is flagged uncertain: lean on symptoms + geo + context.
+W_WOUND_UNCERTAIN = 0.30
+W_SYMPTOM_UNCERTAIN = 0.32
+W_GEO_UNCERTAIN = 0.22
+W_CTX_UNCERTAIN = 0.16
+
+
+def modality_weights_for_predict(
+    *,
+    wound_model_loaded: bool,
+    wound_uncertain: bool,
+) -> tuple[float, float, float, float]:
+    """
+    Log-space fusion weights (wound / symptom / geo / context).
+
+    If no checkpoint is deployed, ``wound_prob`` is uniform and does not change the argmax;
+    symptoms + geo + context still determine ``final_probability`` — see API ``fusion_warning``.
+    When the wound model is loaded and not uncertain, wound gets a higher share so the trained
+    image branch matches production behavior when ``wound_ensemble.pt`` is present.
+    """
+    if wound_model_loaded and not wound_uncertain:
+        return (
+            W_WOUND_CONFIDENT,
+            W_SYMPTOM_CONFIDENT,
+            W_GEO_CONFIDENT,
+            W_CTX_CONFIDENT,
+        )
+    if wound_model_loaded and wound_uncertain:
+        return (
+            W_WOUND_UNCERTAIN,
+            W_SYMPTOM_UNCERTAIN,
+            W_GEO_UNCERTAIN,
+            W_CTX_UNCERTAIN,
+        )
+    return (W_WOUND, W_SYMPTOM, W_GEO, W_CTX)
+
+
+def modality_weights_reason(
+    *,
+    wound_model_loaded: bool,
+    wound_uncertain: bool,
+) -> str:
+    if not wound_model_loaded:
+        return "no_wound_model_uniform_image_prior"
+    if wound_uncertain:
+        return "uncertain_wound_more_symptom_geo"
+    return "confident_wound_image_weighted"
 
 
 def _log(p: np.ndarray, eps: float = 1e-8) -> np.ndarray:

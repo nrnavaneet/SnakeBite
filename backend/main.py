@@ -22,13 +22,19 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from ml.config import CLASSES
-from ml.fusion import fuse_multimodal, top_prediction
+from ml.fusion import (
+    fuse_multimodal,
+    modality_weights_for_predict,
+    modality_weights_reason,
+    top_prediction,
+)
 from ml.image_quality import assess_image_quality
 from ml.geo_regions import geo_prior_from_region, load_geo_region_payload
 from ml.checkpoint_util import pick_wound_checkpoint
 from ml.geo_species import load_geo_species_payload, rank_snake_species
 from ml.symptom_engine import load_catalog, rank_selected_symptoms, score_symptoms
 
+from backend.checkpoint_bootstrap import ensure_wound_checkpoint_from_env
 from backend.disclaimer import PRODUCT_DISCLAIMER
 
 logger = logging.getLogger(__name__)
@@ -62,6 +68,10 @@ def root() -> dict:
         "test_wound_backbone": "/test/wound/backbone",
         "test_wound_backbone_alt": "/test/wound_backbone",
         "disclaimer": PRODUCT_DISCLAIMER,
+        "deploy_note": (
+            "Set env WOUND_ENSEMBLE_URL to an HTTPS URL of wound_ensemble.pt on first boot so "
+            "production /predict matches a local lab with the same weights."
+        ),
     }
 
 
@@ -94,6 +104,9 @@ def _startup() -> None:
     _symptoms, _symptom_mat, _symptom_items = load_catalog()
     _geo_payload = load_geo_region_payload()
     _species_payload = load_geo_species_payload()
+    # Production: *.pt is gitignored — set WOUND_ENSEMBLE_URL on the host to download the same
+    # ensemble as local ``models/wound_ensemble.pt`` so /predict matches lab.html against localhost.
+    ensure_wound_checkpoint_from_env(ROOT)
     # Only import PyTorch when a checkpoint exists (saves hundreds of MB on Render Free when models/*.pt are absent).
     ck = pick_wound_checkpoint(ROOT)
     if ck is not None:
@@ -199,6 +212,12 @@ async def predict(
         sym_p = score_symptoms(sym_list, _symptoms, _symptom_mat)
         g_p = geo_prior_from_region(country, state, _geo_payload)
 
+        wound_loaded = _wound_predictor is not None
+        w_uncertain = bool(wd.get("wound_uncertain", True))
+        modality_w = modality_weights_for_predict(
+            wound_model_loaded=wound_loaded,
+            wound_uncertain=w_uncertain,
+        )
         final, dbg = fuse_multimodal(
             wound_p,
             sym_p,
@@ -207,8 +226,22 @@ async def predict(
             bite_circumstance=bite_circumstance,
             age_years=age_years,
             weight_kg=weight_kg,
+            modality_weights=modality_w,
+        )
+        dbg["modality_weights_reason"] = modality_weights_reason(
+            wound_model_loaded=wound_loaded,
+            wound_uncertain=w_uncertain,
         )
         top, conf = top_prediction(final)
+
+        fusion_warning: str | None = None
+        if not wound_loaded:
+            fusion_warning = (
+                "Wound CNN checkpoint is not loaded on this server; the image branch is a uniform prior "
+                "and does not change the venom-type ranking. Final output follows symptoms, geography, and "
+                "context only. Deploy models/wound_ensemble.pt (or set WOUND_CHECKPOINT) on the API host to "
+                "match local/image-driven behavior."
+            )
 
         assert _species_payload is not None
         species_rank, sp_dbg = rank_snake_species(
@@ -252,15 +285,19 @@ async def predict(
             "geo_input": {"country": country.strip(), "state": (state or "").strip()},
             "top_class": top,
             "top_confidence": conf,
+            "wound_model_loaded": wound_loaded,
+            "fusion_warning": fusion_warning,
             "fusion_explanation": {
                 "wound_branch": (
-                    "Ensemble: weighted average of softmax vectors — EfficientNet-B3 0.5, ResNet50 0.3, "
-                    "DenseNet121 0.2. If ensemble max confidence < 0.60, wound_effective_class is 'unknown'."
+                    "Ensemble: weighted average of softmax vectors — EfficientNet-B3 0.58, ResNet50 0.26, "
+                    "DenseNet121 0.16 (defaults; checkpoint may override). If ensemble max confidence < 0.60, "
+                    "wound_effective_class is 'unknown' and fusion uses lower wound / higher symptom+geo weights."
                 ),
                 "final_multimodal": (
                     "final_probability blends wound + symptoms + geo + context in log-space "
-                    f"(weights: {dbg.get('modality_weights', {})}). "
-                    "It is not the sum of the three CNN outputs; symptoms/geo/context can change the top class."
+                    f"(weights: {dbg.get('modality_weights', {})}, reason={dbg.get('modality_weights_reason', '')}). "
+                    "Confident wound runs use a higher wound share; uncertain wound runs favor symptoms/geo. "
+                    "Without a deployed wound model, the image branch is uniform and does not affect ranking."
                 ),
             },
             "snake_species_top": species_rank,

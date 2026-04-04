@@ -1,7 +1,4 @@
 __pycache__/
-*.py[cod]
-*.pt
-models/*.pkl
 models/_upload_tmp.jpg
 !models/.gitkeep
 .DS_Store

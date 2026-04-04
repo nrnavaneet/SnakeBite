@@ -34,7 +34,7 @@ ARCH_CHOICES = (
 
 # Default wound ensemble (training + inference): EfficientNet-B3 favored over ResNet50 / DenseNet121
 ENSEMBLE_ARCHS: tuple[str, ...] = ("efficientnet_b3", "resnet50", "densenet121")
-DEFAULT_ENSEMBLE_WEIGHTS = [0.5, 0.3, 0.2]
+DEFAULT_ENSEMBLE_WEIGHTS = [0.58, 0.26, 0.16]
 
 
 def create_wound_model(arch: str, num_classes: int, *, pretrained: bool) -> nn.Module:

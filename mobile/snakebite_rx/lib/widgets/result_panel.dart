@@ -19,6 +19,7 @@ class ResultPanel extends StatelessWidget {
     final snakes = (result['snake_species_top'] as List?) ?? [];
     final ranked = (result['selected_symptoms_ranked'] as List?) ?? [];
     final woundUncertain = result['wound_uncertain'] == true;
+    final fusionWarning = result['fusion_warning']?.toString();
     final wEff = result['wound_effective_class']?.toString();
     final disc = result['disclaimer'];
     String discSummary = '';
@@ -54,6 +55,14 @@ class ResultPanel extends StatelessWidget {
             title: 'Wound read uncertain',
             body:
                 'Effective class: ${wEff ?? "unknown"}. Do not rely on wound class alone. Use clinical assessment.',
+          ),
+        if (fusionWarning != null && fusionWarning.isNotEmpty)
+          _Banner(
+            icon: Icons.cloud_off_rounded,
+            color: cs.surfaceContainerHighest,
+            onColor: cs.onSurfaceVariant,
+            title: 'Image model not on server',
+            body: fusionWarning,
           ),
         const SizedBox(height: 12),
         Container(

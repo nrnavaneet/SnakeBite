@@ -15,6 +15,19 @@ def _has_any_wound_checkpoint() -> bool:
     return pick_wound_checkpoint(ROOT) is not None
 
 
+def test_modality_weights_sum_to_one():
+    from ml.fusion import modality_weights_for_predict
+
+    for loaded, uncertain in (
+        (True, False),
+        (True, True),
+        (False, True),
+    ):
+        t = modality_weights_for_predict(wound_model_loaded=loaded, wound_uncertain=uncertain)
+        assert len(t) == 4
+        assert abs(sum(t) - 1.0) < 1e-6
+
+
 def test_fuse_multimodal_sums():
     from ml.config import CLASSES
     from ml.fusion import fuse_multimodal
