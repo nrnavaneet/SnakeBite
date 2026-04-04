@@ -11,15 +11,17 @@ sys.path.insert(0, str(ROOT))
 
 
 def main() -> int:
+    from ml.checkpoint_util import WOUND_ENSEMBLE_FILENAME, WOUND_MOBILENET_FILENAME
+
     errors: list[str] = []
     models = ROOT / "models"
     wound_ck = None
-    if (models / "wound_ensemble.pt").is_file():
-        wound_ck = models / "wound_ensemble.pt"
-    elif (models / "wound_mobilenet.pt").is_file():
-        wound_ck = models / "wound_mobilenet.pt"
+    if (models / WOUND_ENSEMBLE_FILENAME).is_file():
+        wound_ck = models / WOUND_ENSEMBLE_FILENAME
+    elif (models / WOUND_MOBILENET_FILENAME).is_file():
+        wound_ck = models / WOUND_MOBILENET_FILENAME
     else:
-        errors.append("missing models/wound_ensemble.pt or models/wound_mobilenet.pt")
+        errors.append(f"missing models/{WOUND_ENSEMBLE_FILENAME} or models/{WOUND_MOBILENET_FILENAME}")
 
     for name in (
         "symptom_catalog.json",

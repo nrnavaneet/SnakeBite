@@ -23,9 +23,13 @@ GoRouter createAppRouter() {
           key: state.pageKey,
           child: const MainShell(),
           transitionsBuilder: (context, animation, _, child) {
+            final curved = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
             return FadeTransition(
-              opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
-              child: child,
+              opacity: curved,
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.97, end: 1).animate(curved),
+                child: child,
+              ),
             );
           },
         ),

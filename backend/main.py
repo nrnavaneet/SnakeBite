@@ -104,8 +104,8 @@ def _startup() -> None:
     _symptoms, _symptom_mat, _symptom_items = load_catalog()
     _geo_payload = load_geo_region_payload()
     _species_payload = load_geo_species_payload()
-    # Production: *.pt is gitignored — set WOUND_ENSEMBLE_URL on the host to download the same
-    # ensemble as local ``models/wound_ensemble.pt`` so /predict matches lab.html against localhost.
+    # Production: if models/wound_ensemble.pt is absent, set WOUND_ENSEMBLE_URL (or WOUND_CHECKPOINT_URL)
+    # to download the same ensemble as local dev so /predict matches lab.html against localhost.
     ensure_wound_checkpoint_from_env(ROOT)
     # Only import PyTorch when a checkpoint exists (saves hundreds of MB on Render Free when models/*.pt are absent).
     ck = pick_wound_checkpoint(ROOT)
@@ -239,7 +239,8 @@ async def predict(
             fusion_warning = (
                 "Wound CNN checkpoint is not loaded on this server; the image branch is a uniform prior "
                 "and does not change the venom-type ranking. Final output follows symptoms, geography, and "
-                "context only. Deploy models/wound_ensemble.pt (or set WOUND_CHECKPOINT) on the API host to "
+                "context only. Deploy models/wound_ensemble.pt or set WOUND_ENSEMBLE_URL / WOUND_CHECKPOINT_URL "
+                "on the API host to "
                 "match local/image-driven behavior."
             )
 

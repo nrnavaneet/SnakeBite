@@ -13,13 +13,24 @@ class AboutScreen extends StatelessWidget {
     final t = Theme.of(context).textTheme;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar.large(
+          SliverAppBar(
+            pinned: true,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            backgroundColor: AppTheme.surfaceElevated.withValues(alpha: 0.55),
+            surfaceTintColor: Colors.transparent,
+            toolbarHeight: 64,
             title: const Text('How it works'),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Divider(height: 1, thickness: 1, color: AppTheme.neon.withValues(alpha: 0.15)),
+            ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 Center(
@@ -54,9 +65,21 @@ class AboutScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
-                    color: cs.primary.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppTheme.primary.withValues(alpha: 0.25)),
+                    gradient: LinearGradient(
+                      colors: [
+                        AppTheme.neon.withValues(alpha: 0.12),
+                        AppTheme.surfaceElevated.withValues(alpha: 0.9),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: AppTheme.neon.withValues(alpha: 0.35)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.neon.withValues(alpha: 0.08),
+                        blurRadius: 24,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

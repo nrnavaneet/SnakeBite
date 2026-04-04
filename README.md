@@ -142,7 +142,7 @@ The repo **`render.yaml`** encodes option **A** (service names `snakebite-api` +
 
 **`scripts/build_web.sh`** is invoked by **`scripts/render_build_web.sh`**. When **`API_BASE`** is set on the static site, it runs `flutter build web` and writes **`api_config.json`**.
 
-Model files (`*.pt`) are gitignored; upload them to the API instance or use an artifact pipeline so **`models/`** exists at runtime on the API service.
+Large **`*.pt`** weights are usually tracked with **Git LFS** (see `.gitattributes`) or supplied at deploy time. For hosts without the files in the image, set **`WOUND_ENSEMBLE_URL`** or **`WOUND_CHECKPOINT_URL`** so the API downloads **`models/wound_ensemble.pt`** on boot (see `backend/checkpoint_bootstrap.py`).
 
 **Render CLI (validate + redeploy):** Install the [Render CLI](https://render.com/docs/cli) (`brew install render`), then `render login` and `render workspace set`. Validate: `render blueprints validate render.yaml`. After the Blueprint exists, redeploy both services from the repo root: **`bash scripts/render_deploy.sh`**. The CLI cannot create the initial Blueprint from YAML alone; use the dashboard once (**New → Blueprint**), then use the script for later deploys.
 

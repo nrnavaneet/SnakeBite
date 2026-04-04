@@ -15,6 +15,7 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 
 from ml.config import CLASS_TO_IDX, CLASSES, MODELS, ROOT, WOUND_CSV
+from ml.checkpoint_util import WOUND_ENSEMBLE_FILENAME, WOUND_MOBILENET_FILENAME
 from ml.wound_arch import (
     ARCH_CHOICES,
     DEFAULT_ARCH,
@@ -176,7 +177,7 @@ def main() -> None:
     MODELS.mkdir(parents=True, exist_ok=True)
 
     if args.ensemble:
-        out = args.out or (MODELS / "wound_ensemble.pt")
+        out = args.out or (MODELS / WOUND_ENSEMBLE_FILENAME)
         states: dict[str, dict[str, torch.Tensor]] = {}
         accs: dict[str, float] = {}
         for arch in ENSEMBLE_ARCHS:
@@ -209,7 +210,7 @@ def main() -> None:
         print("saved ensemble ->", out, "members:", list(ENSEMBLE_ARCHS), flush=True)
         return
 
-    out = args.out or (MODELS / "wound_mobilenet.pt")
+    out = args.out or (MODELS / WOUND_MOBILENET_FILENAME)
     best_state, best_acc = train_single_arch(
         args.arch,
         train_loader,

@@ -1,5 +1,5 @@
 # SnakeBiteRx — common tasks (run from repo root)
-.PHONY: verify assets train train-fast api web-build
+.PHONY: verify assets train train-fast train-both api web-build
 
 verify:
 	python3 scripts/verify_stack.py
@@ -13,6 +13,10 @@ train:
 
 train-fast:
 	python3 -u -m ml.train_wound --ensemble --epochs 5 --batch-size 8
+
+# Full ensemble, then MobileNet single (models/wound_ensemble.pt + models/wound_mobilenet.pt)
+train-both:
+	bash scripts/train_both_checkpoints.sh
 
 api:
 	uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
 import '../theme/app_theme.dart';
+import '../widgets/ambient_background.dart';
 import '../widgets/branding/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,20 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFE0F2FE),
-              AppTheme.surface,
-              Color(0xFFF0FDFA),
-            ],
-          ),
-        ),
+      backgroundColor: Colors.transparent,
+      body: AmbientBackground(
         child: SafeArea(
           child: Column(
             children: [
@@ -48,7 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
               const AppLogo(size: 112)
                   .animate()
                   .fadeIn(duration: 600.ms, curve: Curves.easeOut)
-                  .scale(begin: const Offset(0.88, 0.88), duration: 700.ms, curve: Curves.easeOutCubic),
+                  .scale(begin: const Offset(0.88, 0.88), duration: 700.ms, curve: Curves.easeOutCubic)
+                  .then(delay: 200.ms)
+                  .shimmer(duration: 2800.ms, color: AppTheme.neon.withValues(alpha: 0.35)),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),

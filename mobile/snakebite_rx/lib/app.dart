@@ -13,7 +13,7 @@ class SnakeBiteApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'SnakeBiteRx',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
+      theme: AppTheme.dark(),
       routerConfig: router,
     );
   }

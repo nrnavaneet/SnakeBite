@@ -7,6 +7,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from ml.checkpoint_util import WOUND_ENSEMBLE_FILENAME
+
 logger = logging.getLogger(__name__)
 
 # Refuse to treat tiny/corrupt files as a valid checkpoint
@@ -25,7 +27,7 @@ def ensure_wound_checkpoint_from_env(root: Path) -> None:
     if not url:
         return
 
-    dest = root / "models" / "wound_ensemble.pt"
+    dest = root / "models" / WOUND_ENSEMBLE_FILENAME
     force = os.environ.get("WOUND_ENSEMBLE_FORCE", "").strip() in ("1", "true", "yes")
 
     if dest.is_file() and dest.stat().st_size >= _MIN_BYTES and not force:

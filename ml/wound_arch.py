@@ -20,6 +20,7 @@ from torchvision.models import (
     resnet50,
 )
 
+from ml.checkpoint_util import WOUND_ENSEMBLE_FILENAME, WOUND_MOBILENET_FILENAME
 from ml.config import CLASSES
 
 DEFAULT_ARCH = "efficientnet_b0"
@@ -83,14 +84,14 @@ def load_wound_model_from_checkpoint(
     device: torch.device | None = None,
 ) -> tuple[nn.Module, torch.device, dict]:
     """Load a single backbone from disk. Checkpoint may omit `arch` → mobilenet_v3_small (legacy)."""
-    path = path or Path(__file__).resolve().parents[1] / "models" / "wound_mobilenet.pt"
+    path = path or Path(__file__).resolve().parents[1] / "models" / WOUND_MOBILENET_FILENAME
     dev = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
     try:
         ckpt = torch.load(path, map_location=dev, weights_only=False)
     except TypeError:
         ckpt = torch.load(path, map_location=dev)
     if ckpt.get("kind") == "ensemble":
-        raise ValueError("use load_wound_predictor() for wound_ensemble.pt")
+        raise ValueError(f"use load_wound_predictor() for {WOUND_ENSEMBLE_FILENAME}")
     arch = str(ckpt.get("arch") or "mobilenet_v3_small").lower()
     model = create_wound_model(arch, len(CLASSES), pretrained=False)
     model.load_state_dict(ckpt["model_state"])

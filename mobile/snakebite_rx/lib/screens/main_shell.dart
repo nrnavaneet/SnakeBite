@@ -1,6 +1,9 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
+import '../widgets/ambient_background.dart';
 import 'about_screen.dart';
 import 'assess_screen.dart';
 import 'settings_screen.dart';
@@ -17,53 +20,94 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(gradient: AppTheme.scaffoldGradient),
+    final pad = MediaQuery.paddingOf(context);
+    return AmbientBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        extendBody: true,
         body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 320),
-        switchInCurve: Curves.easeOutCubic,
-        switchOutCurve: Curves.easeInCubic,
-        transitionBuilder: (child, anim) {
-          return FadeTransition(
-            opacity: anim,
-            child: SlideTransition(
-              position: Tween<Offset>(begin: const Offset(0.02, 0), end: Offset.zero).animate(anim),
-              child: child,
-            ),
-          );
-        },
-        child: KeyedSubtree(
-          key: ValueKey<int>(_index),
-          child: switch (_index) {
-            0 => const AssessScreen(),
-            1 => const AboutScreen(),
-            _ => const SettingsScreen(),
+          duration: const Duration(milliseconds: 520),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: (child, anim) {
+            final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic);
+            return FadeTransition(
+              opacity: curved,
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.97, end: 1).animate(curved),
+                child: SlideTransition(
+                  position: Tween<Offset>(begin: const Offset(0.04, 0.015), end: Offset.zero).animate(curved),
+                  child: child,
+                ),
+              ),
+            );
           },
+          child: KeyedSubtree(
+            key: ValueKey<int>(_index),
+            child: switch (_index) {
+              0 => const AssessScreen(),
+              1 => const AboutScreen(),
+              _ => const SettingsScreen(),
+            },
+          ),
         ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.biotech_outlined),
-            selectedIcon: Icon(Icons.biotech_rounded),
-            label: 'Assess',
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(
+            left: 14,
+            right: 14,
+            bottom: pad.bottom > 0 ? pad.bottom + 6 : 14,
+            top: 8,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
-            selectedIcon: Icon(Icons.menu_book_rounded),
-            label: 'Guide',
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  color: AppTheme.surfaceElevated.withValues(alpha: 0.72),
+                  border: Border.all(color: AppTheme.neon.withValues(alpha: 0.22)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.neon.withValues(alpha: 0.12),
+                      blurRadius: 36,
+                      offset: const Offset(0, 14),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.5),
+                      blurRadius: 24,
+                      offset: const Offset(0, 12),
+                    ),
+                  ],
+                ),
+                child: NavigationBar(
+                  height: 66,
+                  backgroundColor: Colors.transparent,
+                  selectedIndex: _index,
+                  onDestinationSelected: (i) => setState(() => _index = i),
+                  animationDuration: const Duration(milliseconds: 450),
+                  destinations: const [
+                    NavigationDestination(
+                      icon: Icon(Icons.biotech_outlined),
+                      selectedIcon: Icon(Icons.biotech_rounded),
+                      label: 'Assess',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.menu_book_outlined),
+                      selectedIcon: Icon(Icons.menu_book_rounded),
+                      label: 'Guide',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.tune_outlined),
+                      selectedIcon: Icon(Icons.tune_rounded),
+                      label: 'Settings',
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.tune_outlined),
-            selectedIcon: Icon(Icons.tune_rounded),
-            label: 'Settings',
-          ),
-        ],
-      ),
+        ),
       ),
     );
   }

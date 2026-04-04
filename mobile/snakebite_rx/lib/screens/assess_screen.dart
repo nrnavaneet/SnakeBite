@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../state/api_session.dart';
 import '../theme/app_theme.dart';
 import '../widgets/section_card.dart';
+import '../widgets/tactile_pressable.dart';
 import 'result_screen.dart';
 
 const String _kStaticDisclaimer =
@@ -383,16 +384,23 @@ class _AssessScreenState extends State<AssessScreen> {
       backgroundColor: Colors.transparent,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar.large(
-            floating: true,
-            pinned: false,
-            backgroundColor: Colors.transparent,
+          // SliverAppBar.large duplicates title + subtitle when scrolling — use single pinned bar.
+          SliverAppBar(
+            pinned: true,
+            floating: false,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            backgroundColor: AppTheme.surfaceElevated.withValues(alpha: 0.55),
             surfaceTintColor: Colors.transparent,
+            toolbarHeight: 72,
             title: const _AppBarBrand(),
-            actions: const [],
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Divider(height: 1, thickness: 1, color: AppTheme.neon.withValues(alpha: 0.15)),
+            ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 120),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 Container(
@@ -400,17 +408,17 @@ class _AssessScreenState extends State<AssessScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        cs.error.withValues(alpha: 0.12),
-                        const Color(0xFFFFF7ED),
+                        cs.error.withValues(alpha: 0.22),
+                        const Color(0xFF2A0A0A).withValues(alpha: 0.85),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: cs.error.withValues(alpha: 0.22)),
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(color: cs.error.withValues(alpha: 0.45)),
                     boxShadow: [
                       BoxShadow(
-                        color: cs.error.withValues(alpha: 0.08),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
+                        color: cs.error.withValues(alpha: 0.25),
+                        blurRadius: 28,
+                        offset: const Offset(0, 10),
                       ),
                     ],
                   ),
@@ -435,7 +443,7 @@ class _AssessScreenState extends State<AssessScreen> {
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w800,
-                                color: AppTheme.ink,
+                                color: cs.onSurface,
                                 letterSpacing: -0.2,
                               ),
                             ),
@@ -611,20 +619,23 @@ class _AssessScreenState extends State<AssessScreen> {
                                 itemBuilder: (ctx, i) {
                                   final it = _filteredSymptoms[i];
                                   final sel = _selectedSymptoms.contains(it.value);
-                                  return CheckboxListTile(
-                                    value: sel,
-                                    onChanged: (on) {
-                                      setState(() {
-                                        if (on == true) {
-                                          _selectedSymptoms.add(it.value);
-                                        } else {
-                                          _selectedSymptoms.remove(it.value);
-                                        }
-                                      });
-                                    },
-                                    title: Text(it.display, style: const TextStyle(fontSize: 13.5, height: 1.25)),
-                                    dense: true,
-                                    controlAffinity: ListTileControlAffinity.leading,
+                                  return TactilePressable(
+                                    scale: 0.994,
+                                    child: CheckboxListTile(
+                                      value: sel,
+                                      onChanged: (on) {
+                                        setState(() {
+                                          if (on == true) {
+                                            _selectedSymptoms.add(it.value);
+                                          } else {
+                                            _selectedSymptoms.remove(it.value);
+                                          }
+                                        });
+                                      },
+                                      title: Text(it.display, style: const TextStyle(fontSize: 13.5, height: 1.25)),
+                                      dense: true,
+                                      controlAffinity: ListTileControlAffinity.leading,
+                                    ),
                                   );
                                 },
                               ),
@@ -638,27 +649,62 @@ class _AssessScreenState extends State<AssessScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                FilledButton.icon(
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size.fromHeight(54),
-                    backgroundColor: AppTheme.primaryDark,
-                  ),
-                  onPressed: (busy || _symptomsLoading) ? null : _analyze,
-                  icon: _loading
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                        )
-                      : const Icon(Icons.auto_awesome_rounded),
-                  label: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      _loading ? 'Running fusion…' : 'Run multimodal analysis',
-                      style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.2),
-                    ),
-                  ),
-                ).animate().fadeIn(delay: 200.ms),
+                Builder(
+                  builder: (context) {
+                    final disabled = busy || _symptomsLoading;
+                    final cta = ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: disabled
+                                ? [cs.surfaceContainerHighest, cs.surfaceContainerHighest]
+                                : AppTheme.heroButtonGradient.colors,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.neon.withValues(alpha: 0.5),
+                              blurRadius: 32,
+                              offset: const Offset(0, 12),
+                            ),
+                          ],
+                        ),
+                        child: FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            minimumSize: const Size.fromHeight(58),
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: AppTheme.void_,
+                            disabledForegroundColor: cs.onSurfaceVariant,
+                            shadowColor: Colors.transparent,
+                            disabledBackgroundColor: Colors.transparent,
+                          ),
+                          onPressed: disabled ? null : _analyze,
+                          icon: _loading
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.void_),
+                                )
+                              : const Icon(Icons.auto_awesome_rounded),
+                          label: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Text(
+                              _loading ? 'Running fusion…' : 'Run multimodal analysis',
+                              style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.4, color: AppTheme.void_),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                    final wrapped = disabled ? cta : TactilePressable(scale: 0.987, child: cta);
+                    return wrapped
+                        .animate()
+                        .fadeIn(delay: 200.ms)
+                        .shimmer(delay: 400.ms, duration: 2200.ms, color: Colors.white.withValues(alpha: 0.45));
+                  },
+                ),
                 if (_error != null) ...[
                   const SizedBox(height: 16),
                   Material(
@@ -705,29 +751,54 @@ class _AppBarBrand extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final url = context.watch<ApiSession>().baseUrl;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          'SnakeBiteRx',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w900,
-                letterSpacing: -0.6,
-                color: AppTheme.ink,
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            gradient: LinearGradient(
+              colors: [AppTheme.primary.withValues(alpha: 0.95), AppTheme.primaryDark],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppTheme.primaryDark.withValues(alpha: 0.35),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
               ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          _apiSubtitle(url),
-          style: TextStyle(
-            fontSize: 11.5,
-            color: cs.onSurfaceVariant,
-            fontWeight: FontWeight.w600,
-            height: 1.25,
+            ],
           ),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
+          child: Icon(Icons.healing_rounded, color: AppTheme.void_, size: 22),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'SnakeBiteRx',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
+                      color: AppTheme.ink,
+                    ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                _apiSubtitle(url),
+                style: TextStyle(
+                  fontSize: 11.5,
+                  color: cs.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                  height: 1.25,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ],
     );

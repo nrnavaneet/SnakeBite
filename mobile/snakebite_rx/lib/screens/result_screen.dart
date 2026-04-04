@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import '../theme/app_theme.dart';
+import '../widgets/ambient_background.dart';
 import '../widgets/result_panel.dart';
 
 /// Full-screen results with optional hero image. Blur overlay only when API flags bad quality.
@@ -20,16 +22,27 @@ class ResultScreen extends StatelessWidget {
     final badPhoto = iq is Map && iq['recommend_retake'] == true;
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar.large(
-            pinned: true,
-            title: const Text('Analysis'),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_rounded),
-              onPressed: () => Navigator.of(context).pop(),
+      backgroundColor: Colors.transparent,
+      body: AmbientBackground(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              backgroundColor: AppTheme.surfaceElevated.withValues(alpha: 0.55),
+              surfaceTintColor: Colors.transparent,
+              toolbarHeight: 64,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: const Text('Analysis'),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1),
+                child: Divider(height: 1, thickness: 1, color: AppTheme.neon.withValues(alpha: 0.15)),
+              ),
             ),
-          ),
           if (imageBytes != null)
             SliverToBoxAdapter(
               child: Padding(
@@ -93,6 +106,7 @@ class ResultScreen extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../theme/app_theme.dart';
 
+/// Frosted HUD panel with neon edge accent.
 class SectionCard extends StatelessWidget {
   const SectionCard({
     super.key,
@@ -26,32 +27,31 @@ class SectionCard extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(26),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white,
-            const Color(0xFFFAFAFA),
+            AppTheme.surfaceElevated.withValues(alpha: 0.72),
+            const Color(0xFF0F1624).withValues(alpha: 0.88),
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withValues(alpha: 0.07),
-            blurRadius: 28,
-            offset: const Offset(0, 12),
+            color: AppTheme.neon.withValues(alpha: 0.06),
+            blurRadius: 40,
+            offset: const Offset(0, 16),
           ),
           BoxShadow(
-            color: AppTheme.primary.withValues(alpha: 0.06),
-            blurRadius: 0,
-            spreadRadius: 0,
-            offset: Offset.zero,
+            color: Colors.black.withValues(alpha: 0.45),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
           ),
         ],
-        border: Border.all(color: cs.outlineVariant.withValues(alpha: 0.2)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(26),
         child: Stack(
           children: [
             Positioned(
@@ -64,13 +64,16 @@ class SectionCard extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [AppTheme.primary, AppTheme.primaryDark],
+                    colors: [AppTheme.neon, AppTheme.violet.withValues(alpha: 0.85)],
                   ),
+                  boxShadow: [
+                    BoxShadow(color: AppTheme.neon.withValues(alpha: 0.5), blurRadius: 12, spreadRadius: 0),
+                  ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(22, 20, 20, 20),
+              padding: const EdgeInsets.fromLTRB(24, 22, 22, 22),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -79,47 +82,48 @@ class SectionCard extends StatelessWidget {
                     children: [
                       if (step != null) ...[
                         Container(
-                          width: 32,
-                          height: 32,
+                          width: 36,
+                          height: 36,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              colors: [AppTheme.primary.withValues(alpha: 0.9), AppTheme.primaryDark],
+                              colors: [AppTheme.neon, AppTheme.neonDim],
                             ),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: AppTheme.primaryDark.withValues(alpha: 0.35),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
+                                color: AppTheme.neon.withValues(alpha: 0.45),
+                                blurRadius: 16,
+                                offset: const Offset(0, 4),
                               ),
                             ],
                           ),
                           child: Text(
                             '$step',
                             style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 15,
+                              color: Color(0xFF042F2E),
+                              fontWeight: FontWeight.w900,
+                              fontSize: 16,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 14),
                       ] else if (leading != null) ...[
                         Container(
-                          padding: const EdgeInsets.all(11),
+                          padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                cs.primary.withValues(alpha: 0.12),
-                                cs.secondary.withValues(alpha: 0.08),
+                                cs.primary.withValues(alpha: 0.2),
+                                cs.secondary.withValues(alpha: 0.12),
                               ],
                             ),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
                           ),
                           child: Icon(leading, color: cs.primary, size: 22),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 14),
                       ],
                       Expanded(
                         child: Column(
@@ -129,17 +133,17 @@ class SectionCard extends StatelessWidget {
                               title,
                               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    letterSpacing: -0.3,
-                                    color: AppTheme.ink,
+                                    letterSpacing: -0.35,
+                                    color: cs.onSurface,
                                   ),
                             ),
                             if (subtitle != null) ...[
-                              const SizedBox(height: 5),
+                              const SizedBox(height: 6),
                               Text(
                                 subtitle!,
                                 style: TextStyle(
                                   fontSize: 13.5,
-                                  height: 1.4,
+                                  height: 1.45,
                                   color: cs.onSurfaceVariant,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -150,7 +154,7 @@ class SectionCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 20),
                   child,
                 ],
               ),
@@ -160,13 +164,18 @@ class SectionCard extends StatelessWidget {
       ),
     )
         .animate()
-        .fadeIn(delay: Duration(milliseconds: delayMs), duration: const Duration(milliseconds: 420))
+        .fadeIn(delay: Duration(milliseconds: delayMs), duration: const Duration(milliseconds: 500))
         .slideY(
-          begin: 0.035,
+          begin: 0.045,
           end: 0,
           delay: Duration(milliseconds: delayMs),
-          duration: const Duration(milliseconds: 480),
+          duration: const Duration(milliseconds: 560),
           curve: Curves.easeOutCubic,
+        )
+        .shimmer(
+          delay: Duration(milliseconds: 180 + delayMs),
+          duration: const Duration(milliseconds: 2200),
+          color: Colors.white.withValues(alpha: 0.04),
         );
   }
 }

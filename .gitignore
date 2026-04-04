@@ -1,4 +1,5 @@
 __pycache__/
+# Keep models/*.pkl in git (e.g. geo_index.pkl). Do not add a *.pkl ignore rule here.
 models/_upload_tmp.jpg
 !models/.gitkeep
 .DS_Store
