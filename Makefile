@@ -17,7 +17,7 @@ train-fast:
 api:
 	uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 
-# Flutter web for Vercel / static hosting. Set API_BASE to your public HTTPS API, e.g.:
+# Flutter web (same script as Vercel / Render). Example:
 #   make web-build API_BASE=https://snakebite-api.onrender.com
 web-build:
-	cd mobile/snakebite_rx && flutter pub get && flutter build web --release --dart-define=API_BASE=$(API_BASE) --base-href /
+	API_BASE="$(API_BASE)" bash scripts/build_web.sh

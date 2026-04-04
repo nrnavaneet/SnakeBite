@@ -32,6 +32,15 @@ from backend.disclaimer import PRODUCT_DISCLAIMER
 
 app = FastAPI(title="SnakeBiteRx API", version="0.1.0")
 
+# Apply before routes so all paths (including /predict multipart) get CORS on success and error responses.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
+
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 if STATIC_DIR.is_dir():
     app.mount("/ui", StaticFiles(directory=str(STATIC_DIR), html=True), name="ui")
@@ -61,13 +70,6 @@ def demo_page() -> FileResponse:
         raise FileNotFoundError("backend/static/index.html missing")
     return FileResponse(index)
 
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 _wound_predictor = None
 _wound_dev = None

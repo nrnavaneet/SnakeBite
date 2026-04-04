@@ -305,7 +305,18 @@ class _AssessScreenState extends State<AssessScreen> {
         ),
       );
     } catch (e) {
-      setState(() => _error = e.toString());
+      var msg = e.toString();
+      if (kIsWeb &&
+          (msg.contains('Failed to fetch') ||
+              msg.contains('ClientException') ||
+              msg.contains('XMLHttpRequest'))) {
+        msg =
+            '$msg\n\n'
+            'Often happens if the API host closed the connection: Render Free can be slow to wake, '
+            'or run out of RAM during image analysis. Wait a minute after opening the app, try a '
+            'smaller photo, check your API service Logs on Render, or upgrade the instance RAM.';
+      }
+      setState(() => _error = msg);
     } finally {
       if (mounted) setState(() => _loading = false);
     }

@@ -10,7 +10,9 @@ Multi-modal prototype: **wound CNN** + **symptom knowledge base** + **country/st
 SnakeBite/
 ├── README.md                 # this file
 ├── Makefile                  # verify | assets | train | api
-├── requirements.txt          # Python deps (API + training)
+├── requirements.txt          # Python deps (local dev; includes `-r requirements-core.txt`)
+├── requirements-render.txt   # CPU-only PyTorch for Render (`pip install -r requirements-render.txt`)
+├── requirements-core.txt     # Shared deps (no torch)
 ├── .gitignore
 ├── data/                     # datasets — do not delete (geo / symptom / wound CSVs)
 │   └── geo_data/             # GBIF CSV, `snake_wounds_labels.json`, `categories/<label>/*.jpg`
@@ -112,21 +114,50 @@ flutter run --dart-define=API_BASE=http://127.0.0.1:8000
 
 - **Android emulator:** use `--dart-define=API_BASE=http://10.0.2.2:8000`
 
-### Web app (any phone browser) — Vercel
+### Web app — entirely on Render (no Vercel)
 
-The Flutter client builds to **static files** (`flutter build web`). Deploy the output to [Vercel](https://vercel.com/) (or any static host). The **Python API with PyTorch** is **not** run on Vercel; host it separately on a service that supports long-running processes and your model files (e.g. [Render](https://render.com/), [Railway](https://railway.app/), [Fly.io](https://fly.io/), or a VPS) behind **HTTPS**.
+You need **two** Render resources: a **Web Service** (API) and a **Static Site** (Flutter web). Vercel is not required.
 
-**Live site (frontend):** [https://snakebiterx.vercel.app](https://snakebiterx.vercel.app)
+**A) One-shot: Blueprint (both from `render.yaml`)**
 
-1. Deploy the API and note its public HTTPS URL, e.g. `https://snakebite-api.onrender.com`.
-2. Point the web app at that API (pick one or combine):
-   - **Easiest:** edit **`mobile/snakebite_rx/web/api_config.json`** → `"apiBase": "https://your-api.example.com"` → commit → redeploy (no Dart rebuild flag needed).
-   - **Or** set Vercel **Environment Variable** **`API_BASE`** for Production and redeploy (baked into the build by `vercel_build_web.sh`).
-3. Without step 2, the browser build still defaults to `http://127.0.0.1:8000`, which **only works on your laptop** — phones and `*.vercel.app` cannot reach it.
-4. Repo **`vercel.json`** runs `scripts/vercel_build_web.sh` for `flutter build web`.
-5. On a phone: open the site, **Gallery** / **Camera**, fill fields, **Run analysis**.
+1. [Dashboard](https://dashboard.render.com) → **New** → **Blueprint** → connect **SnakeBite** → apply **`render.yaml`**.
+2. After deploy, open the **API** service → **Connect** → copy its **HTTPS** URL (it may look like `https://snakebite-api-xxxx.onrender.com`, not always the short name).
+3. Open the **static** service **`snakebite-web`** → **Environment** → set **`API_BASE`** to that **exact** API URL (no trailing slash) → **Save** → **Manual Deploy** so the Flutter build bakes in the right API.
 
-**Backend on Render:** connect the repo to [Render](https://render.com/) and use **`render.yaml`** (Blueprint), or create a **Web Service** manually: root directory `.`, build `pip install -r requirements.txt`, start `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`. Model files (`*.pt`) are gitignored; upload them to the instance or use your own artifact pipeline so `models/` exists at runtime.
+**B) You already created the API by hand (e.g. “SnakeBite”) — add only the static site**
+
+1. **New** → **Static Site** → same repo and branch as the API.
+2. **Build command:** `bash scripts/render_build_web.sh`
+3. **Publish directory:** `mobile/snakebite_rx/build/web`
+4. **Environment variables:** **`API_BASE`** = your API’s public URL from the API service **Connect** tab (example shape: `https://snakebite-eag1.onrender.com`). This must be the real URL, not a guess.
+5. **Redirects / rewrites:** add a **rewrite**: source `/*` → destination `/index.html` (so `/home` works for the SPA).
+6. Deploy, then open the static site’s URL in a browser; use **Settings** in the app if an old API URL was saved.
+
+The repo **`render.yaml`** encodes option **A** (service names `snakebite-api` + `snakebite-web`). Option **B** is the same idea with two manual services.
+
+| Piece | Render type | Purpose |
+|-------|-------------|---------|
+| API | Web Service (Python) | `uvicorn backend.main:app`, build with **`requirements-render.txt`** |
+| App | Static Site | Flutter `build/web`, **`API_BASE`** points at the API URL above |
+
+**`scripts/build_web.sh`** is invoked by **`scripts/render_build_web.sh`**. When **`API_BASE`** is set on the static site, it runs `flutter build web` and writes **`api_config.json`**.
+
+Model files (`*.pt`) are gitignored; upload them to the API instance or use an artifact pipeline so **`models/`** exists at runtime on the API service.
+
+**Render CLI (validate + redeploy):** Install the [Render CLI](https://render.com/docs/cli) (`brew install render`), then `render login` and `render workspace set`. Validate: `render blueprints validate render.yaml`. After the Blueprint exists, redeploy both services from the repo root: **`bash scripts/render_deploy.sh`**. The CLI cannot create the initial Blueprint from YAML alone; use the dashboard once (**New → Blueprint**), then use the script for later deploys.
+
+### Web app — Vercel (frontend only, optional)
+
+You can still host only the Flutter static output on [Vercel](https://vercel.com/) and run the API on Render or elsewhere. **Example:** [https://snakebiterx.vercel.app](https://snakebiterx.vercel.app).
+
+1. Deploy the API and note its public HTTPS URL.
+2. In Vercel → **Settings → Environment Variables**, set **`API_BASE`** to that URL (Production), then redeploy. **`vercel.json`** runs **`scripts/vercel_build_web.sh`**, which delegates to **`scripts/build_web.sh`**.
+3. Or commit **`mobile/snakebite_rx/web/api_config.json`** with `"apiBase": "https://…"` when `API_BASE` is not set in Vercel.
+4. Without a configured API URL, the hosted app shows a configuration message (localhost is not used on public hosts).
+
+On a phone: open the site, **Gallery** / **Camera**, fill fields, **Run analysis**.
+
+**Manual API on Render:** Web Service from this repo: root **`.`**, build **`pip install --no-cache-dir -r requirements-render.txt`** (CPU-only PyTorch; avoids huge CUDA wheels), start `uvicorn backend.main:app --host 0.0.0.0 --port $PORT`.
 
 **Full screen (no browser UI):** install the site as an app: **Chrome menu → Install app** or **Safari → Share → Add to Home Screen**. The manifest uses `display: fullscreen` so the installed PWA uses the whole screen. A normal browser tab still shows the address bar (that is expected).
 

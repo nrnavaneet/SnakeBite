@@ -1,0 +1,6 @@
+# CPU-only PyTorch for Render and other Linux CPU hosts (no NVIDIA CUDA wheels — much smaller).
+# https://docs.pytorch.org/get-started/locally/
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.0.0
+torchvision>=0.15.0
+-r requirements-core.txt
