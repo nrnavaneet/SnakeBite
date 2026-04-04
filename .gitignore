@@ -12,7 +12,4 @@ venv/
 mobile/**/build/
 mobile/**/.dart_tool/
 mobile/**/pubspec.lock
-*.zip
-*.csv
-!data/geo_data/snake_geo_clean.csv
 .vercel

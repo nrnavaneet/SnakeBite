@@ -23,6 +23,25 @@ VENOM_MAP = {
 
 
 def load_symptom_table() -> pd.DataFrame:
+    """Symptom rows from KB CSV. If the file is absent (e.g. *.csv gitignored on deploy), return empty."""
+    if not SYMPTOM_CSV.is_file():
+        return pd.DataFrame(
+            columns=[
+                "feature_type",
+                "venom_type",
+                "symptom",
+                "severity",
+                "importance_rank",
+                "weight_tier",
+                "weight",
+                "possible_snakes",
+                "family",
+                "onset_min_hours",
+                "onset_max_hours",
+                "local_signs_absent_or_minimal",
+                "source",
+            ]
+        )
     df = pd.read_csv(SYMPTOM_CSV)
     return df[df["feature_type"].astype(str).str.lower() == "symptom"].copy()
 
