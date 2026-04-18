@@ -50,6 +50,65 @@ log() { printf '%s\n' "$*"; }
 
 die() { log "ERROR: $*"; exit 1; }
 
+is_windows_shell() {
+  local u
+  u="$(uname -s 2>/dev/null || true)"
+  [[ "$u" == MINGW* || "$u" == MSYS* || "$u" == CYGWIN* ]]
+}
+
+cloudflared_install_hint() {
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    echo "brew install cloudflared"
+  elif is_windows_shell; then
+    echo "winget install Cloudflare.cloudflared  (or: choco install cloudflared)"
+  else
+    echo "See Cloudflare docs for your OS: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/"
+  fi
+}
+
+lfs_install_hint() {
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    echo "brew install git-lfs && git lfs install"
+  elif is_windows_shell; then
+    echo "winget install GitHub.GitLFS  (or: choco install git-lfs), then: git lfs install"
+  else
+    echo "Install git-lfs for your OS, then run: git lfs install"
+  fi
+}
+
+ensure_checkpoints_resolved_from_lfs() {
+  local files=("$ROOT/models/wound_ensemble.pt" "$ROOT/models/wound_mobilenet.pt")
+  local need_lfs=0
+  local f first
+  for f in "${files[@]}"; do
+    [[ -f "$f" ]] || continue
+    IFS= read -r first < "$f" || true
+    if [[ "$first" == "version https://git-lfs.github.com/spec/v1" ]]; then
+      need_lfs=1
+      break
+    fi
+  done
+  [[ "$need_lfs" == 1 ]] || return 0
+
+  log "Detected Git LFS pointer checkpoint(s) under models/*.pt."
+  if ! command -v git >/dev/null 2>&1; then
+    log "  git not found; cannot auto-fetch LFS objects."
+    log "  Install and run: $(lfs_install_hint)"
+    return 0
+  fi
+  if ! git lfs version >/dev/null 2>&1; then
+    log "  git-lfs not installed."
+    log "  Install and run: $(lfs_install_hint)"
+    return 0
+  fi
+
+  log "  Running git lfs pull for wound checkpoints..."
+  (
+    cd "$ROOT"
+    git lfs pull --include="models/wound_ensemble.pt,models/wound_mobilenet.pt" --exclude=""
+  ) || log "  git lfs pull failed; check network/auth and retry manually."
+}
+
 ensure_runtime_deps() {
   if [[ ! -x "$ROOT/.venv/bin/uvicorn" ]]; then
     log "First run detected (.venv/uvicorn missing). Installing runtime Python deps…"
@@ -104,6 +163,7 @@ free_ports() {
 }
 
 ensure_runtime_deps
+ensure_checkpoints_resolved_from_lfs
 
 UVICORN_BIN="$ROOT/.venv/bin/uvicorn"
 if [[ ! -x "$UVICORN_BIN" ]]; then
@@ -309,7 +369,8 @@ if [[ "$RUN_TUNNELS" == 1 ]]; then
   elif start_tunnel_ngrok_api; then
     :
   else
-    log "No cloudflared/ngrok — tunnels skipped. Install: brew install cloudflared"
+    log "No cloudflared/ngrok — tunnels skipped."
+    log "  Install cloudflared: $(cloudflared_install_hint)"
   fi
   if [[ -n "$API_PUBLIC_URL" ]]; then
     API_BASE_FOR_FLUTTER="$API_PUBLIC_URL"
