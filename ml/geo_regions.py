@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 from ml.config import CLASS_TO_IDX, CLASSES, GEO_CSV, MODELS
+from ml.geo_normalize import apply_canonical_state_column, resolve_canonical_state_from_region_keys
 
 GEO_CLASSES = {"cytotoxic", "hemotoxic", "neurotoxic", "non_venomous"}
 
@@ -35,6 +36,7 @@ def build_geo_region_json(out_path: Path | None = None) -> Path:
     df = pd.read_csv(GEO_CSV, usecols=["country", "state", "venom_type"], low_memory=False)
     df["country"] = df["country"].astype(str).str.strip()
     df["state"] = df["state"].fillna("").astype(str).str.strip()
+    apply_canonical_state_column(df)
     df["cls"] = df["venom_type"].map(_map_vt)
     df = df.dropna(subset=["cls"])
     df["ci"] = df["cls"].map(lambda x: CLASS_TO_IDX[str(x)])
@@ -115,6 +117,7 @@ def geo_prior_from_region(country: str, state: str, payload: dict[str, Any] | No
     default = np.array(payload.get("global_default") or [0.2] * len(CLASSES), dtype=np.float64)
 
     if c and s:
+        s = resolve_canonical_state_from_region_keys(c, s, region_prior.keys())
         k = _key(c, s)
         if k in region_prior:
             return np.array(region_prior[k], dtype=np.float64)

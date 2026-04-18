@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 
 from ml.config import CLASS_TO_IDX, CLASSES, GEO_CSV, MODELS
+from ml.geo_normalize import apply_canonical_state_column, resolve_canonical_state_from_region_keys
 from ml.geo_regions import _key as region_key
 from ml.symptom_engine import load_symptom_table
 
@@ -73,6 +74,7 @@ def build_geo_species_json(out_path: Path | None = None) -> Path:
 
     df["country"] = df["country"].astype(str).str.strip()
     df["state"] = df["state"].fillna("").astype(str).str.strip()
+    apply_canonical_state_column(df)
     df["cls"] = df["venom_type"].map(_map_vt)
     df = df.dropna(subset=["cls"])
 
@@ -220,6 +222,7 @@ def _get_venom_table(
     glob = payload.get("global") or {}
 
     if c and s:
+        s = resolve_canonical_state_from_region_keys(c, s, by_region.keys())
         k = region_key(c, s)
         if k in by_region:
             return by_region[k]

@@ -13,6 +13,7 @@
 #   bash scripts/dev_all.sh --debug-web      # huge/slow JS (debug) — only for hot reload; default is --release for phone
 # Env: DEV_ALL_OPEN=0 — same as --no-open
 #      LAB_OPEN_DELAY_SEC (default 10) — seconds to wait before opening browser (tunnel + app warm-up)
+# First run: if .venv/uvicorn is missing, auto-runs scripts/setup_dev.sh
 #
 set -euo pipefail
 
@@ -47,6 +48,13 @@ done
 log() { printf '%s\n' "$*"; }
 
 die() { log "ERROR: $*"; exit 1; }
+
+ensure_first_run_setup() {
+  if [[ ! -x "$ROOT/.venv/bin/uvicorn" ]]; then
+    log "First run detected (.venv/uvicorn missing). Running setup_dev.sh once…"
+    bash "$ROOT/scripts/setup_dev.sh"
+  fi
+}
 
 # --- 0) Stop prior runs (same as make lab: kill pids + ports, then clean logs) ---
 kill_snakebite_pids() {
@@ -84,6 +92,8 @@ free_ports() {
   done
   sleep 0.5
 }
+
+ensure_first_run_setup
 
 UVICORN_BIN="$ROOT/.venv/bin/uvicorn"
 if [[ ! -x "$UVICORN_BIN" ]]; then

@@ -16,6 +16,7 @@ Multimodal **prototype** for **venom-type estimation** from a **wound photo** + 
 | [docs/WHY_AND_WEIGHTS.md](docs/WHY_AND_WEIGHTS.md) | Why ensemble + modality weights |
 | [docs/DATA_LAYOUT.md](docs/DATA_LAYOUT.md) | `data/` layout, assets |
 | [docs/TUNNELS.md](docs/TUNNELS.md) | Quick tunnels vs **stable** URLs (Cloudflare named tunnel, ngrok, Tailscale) |
+| [docs/PROJECT_PRESENTATION_GUIDE.md](docs/PROJECT_PRESENTATION_GUIDE.md) | Beginner + detailed one-file project + Q&A presentation guide |
 
 ---
 

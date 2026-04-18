@@ -9,5 +9,6 @@ Short, focused pages. Start with the [main README](../README.md) for setup (`mak
 | [Why & weights](WHY_AND_WEIGHTS.md) | Why ensemble + symptoms + geo, modality tables, tuning pointers |
 | [Data layout](DATA_LAYOUT.md) | What lives under `data/`, labeling, assets |
 | [Tunnels](TUNNELS.md) | Quick `trycloudflare` vs permanent/stable tunnel setup |
+| [Project presentation guide](PROJECT_PRESENTATION_GUIDE.md) | Beginner + detailed one-file explanation with ready Q&A |
 
 **Rubric (if present in your tree):** `docs/SnakeBiteRx_Labeling_Rubric.pdf` — wound image labeling guidance.

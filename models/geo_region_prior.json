@@ -227,7 +227,6 @@
     "Yemen",
     "Zambia",
     "Zimbabwe",
-    "nan",
     "\u00c5land Islands"
   ],
   "states_by_country": {
@@ -369,7 +368,6 @@
       "Salta",
       "San Juan",
       "San Luis",
-      "San luis",
       "Santa Fe",
       "Santa F\u00e9",
       "Santiago del Estero",
@@ -400,18 +398,14 @@
       "Great Barrier Reef",
       "Jervis Bay Territory",
       "New South Wales",
-      "New south wales",
       "Northern Territory",
-      "Northern territory",
       "Qld",
       "Queensland",
       "South Australia",
-      "South australia",
       "Tasmania",
       "Victoria",
       "Western",
       "Western Australia",
-      "Western australia",
       "York, Queensland"
     ],
     "Austria": [
@@ -421,7 +415,7 @@
       "Carinthia",
       "Jiho\u010desk\u00fd",
       "K\u00e4rnten",
-      "Lower austria",
+      "Lower Austria",
       "Nieder\u00f6sterreich",
       "Ober\u00f6sterreich",
       "Podravska",
@@ -528,9 +522,7 @@
       "Cayo",
       "Corozal",
       "Orange Walk",
-      "Orange walk",
       "Stann Creek",
-      "Stann creek",
       "Toledo"
     ],
     "Benin": [
@@ -680,13 +672,11 @@
       "El Beni",
       "La Paz",
       "La Paz Department",
-      "La paz",
       "Mizque",
       "Pando",
       "Potos\u00ed",
       "Puno",
       "Santa Cruz",
-      "Santa cruz",
       "Tarija"
     ],
     "Bonaire, Sint Eustatius and Saba": [
@@ -740,11 +730,9 @@
       "Cear\u00e1",
       "Df",
       "Distrito Federal",
-      "Distrito federal",
       "Es",
       "Espirito Santo",
       "Espirito Santo state",
-      "Espirito santo",
       "Esp\u00edrito Santo",
       "Go",
       "Goias",
@@ -755,11 +743,8 @@
       "Maranh\u00e3o",
       "Mato Grosso",
       "Mato Grosso do Sul",
-      "Mato grosso",
-      "Mato grosso do sul",
       "Mg",
       "Minas Gerais",
-      "Minas gerais",
       "Misiones",
       "Ms",
       "Mt",
@@ -781,7 +766,6 @@
       "Rio Grande do Sul",
       "Rio de Janeiro",
       "Rio de Janeiro state",
-      "Rio de janeiro",
       "Rj",
       "Rn",
       "Ro",
@@ -790,15 +774,12 @@
       "Roraima",
       "Rs",
       "Santa Catarina",
-      "Santa catarina",
       "Sao Paulo",
-      "Sao paulo",
       "Sc",
       "Sergipe",
       "Sp",
       "S\u00e2o Paulo",
       "S\u00e3o Paulo",
-      "S\u00e3o paulo",
       "S\u201eo Paulo",
       "Tocantins"
     ],
@@ -1107,7 +1088,6 @@
       "Sucre",
       "Tolima",
       "Valle del Cauca",
-      "Valle del cauca",
       "Vaupes",
       "Vaup\u00e9s",
       "Vichada"
@@ -1200,7 +1180,6 @@
       "San Jose Prov.",
       "San Jose Province",
       "San Jos\u00e9",
-      "San jose",
       "Unknown"
     ],
     "Croatia": [
@@ -1217,13 +1196,10 @@
       "Li\u010dko-senjska",
       "Osje\u010dko-baranjska",
       "Primorsko-Goranska",
-      "Primorsko-goranska",
       "Splitsko-Dalmatinska",
-      "Splitsko-dalmatinska",
       "Zadarska",
       "Zagreba\u010dka",
-      "\u0160ibensko-Kninska",
-      "\u0160ibensko-kninska"
+      "\u0160ibensko-Kninska"
     ],
     "Cuba": [
       "Artemisa",
@@ -1252,7 +1228,6 @@
       "Pinar del Rio",
       "Pinar del R\u00edo",
       "Pinar del R\u00edo Province",
-      "Pinar del rio",
       "Sancti Sp\u00edritus",
       "Sancti Sp\u00edritus Province",
       "Santiago de Cuba",
@@ -1349,8 +1324,7 @@
       "Saint Joseph Par.",
       "Saint Mark",
       "Saint Patrick",
-      "Saint Peter",
-      "Saint george"
+      "Saint Peter"
     ],
     "Dominican Republic": [
       "Azua",
@@ -1394,7 +1368,6 @@
       "Samana",
       "Samana Province",
       "Saman\u00e1",
-      "San Cristobal",
       "San Cristobal Province",
       "San Crist\u00f3bal",
       "San Juan",
@@ -1422,7 +1395,7 @@
       "Cotopaxi Province",
       "El Oro",
       "Esmeraldas",
-      "Esmeraldas prov.",
+      "Esmeraldas Prov.",
       "Galapagos",
       "Gal\u00e1pagos",
       "Guayas",
@@ -1434,8 +1407,6 @@
       "Los Rios",
       "Los Rios Province",
       "Los R\u00edos",
-      "Los rios",
-      "MORONA-SANTIAGO",
       "Manabi",
       "Manab\u00ed",
       "Moro Santiago",
@@ -1457,11 +1428,9 @@
       "Sucumbios",
       "Sucumb\u00edos",
       "Tungurahua",
-      "Zamora Chinchipe",
-      "Zamora chinchipe"
+      "Zamora Chinchipe"
     ],
     "Egypt": [
-      "Al Bahr Al Ahmar",
       "Al Bahr al Ahmar",
       "Al Buhayrah",
       "Al Fayyum",
@@ -1469,25 +1438,22 @@
       "Al Qahirah",
       "Al Uqsur",
       "Al Wadi al Jadid",
-      "Al buhayrah",
       "Al-Fayyum",
       "Alexandria Governorate",
       "As Suways",
       "Aswan",
       "Aswan Governorate",
-      "Aswan governorate",
       "Asyut",
       "Asyut Governorate",
       "Bani Suwayf",
       "Beheira (= Al Buhayrah)",
       "Beheira governorate",
-      "Beni Suef Governorate",
+      "Beni suef governorate",
       "Cairo",
       "Cairo Governorate",
       "Faiyum",
       "Faiyum Governorate",
       "Giza",
-      "Giza Governorate",
       "Giza Province",
       "Giza governorate",
       "Janub Sina'",
@@ -1522,15 +1488,12 @@
       "La Paz",
       "La Union",
       "La Uni\u00f3n",
-      "La libertad",
       "Morazan",
       "Moraz\u00e1n",
       "San Miguel",
       "San Salvador",
       "San Vicente",
-      "San miguel",
       "Santa Ana",
-      "Santa ana",
       "Sonsonate",
       "Usulut\u00e1n"
     ],
@@ -1863,7 +1826,6 @@
       "Brong-Ahafo Region",
       "Central",
       "Central Region",
-      "Central region",
       "Eastern",
       "Eastern Region",
       "Greater Accra",
@@ -1937,14 +1899,12 @@
     ],
     "Guatemala": [
       "Alta Verapaz",
-      "Alta verapaz",
-      "Baja Verapaz",
+      "Baja verapaz",
       "Chimaltenango",
       "Chimaltenango Dept.",
       "Chiquimula",
       "El Progreso",
       "El Progreso Dept.",
-      "El progreso",
       "Escuintla",
       "Guatemala",
       "Huehuetenango",
@@ -1964,9 +1924,7 @@
       "Sacatep\u00e9quez",
       "San Marcos",
       "San Marcos Dept.",
-      "San marcos",
       "Santa Rosa",
-      "Santa rosa",
       "Solola",
       "Solol\u00e1",
       "Suchitepequez",
@@ -2058,12 +2016,9 @@
       "Francisco Morazan",
       "Francisco Morazan Department",
       "Francisco Moraz\u00e1n",
-      "Francisco morazan",
       "Gracias a Dios",
-      "Gracias a dios",
       "Intibuca",
       "Intibuc\u00e1",
-      "Islas De La Bahia",
       "Islas de Bahia",
       "Islas de la Bah\u00eda",
       "Islas de la bahia",
@@ -2082,7 +2037,6 @@
       "Eastern",
       "Guangdong",
       "Hong Kong",
-      "Hong kong",
       "Islands",
       "Kowloon City",
       "Kwai Tsing",
@@ -2110,7 +2064,6 @@
       "Zala"
     ],
     "India": [
-      "Andaman and Nicobar",
       "Andaman and Nicobar Islands",
       "Andhra Pradesh",
       "Arunachal Pradesh",
@@ -2125,7 +2078,6 @@
       "Haryana",
       "Haryana/Punjab",
       "Himachal Pradesh",
-      "Jammu Kashmir",
       "Jammu and Kashmir",
       "Jharkhand",
       "Karnataka",
@@ -2146,11 +2098,9 @@
       "Samdrup Jongkhar",
       "Sikkim",
       "Tamil Nadu",
-      "Tamil nadu",
       "Telangana",
       "Tripura",
       "Uttar Pradesh",
-      "Uttar pradesh",
       "Uttarakhand",
       "West Bengal",
       "West Bengal State",
@@ -2309,9 +2259,7 @@
       "HaDarom",
       "HaMerkaz",
       "HaZafon",
-      "Hadarom",
       "Haifa",
-      "Hazafon",
       "Jerusalem",
       "Nabatiyeh",
       "Tel Aviv",
@@ -2521,7 +2469,6 @@
       "Kericho County",
       "Kiambu",
       "Kiambu County",
-      "Kiambu county",
       "Kilifi",
       "Kilifi County",
       "Kirinyaga",
@@ -2584,7 +2531,6 @@
       "Rift Valley",
       "Rift Valley Prov.",
       "Rift Valley Province",
-      "Rift valley",
       "Samburu",
       "Samburu County",
       "Samburu District",
@@ -2652,7 +2598,6 @@
       "South Chungcheong Prov.",
       "Ulsan",
       "game",
-      "gyeonggi-do",
       "jeonbuk"
     ],
     "Kosovo": [
@@ -2885,7 +2830,6 @@
       "Dakhlet-Nou\u00e2dhibou",
       "Gorgol",
       "Guidimaka",
-      "Hodh El Gharbi",
       "Hodh ech Chargui",
       "Hodh el Gharbi",
       "Inchiri",
@@ -2919,8 +2863,6 @@
       "Baja California",
       "Baja California Norte",
       "Baja California Sur",
-      "Baja california",
-      "Baja california sur",
       "Campeche",
       "Campeche (CM)",
       "Chiapas",
@@ -2928,11 +2870,9 @@
       "Chihuahua State",
       "Ciudad de mexico",
       "Coahuila",
-      "Coahuila de Zaragoza",
       "Coahuila de zaragoza",
       "Colima",
       "Colima State",
-      "Distrito Federal",
       "Distrito Federal (DF)",
       "Distrito federal",
       "Durango",
@@ -2958,7 +2898,6 @@
       "Neuvo Leon",
       "Nuevo Leon",
       "Nuevo Le\u00f3n",
-      "Nuevo leon",
       "Oaxaca",
       "Puebla",
       "Puebla State",
@@ -2967,8 +2906,6 @@
       "Quer\u00e9taro",
       "Quintana Roo",
       "Quintana Roo (QR)",
-      "Quintana roo",
-      "San Luis Potosi",
       "San Luis Potos\u00ed",
       "San luis potosi",
       "Sinaloa",
@@ -3231,8 +3168,6 @@
       "Masaya",
       "Matagalpa",
       "Nueva Segovia",
-      "Nueva segovia",
-      "Rio San Juan",
       "Rio san juan",
       "Rivas",
       "R\u00edo San Juan",
@@ -3438,11 +3373,8 @@
       "West Bank"
     ],
     "Panama": [
-      "Bocas Del Toro",
       "Bocas del Toro",
       "Bocas del Toro Province",
-      "Bocas del toro",
-      "Canal Zone",
       "Canal area",
       "Canal zone",
       "Chiriqui",
@@ -3472,7 +3404,7 @@
       "Panam\u00e1",
       "Panam\u00e1 Oeste",
       "Panam\u00e1 Province",
-      "San blas",
+      "San Blas",
       "Veraguas",
       "Veraguas Prov.",
       "Veraquas",
@@ -3487,7 +3419,6 @@
       "Central Dist.",
       "Central District",
       "Central Province",
-      "Central province",
       "Chimbu",
       "Chimbu Dist.",
       "Chimbu Province",
@@ -3509,17 +3440,14 @@
       "Louisiade Archipelago",
       "Madang",
       "Madang District",
-      "Madang Province",
       "Madang province",
       "Manus",
       "Manus Province",
       "Milne Bay",
       "Milne Bay Province",
-      "Milne bay province",
       "Morobe",
       "Morobe Dist.",
       "Morobe District",
-      "Morobe Province",
       "Morobe province",
       "National Capital District",
       "National capitol district",
@@ -3557,7 +3485,6 @@
     "Paraguay": [
       "Alto Paraguay",
       "Alto Paran\u00e1",
-      "Alto paraguay",
       "Amambay",
       "Asunci\u00f3n",
       "Boqueron",
@@ -3578,7 +3505,6 @@
       "Paraguari",
       "Paraguar\u00ed",
       "Presidente Hayes",
-      "Presidente hayes",
       "San Pedro",
       "\u00d1eembuc\u00fa"
     ],
@@ -3599,7 +3525,6 @@
       "La Convencion",
       "La Convenci\u00f3n",
       "La Libertad",
-      "La libertad",
       "Lambayeque",
       "Libertad",
       "Lima",
@@ -3607,9 +3532,7 @@
       "Loreto",
       "Loreto Dept.",
       "Loreto Region",
-      "Madre De Dios",
       "Madre de Dios",
-      "Madre de dios",
       "Maynas",
       "Morropon",
       "Pasco",
@@ -3811,7 +3734,6 @@
       "Zamboanga del Sur Prov."
     ],
     "Poland": [
-      "Dolno\u015bl\u0105skie",
       "Greater Poland",
       "Kuyavian-Pomeranian",
       "Lesser Poland",
@@ -3820,13 +3742,8 @@
       "Lublin",
       "Lubusz",
       "Masovian",
-      "Mazowieckie",
-      "Ma\u0142opolskie",
       "Opole",
-      "Opolskie",
-      "Podkarpackie",
       "Podlachian",
-      "Podlaskie",
       "Pomeranian",
       "Silesia",
       "Silesian",
@@ -3834,7 +3751,6 @@
       "Warmian-Masurian",
       "Warmi\u0144sko-Mazurski",
       "West Pomeranian",
-      "Zachodniopomorskie",
       "dolno\u015bl\u0105skie",
       "kujawsko-pomorskie",
       "lubelskie",
@@ -3848,10 +3764,8 @@
       "warmi\u0144sko-mazurskie",
       "wielkopolskie",
       "zachodniopomorskie",
-      "\u0141\u00f3dzkie",
       "\u0141\u00f3d\u017a",
       "\u0142\u00f3dzkie",
-      "\u015awi\u0119tokrzyskie",
       "\u015bl\u0105skie",
       "\u015bwi\u0119tokrzyskie"
     ],
@@ -3933,7 +3847,6 @@
       "Ponce",
       "Puerto Rico",
       "Puerto Rico (Terr.)",
-      "Puerto rico",
       "Quebradillas",
       "Rinc\u00f3n",
       "R\u00edo Grande",
@@ -4028,7 +3941,7 @@
       "Kostroma",
       "Krasnodar",
       "Krasnoyarsk",
-      "Krasnoyarsk krai",
+      "Krasnoyarsk Krai",
       "Kurgan",
       "Kursk",
       "Leningrad",
@@ -4141,7 +4054,6 @@
     "Sao Tome and Principe": [
       "Principe",
       "Pr\u00edncipe",
-      "Sao Tome",
       "Sao tome",
       "S\u00e3o Tom\u00e9"
     ],
@@ -4299,7 +4211,6 @@
       "Cape Prov.",
       "Eastern Cape",
       "Eastern Cape Province",
-      "Eastern cape",
       "Free State",
       "Gauteng",
       "Hhohho",
@@ -4319,8 +4230,7 @@
       "Wes Kaap",
       "Western Cape",
       "Western Cape Prov.",
-      "Western Cape Province",
-      "Western cape"
+      "Western Cape Province"
     ],
     "South Sudan": [
       "Central Equatoria",
@@ -4471,14 +4381,13 @@
       "Puttalam",
       "Ratnapura",
       "Sabaragamuwa Prov.",
-      "Sabaragamuwa Province",
       "Sabaragamuwa prov",
+      "Sabaragamuwa province",
       "Sabaraganywa Prov.",
       "Southern Prov.",
       "Sri Lanka",
       "Trincomalee",
       "Uva Prov.",
-      "Uva Province",
       "Uva province",
       "Vavuniya",
       "Western",
@@ -4841,7 +4750,6 @@
       "San Juan-Laventille",
       "San Juan-Laventille Regional Corporation",
       "Sangre Grande",
-      "Sangre grande",
       "Siparia",
       "St. Andrew",
       "St. George",
@@ -4849,7 +4757,6 @@
       "St. Mary",
       "St. Patrick",
       "St. Paul",
-      "TUNAPUNA/PIARCO",
       "Tobago",
       "Trinidad",
       "Tunapuna/Piarco"
@@ -4887,7 +4794,6 @@
       "Long cay",
       "Middle Caicos",
       "North Caicos",
-      "North caicos",
       "Providenciales and West Caicos",
       "South Caicos and East Caicos"
     ],
@@ -5183,14 +5089,11 @@
       "New Mexico (State)",
       "New York",
       "New York (State)",
-      "New mexico",
-      "New york",
       "Nm",
       "North Carolina",
       "North Carolina (NC)",
       "North Carolina (State)",
       "North Dakota",
-      "North dakota",
       "Ohio",
       "Ohio (OH)",
       "Ok",
@@ -5204,7 +5107,6 @@
       "South Carolina (State)",
       "South Dakota",
       "South Dakota (State)",
-      "South dakota",
       "Tennesee",
       "Tennessee",
       "Tennessee (TN)",
@@ -5420,15 +5322,12 @@
       "Guana Island",
       "Jost Van Dyke",
       "Tortola",
-      "Virgin Gorda"
+      "Virgin gorda"
     ],
     "Virgin Islands (U.S.)": [
       "Mona Island",
       "Saint Croix",
       "Saint John",
-      "Saint Thomas",
-      "Saint croix",
-      "Saint john",
       "Saint thomas",
       "St. Croix",
       "St. John",
@@ -5477,9 +5376,6 @@
       "Matabeleland North",
       "Matabeleland South",
       "Midlands"
-    ],
-    "nan": [
-      "Lai Chau"
     ],
     "\u00c5land Islands": [
       "Ahvenanmaa",
@@ -6350,18 +6246,11 @@
       0.049999999975
     ],
     "Argentina|San Luis": [
-      6.84931506802402e-11,
-      0.4931506848977294,
-      0.20547945204072057,
-      0.2534246575168887,
-      0.04794520547616814
-    ],
-    "Argentina|San luis": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
+      6.800408024019013e-11,
+      0.4964297857533879,
+      0.20401224072057036,
+      0.2516150968887035,
+      0.04794287656933404
     ],
     "Argentina|Santa Fe": [
       2.8007281892507847e-11,
@@ -6539,32 +6428,18 @@
       0.04792957286626286
     ],
     "Australia|New South Wales": [
-      1.0008622428220911e-13,
-      5.004311214110456e-05,
-      0.7000130612521988,
-      0.2523173714154492,
-      0.04761952422011086
-    ],
-    "Australia|New south wales": [
-      1.982160554219163e-10,
-      1.982160554219163e-10,
-      0.8721506438564318,
-      0.07928642216876652,
-      0.0485629335783695
+      1.0003576278518571e-13,
+      5.0017881392592855e-05,
+      0.7001002858521221,
+      0.25223017228656724,
+      0.04761952397981802
     ],
     "Australia|Northern Territory": [
-      5.141044557427893e-13,
-      5.141044557427893e-13,
-      0.566029005772811,
-      0.38634949849070616,
-      0.04762149573545458
-    ],
-    "Australia|Northern territory": [
-      4.999999995e-10,
-      4.999999995e-10,
-      0.34999999964999995,
-      0.5999999993999999,
-      0.04999999995
+      5.135777107268269e-13,
+      5.135777107268269e-13,
+      0.5658085639077451,
+      0.3865699428640826,
+      0.04762149322714502
     ],
     "Australia|Qld": [
       9.090908842975212e-09,
@@ -6581,18 +6456,11 @@
       0.04762036808520387
     ],
     "Australia|South Australia": [
-      5.698086867327798e-13,
-      5.698086867327798e-13,
-      0.7887291841755139,
-      0.16364905482965436,
-      0.04762176099369207
-    ],
-    "Australia|South australia": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
+      5.697745971687105e-13,
+      5.697745971687105e-13,
+      0.7887389748606459,
+      0.16363926430685366,
+      0.047621760831360826
     ],
     "Australia|Tasmania": [
       4.6501894951786826e-12,
@@ -6616,18 +6484,11 @@
       0.0526315788365651
     ],
     "Australia|Western Australia": [
-      9.570660184121183e-13,
-      9.570660184121183e-13,
-      0.46513408494828945,
-      0.4872423099736094,
-      0.04762360507618701
-    ],
-    "Australia|Western australia": [
-      2.6420079246277366e-10,
-      2.6420079246277366e-10,
-      0.6076618226643794,
-      0.3434610302016058,
-      0.04887714660561313
+      9.536161122960147e-13,
+      9.536161122960147e-13,
+      0.46565074763414394,
+      0.4867256637158859,
+      0.04762358864806297
     ],
     "Australia|York, Queensland": [
       9.090908842975212e-09,
@@ -6678,7 +6539,7 @@
       8.503039836524733e-12,
       0.04765953828372113
     ],
-    "Austria|Lower austria": [
+    "Austria|Lower Austria": [
       9.090908842975215e-09,
       0.9090908842975214,
       9.090908842975215e-09,
@@ -7330,32 +7191,18 @@
       0.049034175319752106
     ],
     "Belize|Orange Walk": [
-      1.669449081524299e-10,
-      0.41736227038107476,
-      0.08347245407621495,
-      0.45075125201156074,
-      0.048414023364204674
-    ],
-    "Belize|Orange walk": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
+      1.6406890891483691e-10,
+      0.4101722722870923,
+      0.08203445445741846,
+      0.45939294496154337,
+      0.04840032812987689
     ],
     "Belize|Stann Creek": [
-      1.1750881314717874e-10,
-      0.3525264394415363,
-      0.3172737954973826,
-      0.282021151553229,
-      0.048178613390343294
-    ],
-    "Belize|Stann creek": [
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      0.9411764639446367,
-      0.058823528996539795
+      1.1198208285420133e-10,
+      0.33594624856260397,
+      0.3023516237063436,
+      0.31354983199176373,
+      0.04815229562730657
     ],
     "Belize|Toledo": [
       2.068252326356101e-10,
@@ -8345,11 +8192,11 @@
       0.047843506950372684
     ],
     "Bolivia (Plurinational State of)|La Paz": [
-      1.829826166179355e-10,
-      0.36596523323587093,
-      0.2744739249269032,
-      0.3110704482504903,
-      0.048490393403752906
+      1.7953321361229205e-10,
+      0.3590664272245841,
+      0.2692998204184381,
+      0.3231597845021257,
+      0.048473967675318856
     ],
     "Bolivia (Plurinational State of)|La Paz Department": [
       9.090908842975215e-09,
@@ -8357,13 +8204,6 @@
       9.090908842975215e-09,
       9.090908842975215e-09,
       0.09090908842975215
-    ],
-    "Bolivia (Plurinational State of)|La paz": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
     ],
     "Bolivia (Plurinational State of)|Mizque": [
       1.5748031421662846e-09,
@@ -8394,18 +8234,11 @@
       0.09090908842975215
     ],
     "Bolivia (Plurinational State of)|Santa Cruz": [
-      3.101736972608507e-11,
-      0.629652605439527,
-      0.23883374689085504,
-      0.08374689826042969,
-      0.04776674937817101
-    ],
-    "Bolivia (Plurinational State of)|Santa cruz": [
-      7.933359777236545e-11,
-      0.5870686235155043,
-      0.16660055532196744,
-      0.19833399443091362,
-      0.047996826652281104
+      2.2301516502624857e-11,
+      0.6177520071227085,
+      0.21855486172572358,
+      0.11596788581364925,
+      0.0477252453156172
     ],
     "Bolivia (Plurinational State of)|Tarija": [
       4.9999999975e-10,
@@ -8723,18 +8556,11 @@
       0.062499999609375
     ],
     "Brazil|Distrito Federal": [
-      6.949270326132781e-11,
-      0.5976372480474191,
-      0.027797081304531124,
-      0.3266157053282407,
-      0.047949965250316195
-    ],
-    "Brazil|Distrito federal": [
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.06976744088696596
+      6.84931506802402e-11,
+      0.6027397259861137,
+      0.027397260272096078,
+      0.3219178081971289,
+      0.04794520547616814
     ],
     "Brazil|Es": [
       4.319654422047964e-10,
@@ -8744,11 +8570,11 @@
       0.04967602585355159
     ],
     "Brazil|Espirito Santo": [
-      3.9603960380354865e-10,
-      0.43564356418390354,
-      0.039603960380354866,
-      0.4752475245642584,
-      0.04950495047544358
+      3.656307128462045e-10,
+      0.43875685541544535,
+      0.0731261425692409,
+      0.43875685541544535,
+      0.04936014623423761
     ],
     "Brazil|Espirito Santo state": [
       9.090908842975212e-09,
@@ -8756,13 +8582,6 @@
       9.090908842975212e-09,
       0.9090908842975213,
       0.09090908842975212
-    ],
-    "Brazil|Espirito santo": [
-      4.6511627474310446e-09,
-      0.46511627474310446,
-      0.46511627474310446,
-      4.6511627474310446e-09,
-      0.06976744121146568
     ],
     "Brazil|Esp\u00edrito Santo": [
       9.678199854733336e-12,
@@ -8821,32 +8640,18 @@
       0.048562933587995454
     ],
     "Brazil|Mato Grosso": [
-      1.8384042650640976e-11,
-      0.2978214909403838,
-      0.03492968103621785,
-      0.6195422373266009,
-      0.04770659067841334
+      1.8208302985830144e-11,
+      0.3022578295647804,
+      0.03641660597166029,
+      0.613619810622476,
+      0.04770575382287499
     ],
     "Brazil|Mato Grosso do Sul": [
-      1.82781941140874e-11,
-      0.3545969658132956,
-      0.025589471759722364,
-      0.5721074757709357,
-      0.04770608663776812
-    ],
-    "Brazil|Mato grosso": [
-      1.886792445710217e-09,
-      0.7547169782840869,
-      0.18867924457102173,
-      1.886792445710217e-09,
-      0.05660377337130653
-    ],
-    "Brazil|Mato grosso do sul": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
+      1.8243181610540124e-11,
+      0.3557420414055324,
+      0.02554045425475617,
+      0.5710115844099058,
+      0.04770591991156243
     ],
     "Brazil|Mg": [
       1.730103805629722e-10,
@@ -8856,18 +8661,11 @@
       0.04844290655763222
     ],
     "Brazil|Minas Gerais": [
-      9.01835234694487e-12,
-      0.7196645172862005,
-      0.08567434729597626,
-      0.14699914325520136,
-      0.04766199215360364
-    ],
-    "Brazil|Minas gerais": [
-      1.3513513476990504e-09,
-      0.8108108086194302,
-      0.13513513476990505,
-      1.3513513476990504e-09,
-      0.054054053907962016
+      8.95896792681456e-12,
+      0.7203010213158906,
+      0.08600609209741977,
+      0.1460311772070773,
+      0.047661709370653456
     ],
     "Brazil|Misiones": [
       2.352941165397924e-09,
@@ -9003,11 +8801,11 @@
       0.047789511363959564
     ],
     "Brazil|Rio de Janeiro": [
-      1.3319126265139596e-11,
-      0.34496537026711555,
-      0.12386787426579825,
-      0.48348428342456734,
-      0.047682472029199764
+      1.3190001978326322e-11,
+      0.3482160522278149,
+      0.12398601859626741,
+      0.4801160720110781,
+      0.047681857151649645
     ],
     "Brazil|Rio de Janeiro state": [
       9.090908842975212e-09,
@@ -9015,13 +8813,6 @@
       9.090908842975212e-09,
       0.9090908842975213,
       0.09090908842975212
-    ],
-    "Brazil|Rio de janeiro": [
-      1.351351349525201e-09,
-      0.6756756747626004,
-      0.13513513495252008,
-      0.13513513495252008,
-      0.054054053981008036
     ],
     "Brazil|Rj": [
       6.329113920044864e-10,
@@ -9073,32 +8864,18 @@
       0.04764791464568595
     ],
     "Brazil|Santa Catarina": [
-      2.4993751561484784e-11,
-      0.5998500374756348,
-      0.33991502123619305,
-      0.012496875780742392,
-      0.04773806548243594
-    ],
-    "Brazil|Santa catarina": [
-      9.478672958828416e-10,
-      0.9478672958828416,
-      9.478672958828416e-10,
-      9.478672958828416e-10,
-      0.052132701273556285
+      2.4354603019377626e-11,
+      0.6088650754844407,
+      0.33122260106353574,
+      0.012177301509688813,
+      0.04773502191798015
     ],
     "Brazil|Sao Paulo": [
-      6.432936635160313e-11,
-      0.7912512061247186,
-      0.09006111289224439,
-      0.07076230298676345,
-      0.04792537793194433
-    ],
-    "Brazil|Sao paulo": [
-      2.2650056620011313e-10,
-      0.7474518684603733,
-      0.04530011324002262,
-      0.1585503963400792,
-      0.04869762173302432
+      5.0112753693304295e-11,
+      0.7817589576155469,
+      0.08018040590928686,
+      0.09020295664794772,
+      0.0478576797771056
     ],
     "Brazil|Sc": [
       4.7505938197144e-10,
@@ -9129,18 +8906,11 @@
       0.09090908842975212
     ],
     "Brazil|S\u00e3o Paulo": [
-      6.136286932739323e-12,
-      0.6927867947062696,
-      0.1251802534278822,
-      0.13438468382699117,
-      0.04764826803272085
-    ],
-    "Brazil|S\u00e3o paulo": [
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      0.9374999912109376,
-      0.06249999941406251
+      6.124448799570527e-12,
+      0.6914502694715124,
+      0.12493875551123874,
+      0.1359627633504657,
+      0.047648211660658704
     ],
     "Brazil|S\u201eo Paulo": [
       9.090908842975215e-09,
@@ -11117,18 +10887,11 @@
       0.04816513760915537
     ],
     "Colombia|Valle del Cauca": [
-      2.1691973969160694e-11,
-      0.5054229934814441,
-      0.35791757049115147,
-      0.08893709327355885,
-      0.047722342732153526
-    ],
-    "Colombia|Valle del cauca": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      0.06976744088696596
+      2.15936082914793e-11,
+      0.5031310731914677,
+      0.3606132584677043,
+      0.08853379399506513,
+      0.04772187432416925
     ],
     "Colombia|Vaupes": [
       2.352941165397924e-09,
@@ -11712,11 +11475,11 @@
       0.09090908842975215
     ],
     "Costa Rica|San Jose": [
-      1.9029495714742246e-10,
-      0.5708848714422674,
-      0.3615604185801027,
-      0.01902949571474225,
-      0.048525214072592734
+      1.2360939429868856e-10,
+      0.6551297897830494,
+      0.2719406674571148,
+      0.02472187885973771,
+      0.048207663776488545
     ],
     "Costa Rica|San Jose Prov.": [
       9.090908842975212e-09,
@@ -11738,13 +11501,6 @@
       0.06962380684852051,
       0.15047725996293146,
       0.047725996630034226
-    ],
-    "Costa Rica|San jose": [
-      3.5211267593235473e-10,
-      0.8098591546444158,
-      0.10563380277970641,
-      0.03521126759323547,
-      0.049295774630529664
     ],
     "Costa Rica|Unknown": [
       9.090908842975215e-09,
@@ -11845,32 +11601,18 @@
       0.06249999941406251
     ],
     "Croatia|Primorsko-Goranska": [
-      1.730103805330396e-10,
-      0.9515570929317178,
-      1.730103805330396e-10,
-      1.730103805330396e-10,
-      0.04844290654925109
-    ],
-    "Croatia|Primorsko-goranska": [
-      4.5248868716856734e-10,
-      0.9502262430539914,
-      4.5248868716856734e-10,
-      4.5248868716856734e-10,
-      0.049773755588542405
+      1.2523481523159624e-10,
+      0.9517845957601313,
+      1.2523481523159624e-10,
+      1.2523481523159624e-10,
+      0.04821540386416455
     ],
     "Croatia|Splitsko-Dalmatinska": [
-      4.1322313998360763e-10,
-      0.9504132219622976,
-      4.1322313998360763e-10,
-      4.1322313998360763e-10,
-      0.049586776798032924
-    ],
-    "Croatia|Splitsko-dalmatinska": [
-      1.3513513458729e-09,
-      0.9459459421110299,
-      1.3513513458729e-09,
-      1.3513513458729e-09,
-      0.054054053834916
+      3.169572104751595e-10,
+      0.9508716314254786,
+      3.169572104751595e-10,
+      3.169572104751595e-10,
+      0.04912836762364973
     ],
     "Croatia|Zadarska": [
       1.286173632944242e-10,
@@ -11887,18 +11629,11 @@
       0.058823528996539795
     ],
     "Croatia|\u0160ibensko-Kninska": [
-      3.278688521365224e-10,
-      0.950819671195915,
-      3.278688521365224e-10,
-      3.278688521365224e-10,
-      0.04918032782047836
-    ],
-    "Croatia|\u0160ibensko-kninska": [
-      1.8867924421502316e-09,
-      0.9433962210751158,
-      1.8867924421502316e-09,
-      1.8867924421502316e-09,
-      0.056603773264506954
+      2.797202794855494e-10,
+      0.951048950250868,
+      2.797202794855494e-10,
+      2.797202794855494e-10,
+      0.048951048909971144
     ],
     "Cuba|Artemisa": [
       2.352941159861592e-09,
@@ -12062,11 +11797,11 @@
       0.06976744088696596
     ],
     "Cuba|Pinar del Rio": [
-      1.1834319484611884e-09,
-      1.1834319484611884e-09,
-      1.1834319484611884e-09,
-      0.9467455587689507,
-      0.053254437680753476
+      8.620689632877527e-10,
+      8.620689632877527e-10,
+      8.620689632877527e-10,
+      0.9482758596165279,
+      0.05172413779726517
     ],
     "Cuba|Pinar del R\u00edo": [
       5.277044846527107e-10,
@@ -12076,13 +11811,6 @@
       0.050131926042007516
     ],
     "Cuba|Pinar del R\u00edo Province": [
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      0.9374999912109376,
-      0.06249999941406251
-    ],
-    "Cuba|Pinar del rio": [
       3.1249999707031254e-09,
       3.1249999707031254e-09,
       3.1249999707031254e-09,
@@ -12615,11 +12343,11 @@
       0.06976744088696596
     ],
     "Dominica|Saint George": [
-      1.5748031421662846e-09,
-      1.5748031421662846e-09,
-      1.5748031421662846e-09,
-      0.9448818852997707,
-      0.055118109975819965
+      1.1834319484611884e-09,
+      1.1834319484611884e-09,
+      1.1834319484611884e-09,
+      0.9467455587689507,
+      0.053254437680753476
     ],
     "Dominica|Saint George Par.": [
       9.090908842975212e-09,
@@ -12683,13 +12411,6 @@
       9.090908842975212e-09,
       0.9090908842975213,
       0.09090908842975212
-    ],
-    "Dominica|Saint george": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      0.06976744088696596
     ],
     "Dominican Republic|Azua": [
       2.1141649035216714e-10,
@@ -12978,13 +12699,6 @@
       0.949720668799351,
       0.050279329524671526
     ],
-    "Dominican Republic|San Cristobal": [
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      0.9411764639446367,
-      0.058823528996539795
-    ],
     "Dominican Republic|San Cristobal Province": [
       4.6511627257977304e-09,
       4.6511627257977304e-09,
@@ -13014,11 +12728,11 @@
       0.09090908842975212
     ],
     "Dominican Republic|San cristobal": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
+      1.8867924421502316e-09,
+      1.8867924421502316e-09,
+      1.8867924421502316e-09,
+      0.9433962210751158,
+      0.056603773264506954
     ],
     "Dominican Republic|Sanchez Ramirez": [
       9.090908842975212e-09,
@@ -13167,7 +12881,7 @@
       0.123083567261432,
       0.04772187432416925
     ],
-    "Ecuador|Esmeraldas prov.": [
+    "Ecuador|Esmeraldas Prov.": [
       9.090908842975215e-09,
       0.9090908842975214,
       9.090908842975215e-09,
@@ -13231,11 +12945,11 @@
       0.09090908842975212
     ],
     "Ecuador|Los Rios": [
-      3.278688523515184e-10,
-      0.5901639342327332,
-      0.09836065570545552,
-      0.2622950818812147,
-      0.04918032785272776
+      2.8818443795729553e-10,
+      0.6051873197103206,
+      0.1152737751829182,
+      0.2305475503658364,
+      0.04899135445274024
     ],
     "Ecuador|Los Rios Province": [
       1.351351349525201e-09,
@@ -13250,20 +12964,6 @@
       0.07604562734751116,
       0.19011406836877792,
       0.049429657775882256
-    ],
-    "Ecuador|Los rios": [
-      2.352941165397924e-09,
-      0.7058823496193772,
-      0.2352941165397924,
-      2.352941165397924e-09,
-      0.0588235291349481
-    ],
-    "Ecuador|MORONA-SANTIAGO": [
-      1.5748031421662846e-09,
-      1.5748031421662846e-09,
-      1.5748031421662846e-09,
-      0.9448818852997707,
-      0.055118109975819965
     ],
     "Ecuador|Manabi": [
       1.4298991920865102e-11,
@@ -13294,11 +12994,11 @@
       0.047809561910469714
     ],
     "Ecuador|Morona-Santiago": [
-      3.8022813673755585e-10,
-      0.4182509504113114,
-      0.15209125469502233,
-      0.38022813673755584,
-      0.049429657775882256
+      3.0674846616357407e-10,
+      0.3374233127799315,
+      0.12269938646542963,
+      0.49079754586171853,
+      0.04907975458617185
     ],
     "Ecuador|Morona-Santiago Prov.": [
       9.090908842975215e-09,
@@ -13413,39 +13113,25 @@
       0.052631578891966756
     ],
     "Ecuador|Zamora Chinchipe": [
-      4.4702726864340514e-11,
-      0.7152436298294482,
-      0.10728654447441724,
-      0.1296379079065875,
-      0.047831917744844354
-    ],
-    "Ecuador|Zamora chinchipe": [
-      1.886792445710217e-09,
-      0.7547169782840869,
-      0.18867924457102173,
-      1.886792445710217e-09,
-      0.05660377337130653
-    ],
-    "Egypt|Al Bahr Al Ahmar": [
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.06976744088696596
+      4.367765887557643e-11,
+      0.7163136055594534,
+      0.10919414718894108,
+      0.12666521073917164,
+      0.0478270364687562
     ],
     "Egypt|Al Bahr al Ahmar": [
-      7.299270067664766e-10,
-      0.8029197074431242,
-      0.07299270067664766,
-      0.07299270067664766,
-      0.05109489047365337
+      6.329113920044864e-10,
+      0.8227848096058323,
+      0.06329113920044864,
+      0.06329113920044864,
+      0.05063291136035891
     ],
     "Egypt|Al Buhayrah": [
-      3.12499998046875e-09,
-      0.62499999609375,
-      3.12499998046875e-09,
-      0.312499998046875,
-      0.062499999609375
+      2.352941165397924e-09,
+      0.7058823496193772,
+      2.352941165397924e-09,
+      0.2352941165397924,
+      0.0588235291349481
     ],
     "Egypt|Al Fayyum": [
       1.5748031471262945e-09,
@@ -13482,13 +13168,6 @@
       3.1249999707031254e-09,
       0.06249999941406251
     ],
-    "Egypt|Al buhayrah": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
-    ],
     "Egypt|Al-Fayyum": [
       3.1249999707031254e-09,
       3.1249999707031254e-09,
@@ -13518,18 +13197,11 @@
       0.052631578836565086
     ],
     "Egypt|Aswan Governorate": [
-      3.12499998046875e-09,
-      0.62499999609375,
-      0.312499998046875,
-      3.12499998046875e-09,
-      0.062499999609375
-    ],
-    "Egypt|Aswan governorate": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
+      2.352941165397924e-09,
+      0.4705882330795848,
+      0.4705882330795848,
+      2.352941165397924e-09,
+      0.0588235291349481
     ],
     "Egypt|Asyut": [
       7.299270067664766e-10,
@@ -13566,7 +13238,7 @@
       3.1249999707031254e-09,
       0.06249999941406251
     ],
-    "Egypt|Beni Suef Governorate": [
+    "Egypt|Beni suef governorate": [
       9.090908842975215e-09,
       0.9090908842975214,
       9.090908842975215e-09,
@@ -13608,13 +13280,6 @@
       0.31674208130464154,
       0.04977375563358653
     ],
-    "Egypt|Giza Governorate": [
-      3.169572106760833e-10,
-      0.8557844688254248,
-      0.031695721067608325,
-      0.06339144213521665,
-      0.04912836765479291
-    ],
     "Egypt|Giza Province": [
       9.090908842975215e-09,
       0.9090908842975214,
@@ -13623,11 +13288,11 @@
       0.09090908842975215
     ],
     "Egypt|Giza governorate": [
-      3.12499998046875e-09,
-      0.312499998046875,
-      3.12499998046875e-09,
-      0.62499999609375,
-      0.062499999609375
+      2.8818443795729553e-10,
+      0.8069164262804275,
+      0.02881844379572955,
+      0.1152737751829182,
+      0.04899135445274024
     ],
     "Egypt|Janub Sina'": [
       1.5748031421662846e-09,
@@ -13819,11 +13484,11 @@
       0.058823528996539795
     ],
     "El Salvador|La Libertad": [
-      3.169572106760833e-10,
-      0.19017432640564996,
-      0.19017432640564996,
-      0.5705229792169499,
-      0.04912836765479291
+      3.0674846616357407e-10,
+      0.18404907969814444,
+      0.18404907969814444,
+      0.5828220857107907,
+      0.04907975458617185
     ],
     "El Salvador|La Paz": [
       9.090908842975212e-09,
@@ -13846,13 +13511,6 @@
       0.46511627474310446,
       0.06976744121146568
     ],
-    "El Salvador|La libertad": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
-    ],
     "El Salvador|Morazan": [
       3.1249999707031254e-09,
       3.1249999707031254e-09,
@@ -13868,11 +13526,11 @@
       0.05511811014942031
     ],
     "El Salvador|San Miguel": [
-      1.351351349525201e-09,
-      0.13513513495252008,
-      0.13513513495252008,
-      0.6756756747626004,
-      0.054054053981008036
+      1.052631577839335e-09,
+      0.10526315778393351,
+      0.10526315778393351,
+      0.7368421044875345,
+      0.052631578891966756
     ],
     "El Salvador|San Salvador": [
       4.3196544239139054e-10,
@@ -13888,26 +13546,12 @@
       0.4054054043097151,
       0.054054053907962016
     ],
-    "El Salvador|San miguel": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      0.06976744088696596
-    ],
     "El Salvador|Santa Ana": [
-      2.3201856143108617e-10,
-      0.5800464035777154,
-      0.1392111368586517,
-      0.23201856143108618,
-      0.0487238979005281
-    ],
-    "El Salvador|Santa ana": [
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.06976744088696596
+      2.2123893800415066e-10,
+      0.5973451326112068,
+      0.13274336280249038,
+      0.22123893800415065,
+      0.04867256636091315
     ],
     "El Salvador|Sonsonate": [
       5.586592175649949e-10,
@@ -16059,18 +15703,11 @@
       0.04988123513069775
     ],
     "Ghana|Central Region": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
-    ],
-    "Ghana|Central region": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
+      4.6511627474310446e-09,
+      0.46511627474310446,
+      0.46511627474310446,
+      4.6511627474310446e-09,
+      0.06976744121146568
     ],
     "Ghana|Eastern": [
       1.1068068620800436e-10,
@@ -16535,20 +16172,13 @@
       0.06976744088696596
     ],
     "Guatemala|Alta Verapaz": [
-      8.814455706583125e-11,
-      0.6170118994608187,
-      0.24680475978432748,
-      0.08814455706583124,
-      0.04803878360087803
+      6.521030322365763e-11,
+      0.5999347896576501,
+      0.24779915224989899,
+      0.1043364851578522,
+      0.04792957286938836
     ],
-    "Guatemala|Alta verapaz": [
-      2.503128910512358e-10,
-      0.5506883603127187,
-      0.2503128910512358,
-      0.15018773463074148,
-      0.04881101375499099
-    ],
-    "Guatemala|Baja Verapaz": [
+    "Guatemala|Baja verapaz": [
       1.236093942834093e-10,
       0.7416563657004557,
       0.2101359702817958,
@@ -16577,20 +16207,13 @@
       0.06249999941406251
     ],
     "Guatemala|El Progreso": [
-      8.620689640309155e-10,
-      0.8620689640309155,
-      8.620689640309155e-10,
-      0.08620689640309155,
-      0.051724137841854936
+      7.299270062336832e-10,
+      0.8029197068570515,
+      7.299270062336832e-10,
+      0.14598540124673662,
+      0.05109489043635783
     ],
     "Guatemala|El Progreso Dept.": [
-      4.6511627474310446e-09,
-      0.46511627474310446,
-      4.6511627474310446e-09,
-      0.46511627474310446,
-      0.06976744121146568
-    ],
-    "Guatemala|El progreso": [
       4.6511627474310446e-09,
       0.46511627474310446,
       4.6511627474310446e-09,
@@ -16717,11 +16340,11 @@
       0.05109489043635783
     ],
     "Guatemala|San Marcos": [
-      2.2650056620011313e-10,
-      0.2038505095801018,
-      0.6568516419803281,
-      0.09060022648004525,
-      0.04869762173302432
+      1.669449081524299e-10,
+      0.1669449081524299,
+      0.7011686142402056,
+      0.08347245407621495,
+      0.048414023364204674
     ],
     "Guatemala|San Marcos Dept.": [
       9.090908842975212e-09,
@@ -16730,26 +16353,12 @@
       9.090908842975212e-09,
       0.09090908842975212
     ],
-    "Guatemala|San marcos": [
-      6.329113920044864e-10,
-      0.06329113920044864,
-      0.8227848096058323,
-      0.06329113920044864,
-      0.05063291136035891
-    ],
     "Guatemala|Santa Rosa": [
-      7.905138333671827e-10,
-      0.3952569166835913,
-      0.31620553334687307,
-      0.2371541500101548,
-      0.051383399168866875
-    ],
-    "Guatemala|Santa rosa": [
-      4.132231403251144e-10,
-      0.6198347104876716,
-      0.24793388419506865,
-      0.08264462806502287,
-      0.04958677683901373
+      2.7173913036094045e-10,
+      0.543478260721881,
+      0.2717391303609405,
+      0.13586956518047025,
+      0.04891304346496929
     ],
     "Guatemala|Solola": [
       1.1834319498616995e-09,
@@ -17312,11 +16921,11 @@
       0.04958677683901373
     ],
     "Honduras|Francisco Morazan": [
-      4.9999999975e-10,
-      0.6999999996499999,
-      0.1999999999,
-      0.049999999975,
-      0.049999999975
+      4.750593821971214e-10,
+      0.66508313507597,
+      0.19002375287884857,
+      0.09501187643942428,
+      0.04988123513069775
     ],
     "Honduras|Francisco Morazan Department": [
       9.090908842975215e-09,
@@ -17332,26 +16941,12 @@
       0.2628316389653939,
       0.04785519464181229
     ],
-    "Honduras|Francisco morazan": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
-    ],
     "Honduras|Gracias a Dios": [
-      7.867820613070983e-11,
-      0.7238394964025304,
-      0.11014948858299375,
-      0.11801730919606473,
-      0.047993705739732995
-    ],
-    "Honduras|Gracias a dios": [
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      0.9411764639446367,
-      0.058823528996539795
+      7.61614622942756e-11,
+      0.7006854531073355,
+      0.10662604721198583,
+      0.14470677835912363,
+      0.047981721245393634
     ],
     "Honduras|Intibuca": [
       4.6511627257977304e-09,
@@ -17366,13 +16961,6 @@
       0.34482758590963136,
       0.08620689647740784,
       0.05172413788644471
-    ],
-    "Honduras|Islas De La Bahia": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
     ],
     "Honduras|Islas de Bahia": [
       9.090908842975212e-09,
@@ -17389,11 +16977,11 @@
       0.048067860499892964
     ],
     "Honduras|Islas de la bahia": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      0.06976744088696596
+      3.12499998046875e-09,
+      3.12499998046875e-09,
+      0.312499998046875,
+      0.62499999609375,
+      0.062499999609375
     ],
     "Honduras|La Paz": [
       1.351351349525201e-09,
@@ -17487,18 +17075,11 @@
       0.049429657775882256
     ],
     "Hong Kong|Hong Kong": [
-      3.8087983239836676e-11,
-      0.1752047229032487,
-      0.20186631117113438,
-      0.5751285469215338,
-      0.04780041896599503
-    ],
-    "Hong Kong|Hong kong": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
+      3.793626706988102e-11,
+      0.1745068285214527,
+      0.2010622154703694,
+      0.5766312594621915,
+      0.047799696508050084
     ],
     "Hong Kong|Islands": [
       2.5598361704195614e-11,
@@ -17668,19 +17249,12 @@
       0.332541567537985,
       0.04988123513069775
     ],
-    "India|Andaman and Nicobar": [
-      8.89679715223338e-11,
-      0.38256227754603533,
-      0.4804270462206025,
-      0.0889679715223338,
-      0.048042704622060256
-    ],
     "India|Andaman and Nicobar Islands": [
-      1.886792445710217e-09,
-      0.37735848914204345,
-      0.5660377337130652,
-      1.886792445710217e-09,
-      0.05660377337130653
+      8.499787504589902e-11,
+      0.3824904377065456,
+      0.48448788776162444,
+      0.08499787504589902,
+      0.04802379940093295
     ],
     "India|Andhra Pradesh": [
       3.734129947582743e-11,
@@ -17773,19 +17347,12 @@
       0.12972972970168006,
       0.048648648638130024
     ],
-    "India|Jammu Kashmir": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
-    ],
     "India|Jammu and Kashmir": [
-      1.052631577839335e-09,
-      0.631578946703601,
-      0.10526315778393351,
-      0.21052631556786702,
-      0.052631578891966756
+      9.478672976797465e-10,
+      0.5687203786078479,
+      0.09478672976797466,
+      0.2843601893039239,
+      0.05213270137238606
     ],
     "India|Jharkhand": [
       8.620689647740785e-10,
@@ -17914,18 +17481,11 @@
       0.04988123513069775
     ],
     "India|Tamil Nadu": [
-      6.659784888903735e-12,
-      0.3010222769784488,
-      0.21910692284493288,
-      0.4322200392898524,
-      0.047650760880106224
-    ],
-    "India|Tamil nadu": [
-      2.352941165397924e-09,
-      2.352941165397924e-09,
-      0.4705882330795848,
-      0.4705882330795848,
-      0.0588235291349481
+      6.641208699939292e-12,
+      0.30018263323725597,
+      0.21982400796799056,
+      0.4323426863660479,
+      0.047650672422064416
     ],
     "India|Telangana": [
       6.521030322365763e-11,
@@ -17942,18 +17502,11 @@
       0.05325443780679948
     ],
     "India|Uttar Pradesh": [
-      6.263701847399705e-11,
-      0.08142812401619616,
-      0.2568117757433879,
-      0.6138427810451711,
-      0.047917319132607744
-    ],
-    "India|Uttar pradesh": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      0.06976744088696596
+      6.182380216001089e-11,
+      0.08037094280801416,
+      0.26584234928804684,
+      0.6058732611681067,
+      0.04791344667400844
     ],
     "India|Uttarakhand": [
       7.616146229427558e-11,
@@ -19013,11 +18566,11 @@
       0.05013192606846235
     ],
     "Israel|HaDarom": [
-      4.454442192456606e-12,
-      0.8049177041769087,
-      0.09087062072611475,
-      0.05657141584419889,
-      0.0476402592483234
+      4.309323220769605e-12,
+      0.8097218331826087,
+      0.08791019370369994,
+      0.05472840490377398,
+      0.04763956820560799
     ],
     "Israel|HaMerkaz": [
       1.266383840910115e-11,
@@ -19027,18 +18580,11 @@
       0.047679351610265826
     ],
     "Israel|HaZafon": [
-      1.627869119296307e-11,
-      0.6690542080307822,
-      0.004883607357888921,
-      0.2783656193996685,
-      0.0476965651953818
-    ],
-    "Israel|Hadarom": [
-      1.3218770649087073e-10,
-      0.9517514867342692,
-      1.3218770649087073e-10,
-      1.3218770649087073e-10,
-      0.04824851286916782
+      1.6168148746707062e-11,
+      0.6709781729883431,
+      0.004850444624012119,
+      0.2764753435686908,
+      0.047696038802785834
     ],
     "Israel|Haifa": [
       2.994460248360865e-11,
@@ -19046,13 +18592,6 @@
       2.994460248360865e-11,
       0.2605180416073952,
       0.047761640961355795
-    ],
-    "Israel|Hazafon": [
-      2.352941159861592e-09,
-      0.9411764639446367,
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      0.058823528996539795
     ],
     "Israel|Jerusalem": [
       5.440696408548346e-11,
@@ -20441,18 +19980,11 @@
       0.050847457592645785
     ],
     "Kenya|Kiambu County": [
-      1.351351349525201e-09,
-      0.27027026990504016,
-      0.27027026990504016,
-      0.40540540485756027,
-      0.054054053981008036
-    ],
-    "Kenya|Kiambu county": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
+      1.1834319512622107e-09,
+      0.23668639025244215,
+      0.3550295853786632,
+      0.3550295853786632,
+      0.05325443780679948
     ],
     "Kenya|Kilifi": [
       1.0126582277455535e-10,
@@ -20868,11 +20400,11 @@
       0.055118109975819965
     ],
     "Kenya|Rift Valley": [
-      1.8867924421502316e-09,
-      0.9433962210751158,
-      1.8867924421502316e-09,
-      1.8867924421502316e-09,
-      0.056603773264506954
+      1.3513513476990504e-09,
+      0.8108108086194302,
+      1.3513513476990504e-09,
+      0.13513513476990505,
+      0.054054053907962016
     ],
     "Kenya|Rift Valley Prov.": [
       1.0126582277455536e-10,
@@ -20887,13 +20419,6 @@
       0.4067796607411663,
       0.20338983037058314,
       0.050847457592645785
-    ],
-    "Kenya|Rift valley": [
-      4.6511627474310446e-09,
-      0.46511627474310446,
-      4.6511627474310446e-09,
-      0.46511627474310446,
-      0.06976744121146568
     ],
     "Kenya|Samburu": [
       3.278688523515184e-10,
@@ -21218,11 +20743,11 @@
       0.05325443768075347
     ],
     "Korea, Republic of|Gyeonggi-do": [
-      3.3411293013690816e-11,
-      0.9522218508901882,
-      3.3411293013690816e-11,
-      3.3411293013690816e-11,
-      0.047778149009577865
+      3.306331624734039e-11,
+      0.9522235079234032,
+      3.306331624734039e-11,
+      3.306331624734039e-11,
+      0.04777649197740686
     ],
     "Korea, Republic of|Gyeongnam": [
       3.1249999707031254e-09,
@@ -21349,13 +20874,6 @@
       9.090908842975215e-09,
       9.090908842975215e-09,
       0.09090908842975215
-    ],
-    "Korea, Republic of|gyeonggi-do": [
-      3.1249999707031254e-09,
-      0.9374999912109376,
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      0.06249999941406251
     ],
     "Korea, Republic of|jeonbuk": [
       2.43902438845925e-10,
@@ -22757,13 +22275,6 @@
       0.4054054043097151,
       0.054054053907962016
     ],
-    "Mauritania|Hodh El Gharbi": [
-      4.6511627474310446e-09,
-      0.46511627474310446,
-      4.6511627474310446e-09,
-      0.46511627474310446,
-      0.06976744121146568
-    ],
     "Mauritania|Hodh ech Chargui": [
       2.352941165397924e-09,
       0.4705882330795848,
@@ -22772,11 +22283,11 @@
       0.0588235291349481
     ],
     "Mauritania|Hodh el Gharbi": [
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.06976744088696596
+      2.352941165397924e-09,
+      0.7058823496193772,
+      2.352941165397924e-09,
+      0.2352941165397924,
+      0.0588235291349481
     ],
     "Mauritania|Inchiri": [
       9.478672958828416e-10,
@@ -22954,11 +22465,11 @@
       0.047987616095357
     ],
     "Mexico|Baja California": [
-      7.075388261880814e-12,
-      0.860367212644707,
-      0.009198004740445057,
-      0.08278204266400552,
-      0.047652739943767286
+      4.924289055743325e-12,
+      0.8760310230167375,
+      0.0073864335836149875,
+      0.06894004678040655,
+      0.04764249661431667
     ],
     "Mexico|Baja California Norte": [
       5.4406964085483457e-11,
@@ -22968,25 +22479,11 @@
       0.04787812839522545
     ],
     "Mexico|Baja California Sur": [
-      5.2645433008409345e-12,
-      0.884443274541277,
-      0.009476177941513682,
-      0.058436430639334375,
-      0.047644116872610456
-    ],
-    "Mexico|Baja california": [
-      1.619564337167065e-11,
-      0.9118147218250576,
-      0.0032391286743341297,
-      0.0372499797548425,
-      0.04769616972957007
-    ],
-    "Mexico|Baja california sur": [
-      1.0141987829511745e-11,
-      0.9442190669275434,
-      0.0020283975659023488,
-      0.006085192697707046,
-      0.0476673427987052
+      3.4656639345562547e-12,
+      0.904884853312638,
+      0.006931327869112509,
+      0.04054826803430818,
+      0.047635550780475724
     ],
     "Mexico|Campeche": [
       2.2459292531780813e-11,
@@ -23037,19 +22534,12 @@
       0.017766722927640283,
       0.047703651060714156
     ],
-    "Mexico|Coahuila de Zaragoza": [
-      1.886792445710217e-09,
-      0.5660377337130652,
-      0.37735848914204345,
-      1.886792445710217e-09,
-      0.05660377337130653
-    ],
     "Mexico|Coahuila de zaragoza": [
-      2.6599281817975833e-11,
-      0.9362947199927493,
-      0.0159595690907855,
-      2.6599281817975833e-11,
-      0.047745710863266615
+      2.623294858204444e-11,
+      0.9312696746625777,
+      0.020986358865635553,
+      2.623294858204444e-11,
+      0.04774396641932088
     ],
     "Mexico|Colima": [
       2.552974214895252e-11,
@@ -23065,13 +22555,6 @@
       9.090908842975215e-09,
       0.09090908842975215
     ],
-    "Mexico|Distrito Federal": [
-      1.2319822594251082e-11,
-      0.8931871380832034,
-      1.2319822594251082e-11,
-      0.05913514845240519,
-      0.04767771343975169
-    ],
     "Mexico|Distrito Federal (DF)": [
       4.6511627257977304e-09,
       0.930232545159546,
@@ -23080,11 +22563,11 @@
       0.06976744088696596
     ],
     "Mexico|Distrito federal": [
-      1.0460251044930938e-10,
-      0.8472803346394059,
-      0.010460251044930938,
-      0.09414225940437844,
-      0.04811715480668232
+      1.1022320198280272e-11,
+      0.8883990079813899,
+      0.001102232019828027,
+      0.06282722513019755,
+      0.047671534857562176
     ],
     "Mexico|Durango": [
       1.603206412774246e-11,
@@ -23234,11 +22717,11 @@
       0.09090908842975215
     ],
     "Mexico|Nuevo Leon": [
-      3.169572105756214e-10,
-      0.919175910669302,
-      0.03169572105756214,
-      3.169572105756214e-10,
-      0.04912836763922132
+      4.933399111744776e-11,
+      0.8584114454435909,
+      0.08880118401140596,
+      0.0049333991117447755,
+      0.04785397138392433
     ],
     "Mexico|Nuevo Le\u00f3n": [
       1.6223231667485024e-11,
@@ -23246,13 +22729,6 @@
       0.18981181050957477,
       0.06002595716969458,
       0.04769630110240597
-    ],
-    "Mexico|Nuevo leon": [
-      5.841121494985916e-11,
-      0.8469626167729578,
-      0.09929906541476057,
-      0.005841121494985916,
-      0.047897196258884514
     ],
     "Mexico|Oaxaca": [
       6.866245536893256e-12,
@@ -23297,11 +22773,11 @@
       0.04786281033796453
     ],
     "Mexico|Quintana Roo": [
-      8.465250148070219e-12,
-      0.3022094302861068,
-      0.20655210361291332,
-      0.44357910775887943,
-      0.047659358333635334
+      6.505122784150236e-12,
+      0.2966335989572507,
+      0.19580419580292208,
+      0.45991218083942165,
+      0.047650024393900474
     ],
     "Mexico|Quintana Roo (QR)": [
       4.6511627474310446e-09,
@@ -23309,20 +22785,6 @@
       4.6511627474310446e-09,
       0.46511627474310446,
       0.06976744121146568
-    ],
-    "Mexico|Quintana roo": [
-      2.8089887639660396e-11,
-      0.2780898876326379,
-      0.16011235954606426,
-      0.5140449438057852,
-      0.04775280898742267
-    ],
-    "Mexico|San Luis Potosi": [
-      1.1750881314717877e-10,
-      0.9048178612332766,
-      0.023501762629435752,
-      0.023501762629435752,
-      0.0481786133903433
     ],
     "Mexico|San Luis Potos\u00ed": [
       3.8707180180425497e-11,
@@ -23332,11 +22794,11 @@
       0.04780336752282549
     ],
     "Mexico|San luis potosi": [
-      3.662332905927034e-11,
-      0.7507782457150419,
-      0.06958432521261364,
-      0.1318439846133732,
-      0.04779344442234779
+      2.7925160568893458e-11,
+      0.7874895280427955,
+      0.058642837194676264,
+      0.10611561016179515,
+      0.04775202457280782
     ],
     "Mexico|Sinaloa": [
       9.961647656423154e-12,
@@ -25005,32 +24467,18 @@
       0.04899135445274024
     ],
     "Nicaragua|Nueva Segovia": [
-      1.5748031471262945e-09,
-      0.15748031471262944,
-      0.6299212588505178,
-      0.15748031471262944,
-      0.05511811014942031
-    ],
-    "Nicaragua|Nueva segovia": [
-      3.12499998046875e-09,
-      0.62499999609375,
-      0.312499998046875,
-      3.12499998046875e-09,
-      0.062499999609375
-    ],
-    "Nicaragua|Rio San Juan": [
-      1.1834319498616995e-09,
-      0.8284023649031895,
-      0.11834319498616994,
-      1.1834319498616995e-09,
-      0.05325443774377647
+      1.052631577839335e-09,
+      0.3157894733518005,
+      0.5263157889196676,
+      0.10526315778393351,
+      0.052631578891966756
     ],
     "Nicaragua|Rio san juan": [
-      1.886792449270203e-09,
-      0.5660377347810609,
-      0.1886792449270203,
-      0.1886792449270203,
-      0.0566037734781061
+      7.299270067664766e-10,
+      0.7299270067664766,
+      0.14598540135329532,
+      0.07299270067664766,
+      0.05109489047365337
     ],
     "Nicaragua|Rivas": [
       3.8022813673755585e-10,
@@ -26369,19 +25817,12 @@
       0.012865873270320625,
       0.04792537793194433
     ],
-    "Panama|Bocas Del Toro": [
-      7.905138333671827e-10,
-      0.7114624500304644,
-      0.15810276667343653,
-      0.07905138333671827,
-      0.051383399168866875
-    ],
     "Panama|Bocas del Toro": [
-      6.84931506802402e-11,
-      0.45205479448958524,
-      0.15753424656455245,
-      0.34246575340120095,
-      0.04794520547616814
+      6.222775357422354e-11,
+      0.4667081518066765,
+      0.16801493465040354,
+      0.31736154322854004,
+      0.047915370252152124
     ],
     "Panama|Bocas del Toro Province": [
       9.090908842975215e-09,
@@ -26389,20 +25830,6 @@
       9.090908842975215e-09,
       9.090908842975215e-09,
       0.09090908842975215
-    ],
-    "Panama|Bocas del toro": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      0.06976744088696596
-    ],
-    "Panama|Canal Zone": [
-      8.499787504589902e-11,
-      0.07649808754130911,
-      0.5184870377799841,
-      0.3569910751927759,
-      0.04802379940093295
     ],
     "Panama|Canal area": [
       9.090908842975212e-09,
@@ -26412,11 +25839,11 @@
       0.09090908842975212
     ],
     "Panama|Canal zone": [
-      1.4641288431238463e-10,
-      0.33674963391848467,
-      0.30746705705600774,
-      0.30746705705600774,
-      0.04831625182308693
+      5.3792361481775556e-11,
+      0.17213555674168177,
+      0.44109736415055956,
+      0.338891877335186,
+      0.04787520171878024
     ],
     "Panama|Chiriqui": [
       1.2690355328338786e-10,
@@ -26607,7 +26034,7 @@
       0.46511627474310446,
       0.06976744121146568
     ],
-    "Panama|San blas": [
+    "Panama|San Blas": [
       9.090908842975215e-09,
       0.9090908842975214,
       9.090908842975215e-09,
@@ -26699,18 +26126,11 @@
       0.058823528996539795
     ],
     "Papua New Guinea|Central Province": [
-      7.933359776607162e-11,
-      7.933359776607162e-11,
-      0.49980166592625125,
-      0.45220150726660824,
-      0.04799682664847334
-    ],
-    "Papua New Guinea|Central province": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
+      7.867820612451956e-11,
+      7.867820612451956e-11,
+      0.5035405191969252,
+      0.44846577490976147,
+      0.04799370573595694
     ],
     "Papua New Guinea|Chimbu": [
       1.902949571112103e-10,
@@ -26859,19 +26279,12 @@
       0.9090908842975213,
       0.09090908842975212
     ],
-    "Papua New Guinea|Madang Province": [
-      2.8818443787424525e-10,
-      2.8818443787424525e-10,
-      0.08645533136227357,
-      0.8645533136227357,
-      0.048991354438621695
-    ],
     "Papua New Guinea|Madang province": [
-      5.934718090323944e-10,
-      5.934718090323944e-10,
-      5.934718090323944e-10,
-      0.949554894451831,
-      0.050445103767753526
+      1.9417475720614573e-10,
+      1.9417475720614573e-10,
+      0.058252427161843714,
+      0.8932038831482703,
+      0.04854368930153643
     ],
     "Papua New Guinea|Manus": [
       1.340482573367163e-10,
@@ -26895,18 +26308,11 @@
       0.04789053591244122
     ],
     "Papua New Guinea|Milne Bay Province": [
-      8.136696499896388e-11,
-      8.136696499896388e-11,
-      0.2685109844965808,
-      0.6834825059912966,
-      0.04800650934938869
-    ],
-    "Papua New Guinea|Milne bay province": [
-      3.3955857362338976e-10,
-      3.3955857362338976e-10,
-      0.3056027162610508,
-      0.6451612898844405,
-      0.04923599317539152
+      6.565988180359029e-11,
+      6.565988180359029e-11,
+      0.2757715035750792,
+      0.6762967825769799,
+      0.047931713716620916
     ],
     "Papua New Guinea|Morobe": [
       6.657789612961679e-11,
@@ -26929,19 +26335,12 @@
       0.9090908842975213,
       0.09090908842975212
     ],
-    "Papua New Guinea|Morobe Province": [
-      1.640689088879183e-10,
-      1.640689088879183e-10,
-      0.5086136175525467,
-      0.44298605399737945,
-      0.048400328121935905
-    ],
     "Papua New Guinea|Morobe province": [
-      1.699235343517677e-10,
-      1.699235343517677e-10,
-      0.033984706870353536,
-      0.9175870854995456,
-      0.048428207290253794
+      8.350730687540588e-11,
+      8.350730687540588e-11,
+      0.2755741126888394,
+      0.6764091856907876,
+      0.04801670145335838
     ],
     "Papua New Guinea|National Capital District": [
       7.616146228847503e-11,
@@ -27168,11 +26567,11 @@
       0.04782421369686996
     ],
     "Paraguay|Alto Paraguay": [
-      5.934718093846031e-10,
-      0.7121661712615237,
-      5.934718093846031e-10,
-      0.23738872375384124,
-      0.050445103797691265
+      5.586592172528948e-10,
+      0.7262569824287631,
+      5.586592172528948e-10,
+      0.2234636869011579,
+      0.05027932955276053
     ],
     "Paraguay|Alto Paran\u00e1": [
       1.1834319498616995e-09,
@@ -27180,13 +26579,6 @@
       0.23668638997233987,
       1.1834319498616995e-09,
       0.05325443774377647
-    ],
-    "Paraguay|Alto paraguay": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
     ],
     "Paraguay|Amambay": [
       5.934718093846031e-10,
@@ -27322,18 +26714,11 @@
       0.054054053907962016
     ],
     "Paraguay|Presidente Hayes": [
-      1.7301038059290478e-10,
-      0.5190311417787143,
-      0.06920415223716192,
-      0.36332179924510005,
-      0.04844290656601334
-    ],
-    "Paraguay|Presidente hayes": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
+      1.6992353438064172e-10,
+      0.5097706031419251,
+      0.08496176719032085,
+      0.35683942219934756,
+      0.048428207298482885
     ],
     "Paraguay|San Pedro": [
       1.052631576731302e-09,
@@ -27455,18 +26840,11 @@
       0.09090908842975212
     ],
     "Peru|La Libertad": [
-      1.886792445710217e-09,
-      0.18867924457102173,
-      0.7547169782840869,
-      1.886792445710217e-09,
-      0.05660377337130653
-    ],
-    "Peru|La libertad": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      9.090908842975212e-09,
-      0.09090908842975212
+      1.5748031446462895e-09,
+      0.15748031446462893,
+      0.7874015723231447,
+      1.5748031446462895e-09,
+      0.055118110062620136
     ],
     "Peru|Lambayeque": [
       6.329113920044864e-10,
@@ -27517,26 +26895,12 @@
       0.9090908842975213,
       0.09090908842975212
     ],
-    "Peru|Madre De Dios": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
-    ],
     "Peru|Madre de Dios": [
-      1.0871337717988027e-11,
-      0.2435179648829318,
-      0.13480458770305154,
-      0.5740066315097678,
-      0.047670815893377495
-    ],
-    "Peru|Madre de dios": [
-      4.319654425779847e-10,
-      0.2591792655467908,
-      0.4319654425779847,
-      0.2591792655467908,
-      0.049676025896468246
+      1.0593220338870834e-11,
+      0.2436440677940292,
+      0.14194915254086918,
+      0.5667372881295897,
+      0.047669491524918756
     ],
     "Peru|Maynas": [
       1.886792449270203e-09,
@@ -28931,13 +28295,6 @@
       2.352941159861592e-09,
       0.058823528996539795
     ],
-    "Poland|Dolno\u015bl\u0105skie": [
-      1.0526315756232684e-09,
-      0.9473684180609416,
-      1.0526315756232684e-09,
-      1.0526315756232684e-09,
-      0.052631578781163424
-    ],
     "Poland|Greater Poland": [
       9.478672958828416e-10,
       0.9478672958828416,
@@ -28994,20 +28351,6 @@
       7.905138321173583e-10,
       0.05138339908762829
     ],
-    "Poland|Mazowieckie": [
-      2.352941159861592e-09,
-      0.9411764639446367,
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      0.058823528996539795
-    ],
-    "Poland|Ma\u0142opolskie": [
-      1.3513513458729e-09,
-      0.9459459421110299,
-      1.3513513458729e-09,
-      1.3513513458729e-09,
-      0.054054053834916
-    ],
     "Poland|Opole": [
       4.999999992499999e-10,
       0.9499999985749998,
@@ -29015,33 +28358,12 @@
       4.999999992499999e-10,
       0.049999999925
     ],
-    "Poland|Opolskie": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
-    ],
-    "Poland|Podkarpackie": [
-      1.3513513458729e-09,
-      0.9459459421110299,
-      1.3513513458729e-09,
-      1.3513513458729e-09,
-      0.054054053834916
-    ],
     "Poland|Podlachian": [
       6.329113912033326e-10,
       0.949367086804999,
       6.329113912033326e-10,
       6.329113912033326e-10,
       0.05063291129626662
-    ],
-    "Poland|Podlaskie": [
-      1.4869888469203028e-10,
-      0.9516728620289938,
-      1.4869888469203028e-10,
-      1.4869888469203028e-10,
-      0.048327137524909844
     ],
     "Poland|Pomeranian": [
       3.52112675684388e-10,
@@ -29092,19 +28414,12 @@
       4.319654422047964e-10,
       0.04967602585355159
     ],
-    "Poland|Zachodniopomorskie": [
-      3.1249999707031254e-09,
-      0.9374999912109376,
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      0.06249999941406251
-    ],
     "Poland|dolno\u015bl\u0105skie": [
-      1.0695187162343793e-10,
-      0.9518716574485975,
-      1.0695187162343793e-10,
-      1.0695187162343793e-10,
-      0.048128342230547065
+      9.713453129758102e-11,
+      0.9519184067162939,
+      9.713453129758102e-11,
+      9.713453129758102e-11,
+      0.04808159299230261
     ],
     "Poland|kujawsko-pomorskie": [
       8.620689632877525e-10,
@@ -29128,39 +28443,39 @@
       0.05063291129626662
     ],
     "Poland|mazowieckie": [
-      3.169572104751595e-10,
-      0.9508716314254786,
-      3.169572104751595e-10,
-      3.169572104751595e-10,
-      0.04912836762364973
+      2.797202794855494e-10,
+      0.951048950250868,
+      2.797202794855494e-10,
+      2.797202794855494e-10,
+      0.048951048909971144
     ],
     "Poland|ma\u0142opolskie": [
-      2.265005660975081e-10,
-      0.9513023776095341,
-      2.265005660975081e-10,
-      2.265005660975081e-10,
-      0.04869762171096424
+      1.9417475716844188e-10,
+      0.9514563101253652,
+      1.9417475716844188e-10,
+      1.9417475716844188e-10,
+      0.04854368929211047
     ],
     "Poland|opolskie": [
-      1.7621145365134195e-10,
-      0.9515418497172465,
-      1.7621145365134195e-10,
-      1.7621145365134195e-10,
-      0.04845814975411904
+      1.730103805330396e-10,
+      0.9515570929317178,
+      1.730103805330396e-10,
+      1.730103805330396e-10,
+      0.04844290654925109
     ],
     "Poland|podkarpackie": [
-      2.971768199430816e-10,
-      0.9509658238178611,
-      2.971768199430816e-10,
-      2.971768199430816e-10,
-      0.04903417529060847
+      2.43902438845925e-10,
+      0.9512195114991077,
+      2.43902438845925e-10,
+      2.43902438845925e-10,
+      0.048780487769185005
     ],
     "Poland|podlaskie": [
-      3.3955857350808973e-10,
-      0.9507640058226512,
-      3.3955857350808973e-10,
-      3.3955857350808973e-10,
-      0.04923599315867302
+      1.0346611481527178e-10,
+      0.9518882563005004,
+      1.0346611481527178e-10,
+      1.0346611481527178e-10,
+      0.04811174338910138
     ],
     "Poland|pomorskie": [
       2.3201856132342093e-10,
@@ -29184,18 +28499,11 @@
       0.04912836762364973
     ],
     "Poland|zachodniopomorskie": [
-      4.319654422047964e-10,
-      0.950323972850552,
-      4.319654422047964e-10,
-      4.319654422047964e-10,
-      0.04967602585355159
-    ],
-    "Poland|\u0141\u00f3dzkie": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
+      3.802281364484089e-10,
+      0.9505703411210223,
+      3.802281364484089e-10,
+      3.802281364484089e-10,
+      0.049429657738293165
     ],
     "Poland|\u0141\u00f3d\u017a": [
       1.5748031421662846e-09,
@@ -29205,18 +28513,11 @@
       0.055118109975819965
     ],
     "Poland|\u0142\u00f3dzkie": [
-      1.5600624017659615e-10,
-      0.9516380650772365,
-      1.5600624017659615e-10,
-      1.5600624017659615e-10,
-      0.0483619344547448
-    ],
-    "Poland|\u015awi\u0119tokrzyskie": [
-      6.779661003160011e-10,
-      0.9491525404424015,
-      6.779661003160011e-10,
-      6.779661003160011e-10,
-      0.050847457523700075
+      1.5349194160238284e-10,
+      0.9516500379347735,
+      1.5349194160238284e-10,
+      1.5349194160238284e-10,
+      0.0483499616047506
     ],
     "Poland|\u015bl\u0105skie": [
       1.5860428224015657e-10,
@@ -29226,11 +28527,11 @@
       0.048374306083247755
     ],
     "Poland|\u015bwi\u0119tokrzyskie": [
-      2.1621621607596784e-10,
-      0.9513513507342586,
-      2.1621621607596784e-10,
-      2.1621621607596784e-10,
-      0.04864864861709277
+      1.640689088609997e-10,
+      0.9515996713937983,
+      1.640689088609997e-10,
+      1.640689088609997e-10,
+      0.04840032811399492
     ],
     "Portugal|": [
       1.5748031421662846e-09,
@@ -29758,20 +29059,13 @@
       0.054054053834916
     ],
     "Puerto Rico|Puerto Rico": [
-      7.43770918391126e-11,
-      7.43770918391126e-11,
-      7.43770918391126e-11,
-      0.9520267755406412,
-      0.04797322423622762
+      7.380073799104042e-11,
+      7.380073799104042e-11,
+      7.380073799104042e-11,
+      0.9520295200844215,
+      0.04797047969417628
     ],
     "Puerto Rico|Puerto Rico (Terr.)": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
-    ],
-    "Puerto Rico|Puerto rico": [
       9.090908842975212e-09,
       9.090908842975212e-09,
       9.090908842975212e-09,
@@ -30401,7 +29695,7 @@
       2.3781212824888553e-10,
       0.04875148629102154
     ],
-    "Russian Federation|Krasnoyarsk krai": [
+    "Russian Federation|Krasnoyarsk Krai": [
       9.090908842975215e-09,
       0.9090908842975214,
       9.090908842975215e-09,
@@ -31094,19 +30388,12 @@
       0.9503239728505521,
       0.049676025853551596
     ],
-    "Sao Tome and Principe|Sao Tome": [
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      0.9374999912109376,
-      3.1249999707031254e-09,
-      0.06249999941406251
-    ],
     "Sao Tome and Principe|Sao tome": [
-      8.620689632877527e-10,
-      8.620689632877527e-10,
-      8.620689632877527e-10,
-      0.9482758596165279,
-      0.05172413779726517
+      6.779661007756392e-10,
+      6.779661007756392e-10,
+      0.20338983023269175,
+      0.7457627108532031,
+      0.05084745755817294
     ],
     "Sao Tome and Principe|S\u00e3o Tom\u00e9": [
       2.2123893795520398e-10,
@@ -32082,20 +31369,13 @@
       0.054054053907962016
     ],
     "South Africa|Eastern Cape": [
-      9.648784253091e-12,
-      0.6348900038533878,
-      0.2132381319933111,
-      0.1042068699333828,
-      0.04766499421026955
+      9.629272989796542e-12,
+      0.6336061627286125,
+      0.21280693307450357,
+      0.10592200288776196,
+      0.04766490129949288
     ],
     "South Africa|Eastern Cape Province": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      0.06976744088696596
-    ],
-    "South Africa|Eastern cape": [
       4.6511627257977304e-09,
       4.6511627257977304e-09,
       4.6511627257977304e-09,
@@ -32222,11 +31502,11 @@
       0.09090908842975215
     ],
     "South Africa|Western Cape": [
-      2.727285124015853e-12,
-      0.5825481024897862,
-      0.300546820666547,
-      0.06927304215000267,
-      0.047632034690936874
+      2.7265043487670027e-12,
+      0.5826539793315084,
+      0.3004607792341237,
+      0.06925321045868187,
+      0.04763203097295954
     ],
     "South Africa|Western Cape Prov.": [
       9.090908842975212e-09,
@@ -32241,13 +31521,6 @@
       0.930232545159546,
       4.6511627257977304e-09,
       0.06976744088696596
-    ],
-    "South Africa|Western cape": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
     ],
     "South Sudan|Central Equatoria": [
       5.277044852096546e-10,
@@ -33264,18 +32537,18 @@
       0.9473684180609417,
       0.05263157878116343
     ],
-    "Sri Lanka|Sabaragamuwa Province": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
-    ],
     "Sri Lanka|Sabaragamuwa prov": [
       9.090908842975212e-09,
       9.090908842975212e-09,
       0.9090908842975213,
       9.090908842975212e-09,
+      0.09090908842975212
+    ],
+    "Sri Lanka|Sabaragamuwa province": [
+      9.090908842975212e-09,
+      9.090908842975212e-09,
+      9.090908842975212e-09,
+      0.9090908842975213,
       0.09090908842975212
     ],
     "Sri Lanka|Sabaraganywa Prov.": [
@@ -33313,19 +32586,12 @@
       0.9501238823246742,
       0.047721641708597586
     ],
-    "Sri Lanka|Uva Province": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      0.06976744088696596
-    ],
     "Sri Lanka|Uva province": [
-      4.6511627257977304e-09,
-      0.930232545159546,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.06976744088696596
+      2.352941165397924e-09,
+      0.4705882330795848,
+      2.352941165397924e-09,
+      0.4705882330795848,
+      0.0588235291349481
     ],
     "Sri Lanka|Vavuniya": [
       9.090908842975212e-09,
@@ -35722,18 +34988,11 @@
       0.09090908842975215
     ],
     "Trinidad and Tobago|Sangre Grande": [
-      1.2202562536643981e-10,
-      0.2562538132695236,
-      0.1952410005863037,
-      0.5003050640024033,
-      0.048200122019743726
-    ],
-    "Trinidad and Tobago|Sangre grande": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
+      1.2048192769632748e-10,
+      0.2530120481622877,
+      0.19277108431412396,
+      0.5060240963245753,
+      0.04819277107853099
     ],
     "Trinidad and Tobago|Siparia": [
       4.7505938197144e-10,
@@ -35784,13 +35043,6 @@
       0.9448818852997707,
       0.055118109975819965
     ],
-    "Trinidad and Tobago|TUNAPUNA/PIARCO": [
-      2.352941165397924e-09,
-      2.352941165397924e-09,
-      0.2352941165397924,
-      0.7058823496193772,
-      0.0588235291349481
-    ],
     "Trinidad and Tobago|Tobago": [
       1.0346611481527177e-10,
       1.0346611481527177e-10,
@@ -35806,11 +35058,11 @@
       0.049429657775882256
     ],
     "Trinidad and Tobago|Tunapuna/Piarco": [
-      4.622140050629899e-11,
-      0.48994684536676925,
-      0.14790848162015677,
-      0.31430552344283313,
-      0.04783914952401946
+      4.5341192471306225e-11,
+      0.48061664019584593,
+      0.14962593515531053,
+      0.32192246654627416,
+      0.047834958057228066
     ],
     "Tunisia|Ariana": [
       4.6511627257977304e-09,
@@ -36002,18 +35254,11 @@
       0.06249999941406251
     ],
     "Turks and Caicos Islands|North Caicos": [
-      1.8867924421502316e-09,
-      1.8867924421502316e-09,
-      1.8867924421502316e-09,
-      0.9433962210751158,
-      0.056603773264506954
-    ],
-    "Turks and Caicos Islands|North caicos": [
-      1.0526315756232686e-09,
-      1.0526315756232686e-09,
-      1.0526315756232686e-09,
-      0.9473684180609417,
-      0.05263157878116343
+      6.779661003160012e-10,
+      6.779661003160012e-10,
+      6.779661003160012e-10,
+      0.9491525404424016,
+      0.05084745752370008
     ],
     "Turks and Caicos Islands|Providenciales and West Caicos": [
       4.6511627257977304e-09,
@@ -37976,11 +37221,11 @@
       0.047771721702611625
     ],
     "United States of America|New Mexico": [
-      1.3582066239718605e-12,
-      0.9459909135964009,
-      0.004074619871915581,
-      0.002308951260752163,
-      0.047625515269573294
+      1.2768130745642534e-12,
+      0.9463738508670245,
+      0.0038304392236927598,
+      0.0021705822267592306,
+      0.047625127681246646
     ],
     "United States of America|New Mexico (State)": [
       9.090908842975215e-09,
@@ -37990,11 +37235,11 @@
       0.09090908842975215
     ],
     "United States of America|New York": [
-      1.0871337717869842e-11,
-      0.9490677827700371,
-      1.0871337717869842e-11,
-      0.0032614013153609523,
-      0.04767081589285925
+      1.0858942338780347e-11,
+      0.9490715604094023,
+      1.0858942338780347e-11,
+      0.003257682701634104,
+      0.04767075686724573
     ],
     "United States of America|New York (State)": [
       3.12499998046875e-09,
@@ -38002,20 +37247,6 @@
       3.12499998046875e-09,
       0.312499998046875,
       0.062499999609375
-    ],
-    "United States of America|New mexico": [
-      2.1303792073627794e-11,
-      0.9522795056911624,
-      2.1303792073627794e-11,
-      2.1303792073627794e-11,
-      0.04772049424492626
-    ],
-    "United States of America|New york": [
-      9.090908842975215e-09,
-      0.9090908842975214,
-      9.090908842975215e-09,
-      9.090908842975215e-09,
-      0.09090908842975215
     ],
     "United States of America|Nm": [
       9.090908842975215e-09,
@@ -38046,18 +37277,11 @@
       0.09090908842975215
     ],
     "United States of America|North Dakota": [
-      1.359619306224441e-10,
-      0.9245411282326199,
-      1.359619306224441e-10,
-      0.02719238612448882,
-      0.04826648537096766
-    ],
-    "United States of America|North dakota": [
-      3.1249999707031254e-09,
-      0.9374999912109376,
-      3.1249999707031254e-09,
-      3.1249999707031254e-09,
-      0.06249999941406251
+      1.3037809644579452e-10,
+      0.9256844847651411,
+      1.3037809644579452e-10,
+      0.026075619289158903,
+      0.048239895684943974
     ],
     "United States of America|Ohio": [
       3.5398230085989504e-11,
@@ -38137,11 +37361,11 @@
       0.09090908842975215
     ],
     "United States of America|South Dakota": [
-      7.481110196641265e-12,
-      0.9493528839537766,
-      7.481110196641265e-12,
-      0.002992444078656506,
-      0.04765467195260486
+      7.434391494945591e-12,
+      0.949371793904552,
+      7.434391494945591e-12,
+      0.0029737565979782365,
+      0.047654449482601245
     ],
     "United States of America|South Dakota (State)": [
       3.1249999707031254e-09,
@@ -38149,13 +37373,6 @@
       3.1249999707031254e-09,
       3.1249999707031254e-09,
       0.06249999941406251
-    ],
-    "United States of America|South dakota": [
-      1.1834319484611882e-09,
-      0.9467455587689505,
-      1.1834319484611882e-09,
-      1.1834319484611882e-09,
-      0.05325443768075347
     ],
     "United States of America|Tennesee": [
       9.090908842975215e-09,
@@ -39606,7 +38823,7 @@
       0.9513513507342586,
       0.04864864861709277
     ],
-    "Virgin Islands (British)|Virgin Gorda": [
+    "Virgin Islands (British)|Virgin gorda": [
       2.352941159861592e-09,
       2.352941159861592e-09,
       2.352941159861592e-09,
@@ -39628,46 +38845,25 @@
       0.09090908842975212
     ],
     "Virgin Islands (U.S.)|Saint Croix": [
-      8.620689632877527e-10,
-      8.620689632877527e-10,
-      8.620689632877527e-10,
-      0.9482758596165279,
-      0.05172413779726517
+      6.329113912033328e-10,
+      6.329113912033328e-10,
+      6.329113912033328e-10,
+      0.9493670868049991,
+      0.050632911296266625
     ],
     "Virgin Islands (U.S.)|Saint John": [
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      4.6511627257977304e-09,
-      0.930232545159546,
-      0.06976744088696596
-    ],
-    "Virgin Islands (U.S.)|Saint Thomas": [
-      1.0526315756232686e-09,
-      1.0526315756232686e-09,
-      1.0526315756232686e-09,
-      0.9473684180609417,
-      0.05263157878116343
-    ],
-    "Virgin Islands (U.S.)|Saint croix": [
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      2.352941159861592e-09,
-      0.9411764639446367,
-      0.058823528996539795
-    ],
-    "Virgin Islands (U.S.)|Saint john": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
+      3.1249999707031254e-09,
+      3.1249999707031254e-09,
+      3.1249999707031254e-09,
+      0.9374999912109376,
+      0.06249999941406251
     ],
     "Virgin Islands (U.S.)|Saint thomas": [
-      7.905138321173584e-10,
-      7.905138321173584e-10,
-      7.905138321173584e-10,
-      0.9486165985408301,
-      0.0513833990876283
+      4.524886871685674e-10,
+      4.524886871685674e-10,
+      4.524886871685674e-10,
+      0.9502262430539915,
+      0.04977375558854242
     ],
     "Virgin Islands (U.S.)|St. Croix": [
       6.329113912033328e-10,
@@ -39941,20 +39137,6 @@
       0.7594936699246915,
       6.329113916039095e-10,
       0.05063291132831277
-    ],
-    "nan|": [
-      3.169572106760833e-10,
-      0.06339144213521665,
-      0.7923930266902082,
-      0.09508716320282498,
-      0.04912836765479291
-    ],
-    "nan|Lai Chau": [
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      9.090908842975212e-09,
-      0.9090908842975213,
-      0.09090908842975212
     ],
     "\u00c5land Islands|": [
       1.5748031421662846e-09,
@@ -41624,13 +40806,6 @@
       0.35991045289547247,
       0.04770105045552435
     ],
-    "nan": [
-      3.0674846616357407e-10,
-      0.061349693232714816,
-      0.7668711654089352,
-      0.12269938646542963,
-      0.04907975458617185
-    ],
     "\u00c5land Islands": [
       1.5105740174423382e-10,
       0.951661630988673,
@@ -41640,10 +40815,10 @@
     ]
   },
   "global_default": [
-    1.2514383719787774e-14,
-    0.5259032100019895,
-    0.25368282669893394,
-    0.17279485608771367,
-    0.04761910721135045
+    1.2514893505452177e-14,
+    0.5259221302050706,
+    0.2536618734833091,
+    0.17279688909782984,
+    0.04761910721377801
   ]
 }
