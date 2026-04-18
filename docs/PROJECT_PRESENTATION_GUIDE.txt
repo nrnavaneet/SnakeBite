@@ -448,3 +448,239 @@ Always end with:
 * "This is a research/education prototype."
 * "Confidence is model confidence, not guaranteed truth."
 * "Emergency care decisions must follow clinical protocols, not this app alone."
+
+------------------------------------------------------------
+
+Extended Question Bank (Comprehensive Viva Prep)
+
+Note: No document can guarantee literally every possible question, but this section covers the most likely questions across technical, ML, product, deployment, and ethics.
+
+Priority Order (What examiners most likely ask first)
+
+Tier 1 - Must Prepare (very high probability)
+
+1) What problem are you solving?
+Short answer: Probabilistic venom-pattern estimation from image + symptoms + geo + context, with uncertainty-aware output.
+
+2) Is this a diagnosis tool / medical device?
+Short answer: No. It is educational/research decision-support and explicitly not a certified medical diagnosis device.
+
+3) Why these models (EfficientNet-B3, ResNet50, DenseNet121)?
+Short answer: Complementary CNNs reduce single-model failure; ensemble is more stable and robust.
+
+4) Why multimodal, not image only?
+Short answer: Photo alone misses many systemic signs. Symptoms and context add clinical signal; geo adds prior.
+
+5) How do you handle low confidence?
+Short answer: If final top confidence < 0.60, output is displayed as unknown.
+
+6) How do you define wound uncertainty?
+Short answer: Wound is uncertain if max confidence < 0.65 OR top1-top2 gap < 0.12.
+
+7) Why log-space fusion?
+Short answer: More stable evidence combination than naive linear averaging, especially when one modality is over-peaked.
+
+8) What are the five classes?
+Short answer: cytotoxic, hemotoxic, neurotoxic, non_venomous, not_snakebite.
+
+9) Is species output a true species ID?
+Short answer: No. It is a ranked hint based on venom probabilities + region + symptoms.
+
+10) Main limitations?
+Short answer: Not clinically validated device; data bias risk; geo prior is occurrence-based; symptom input can be noisy.
+
+Tier 2 - Likely Follow-up
+
+11) Why not ViT-only / latest architecture?
+12) Why not one giant model?
+13) Why symptom override is reduced when wound is confident?
+14) What if checkpoint is missing in production?
+15) Is confidence calibrated real-world probability?
+16) How does fallback chain work for geo (region -> country -> global)?
+17) What does make dev-all do on a fresh clone?
+18) How do you test branch-by-branch behavior?
+19) What is your strongest safety mechanism?
+20) How would you improve this next?
+
+Tier 3 - Nice to Prepare (lower probability, still useful)
+
+21) Why not segmentation pipeline first?
+22) Why these exact smoothing floors?
+23) What fairness checks would you run?
+24) How to make this publication-ready?
+25) How to make this clinically deployable?
+
+How to Use This Priority List
+
+Step 1: Memorize Tier 1 perfectly.
+Step 2: Prepare 1-2 sentence answers for Tier 2.
+Step 3: Keep Tier 3 as backup.
+
+------------------------------------------------------------
+
+A) Project Basics
+
+Q15) What exact problem are you solving?
+A: Probabilistic venom-pattern estimation from multimodal signals (image + symptoms + geography + context), with uncertainty-aware output.
+
+Q16) Is this a diagnosis engine?
+A: No. It is decision-support for education/research and explicitly not a clinical diagnosis tool.
+
+Q17) Who is the expected user?
+A: Developers, students, and research evaluators; not unsupervised patient self-diagnosis in emergencies.
+
+Q18) Why include not_snakebite as a class?
+A: To reduce forced venom predictions on irrelevant/non-bite images and improve safer abstention behavior.
+
+B) Data Questions
+
+Q19) What are your key data files?
+A: data/geo_data/snake_geo_clean.csv, data/wound_data/training_data.csv, data/symptom_data/processed/symptom_dataset.csv, and model assets in models/.
+
+Q20) Are labels balanced across classes?
+A: Usually not perfectly. Class imbalance risk exists and is acknowledged as a limitation.
+
+Q21) How do you handle unknown or noisy labels?
+A: Unknown labels are not used as supervised wound targets; uncertainty thresholds and unknown output protect the UI.
+
+Q22) Is geo data incidence data?
+A: No. It is occurrence-derived prior, not direct patient incidence.
+
+C) Model Choice and Architecture
+
+Q23) Why CNN ensemble and not one backbone?
+A: Better robustness via error diversity, reduced single-model overfitting, and safer behavior on hard images.
+
+Q24) Why EfficientNet-B3 weighted highest?
+A: It generally transfers strongly for fine-grained image patterns; weights are tuned/embedded for stable ensemble behavior.
+
+Q25) Why still keep a MobileNet fallback?
+A: Lighter deployment option and compatibility for constrained environments.
+
+Q26) Why not train end-to-end multimodal transformer?
+A: Requires larger synchronized multimodal datasets and more infrastructure; this system favors modularity, interpretability, and practical deployment.
+
+D) Uncertainty and Confidence
+
+Q27) What is model confidence exactly?
+A: Probability mass at argmax within model output space; not calibrated real-world correctness probability.
+
+Q28) Why two uncertainty layers (wound and final)?
+A: First layer checks image reliability; second layer checks final fused certainty for safer user-facing display.
+
+Q29) Why final threshold at 0.60?
+A: Conservative UI gate to avoid overstating certainty; configurable in ml/config.py.
+
+Q30) Why wound uncertain at max<0.65 or top2 gap<0.12?
+A: Captures both low-confidence and ambiguity cases where class separation is weak.
+
+E) Fusion Logic
+
+Q31) Why use log fusion instead of weighted average of probabilities?
+A: Log fusion behaves like weighted product-of-experts and avoids certain instability patterns from plain linear mixing.
+
+Q32) Why smooth symptom and geo vectors?
+A: To prevent near-one-hot distributions from unfairly vetoing other modalities.
+
+Q33) Why reduce symptom override when image is confident?
+A: Checklist input can be noisy; strong image evidence should not be flipped by one noisy symptom selection.
+
+Q34) What if modalities disagree strongly?
+A: Conflict handling and adaptive weights reduce abrupt flips; uncertainty can still force unknown.
+
+F) API and Engineering
+
+Q35) How does startup work?
+A: Loads symptom catalog, geo payloads, species payload, optionally downloads checkpoint from env URL, then loads wound predictor if checkpoint exists.
+
+Q36) What happens if no checkpoint exists?
+A: Wound branch becomes uniform; API still responds with warning and uses symptom+geo+context.
+
+Q37) Is there branch-level testing?
+A: Yes: /test/wound, /test/geo, /test/symptoms, and /test/wound/backbone.
+
+Q38) How do clients discover valid symptoms and regions?
+A: GET /symptoms and GET /geo/regions.
+
+G) Deployment and Ops
+
+Q39) Can I run after clone with one command?
+A: Yes, make dev-all now triggers first-run setup when .venv/uvicorn is missing.
+
+Q40) What external dependencies are still needed?
+A: python3 always; flutter for web/mobile client; cloudflared or ngrok for tunnel URLs.
+
+Q41) How to keep service reachable remotely?
+A: Use named tunnel/service setup (stable URL) and keep host + API process always online.
+
+Q42) How to stop everything quickly?
+A: make stop (or make kill) clears known pids and key ports.
+
+H) Quality, Validation, and Metrics
+
+Q43) Do you report clinical sensitivity/specificity?
+A: Not as a certified clinical validation claim in this repository state.
+
+Q44) How should this be evaluated properly?
+A: Use held-out datasets, per-class confusion matrix, calibration checks, subgroup analysis, and prospective validation plan.
+
+Q45) Is confidence calibrated?
+A: Not guaranteed calibrated as clinical probability; it is model confidence from fused distribution.
+
+I) Ethics and Safety
+
+Q46) What is the biggest misuse risk?
+A: Treating output as medical diagnosis and delaying emergency care.
+
+Q47) How do you mitigate harm?
+A: Clear disclaimers, unknown fallback, uncertainty flags, and explicit emergency warning.
+
+Q48) Can geography introduce bias?
+A: Yes. Geo priors can encode sampling bias and must be interpreted cautiously.
+
+J) Future Improvements
+
+Q49) What is your next technical upgrade?
+A: Better calibration + richer validation + cleaner region normalization + optional segmentation/quality pipeline.
+
+Q50) What would make this publication-ready?
+A: Robust dataset protocol, transparent metrics, uncertainty calibration, subgroup fairness analysis, and external validation.
+
+Q51) What would make it clinically closer?
+A: Regulatory pathway, prospective trials, clinician workflow integration, and strict post-market monitoring.
+
+K) Presentation Defense Questions
+
+Q52) If examiner says "Your model is overfitting", what do you reply?
+A: We reduce overfitting risk via ensemble diversity, uncertainty thresholds, multimodal fallback, and explicit limitations; full overfitting diagnosis needs train/val/test drift analysis.
+
+Q53) If examiner says "Why trust your output?"
+A: We do not ask blind trust. We provide probability + uncertainty + explainable branch outputs and force unknown when confidence is low.
+
+Q54) If examiner says "Why not remove geo because it is biased?"
+A: Geo is used as a weak prior, not a hard rule; fusion and uncertainty controls prevent pure geo dominance.
+
+Q55) If examiner says "What is your single strongest safety feature?"
+A: The unknown display gate on low fused confidence, plus explicit non-medical disclaimer.
+
+Q56) If examiner asks "What exactly did you engineer, not just train?"
+A: End-to-end multimodal backend, uncertainty policy, adaptive fusion, API routes, dev automation scripts, and presentation-ready explainability outputs.
+
+------------------------------------------------------------
+
+How to answer unexpected questions (strategy)
+
+1) Start with scope: "This is a research prototype, not a diagnostic device." 
+2) Explain current design decision and tradeoff.
+3) State known limitation honestly.
+4) Give concrete next improvement.
+
+Template answer:
+"Great question. In current scope, we chose X because Y tradeoff. Limitation is Z. Next step is A with metric B for validation."
+
+------------------------------------------------------------
+
+Final check sentence for your viva
+
+"Our design goal is safe probabilistic decision-support with uncertainty awareness, not overconfident diagnosis."
+

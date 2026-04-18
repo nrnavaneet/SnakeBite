@@ -1,7 +1,7 @@
 # SnakeBiteRx — common tasks (run from repo root)
 .PHONY: setup verify assets train train-fast train-both api lab web-build serve-web tunnel-api tunnel-web dev-all stop kill
 
-# Fresh clone: venv, pip install, build assets, flutter pub get (if flutter on PATH)
+# Fresh clone runtime setup: venv, pip install, flutter pub get (no asset build by default)
 setup:
 	bash scripts/setup_dev.sh
 
@@ -23,7 +23,12 @@ train-both:
 	bash scripts/train_both_checkpoints.sh
 
 api:
-	uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+	@if [ -x ".venv/bin/uvicorn" ]; then \
+		.venv/bin/uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000; \
+	else \
+		echo "ERROR: .venv/bin/uvicorn not found. Run: make setup"; \
+		exit 1; \
+	fi
 
 # Lab browser UI (/ui/lab.html) + Cloudflare tunnel — no Flutter. Lighter than dev-all (full stack).
 lab:

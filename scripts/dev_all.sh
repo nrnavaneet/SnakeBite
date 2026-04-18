@@ -13,7 +13,7 @@
 #   bash scripts/dev_all.sh --debug-web      # huge/slow JS (debug) — only for hot reload; default is --release for phone
 # Env: DEV_ALL_OPEN=0 — same as --no-open
 #      LAB_OPEN_DELAY_SEC (default 10) — seconds to wait before opening browser (tunnel + app warm-up)
-# First run: if .venv/uvicorn is missing, auto-runs scripts/setup_dev.sh
+# First run: if .venv/uvicorn is missing, auto-installs runtime deps (no asset rebuild)
 #
 set -euo pipefail
 
@@ -22,6 +22,7 @@ cd "$ROOT"
 
 API_PORT="${API_PORT:-8000}"
 WEB_PORT="${WEB_PORT:-37555}"
+API_HEALTH_TIMEOUT_SEC="${API_HEALTH_TIMEOUT_SEC:-180}"
 RUN_TUNNELS=1
 RUN_FLUTTER=1
 OPEN_TERMINALS=1
@@ -49,10 +50,19 @@ log() { printf '%s\n' "$*"; }
 
 die() { log "ERROR: $*"; exit 1; }
 
-ensure_first_run_setup() {
+ensure_runtime_deps() {
   if [[ ! -x "$ROOT/.venv/bin/uvicorn" ]]; then
-    log "First run detected (.venv/uvicorn missing). Running setup_dev.sh once…"
-    bash "$ROOT/scripts/setup_dev.sh"
+    log "First run detected (.venv/uvicorn missing). Installing runtime Python deps…"
+    python3 -m venv "$ROOT/.venv"
+    "$ROOT/.venv/bin/python" -m pip install --upgrade pip
+    "$ROOT/.venv/bin/pip" install -r "$ROOT/requirements.txt"
+  fi
+
+  if command -v flutter >/dev/null 2>&1; then
+    if [[ ! -d "$ROOT/mobile/snakebite_rx/.dart_tool" ]]; then
+      log "Flutter first run detected. Running flutter pub get…"
+      (cd "$ROOT/mobile/snakebite_rx" && flutter pub get >> /tmp/snakebite_flutter_web.log 2>&1)
+    fi
   fi
 }
 
@@ -93,7 +103,7 @@ free_ports() {
   sleep 0.5
 }
 
-ensure_first_run_setup
+ensure_runtime_deps
 
 UVICORN_BIN="$ROOT/.venv/bin/uvicorn"
 if [[ ! -x "$UVICORN_BIN" ]]; then
@@ -111,15 +121,23 @@ start_api() {
     nohup uvicorn backend.main:app --reload --host 0.0.0.0 --port "${API_PORT}" \
       >> /tmp/snakebite_api.log 2>&1 &
   fi
-  echo $! > /tmp/snakebite_api.pid
-  for _ in $(seq 1 40); do
+  local api_pid="$!"
+  echo "$api_pid" > /tmp/snakebite_api.pid
+  local checks=$((API_HEALTH_TIMEOUT_SEC * 4))
+  for i in $(seq 1 "$checks"); do
     if curl -sf "http://127.0.0.1:${API_PORT}/health" >/dev/null 2>&1; then
       log "  API healthy."
       return 0
     fi
+    if ! kill -0 "$api_pid" 2>/dev/null; then
+      die "API process exited early (pid ${api_pid}) — see /tmp/snakebite_api.log"
+    fi
+    if (( i % 40 == 0 )); then
+      log "  waiting for API health... (${i}/$checks checks) log: /tmp/snakebite_api.log"
+    fi
     sleep 0.25
   done
-  die "API did not become healthy — see /tmp/snakebite_api.log"
+  die "API did not become healthy within ${API_HEALTH_TIMEOUT_SEC}s — see /tmp/snakebite_api.log"
 }
 
 wait_for_tunnel_url() {

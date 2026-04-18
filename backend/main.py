@@ -30,7 +30,11 @@ from ml.fusion import (
 )
 from ml.image_quality import assess_image_quality
 from ml.geo_regions import geo_prior_from_region, load_geo_region_payload
-from ml.checkpoint_util import pick_wound_checkpoint
+from ml.checkpoint_util import (
+    WOUND_ENSEMBLE_FILENAME,
+    WOUND_MOBILENET_FILENAME,
+    pick_wound_checkpoint,
+)
 from ml.geo_species import load_geo_species_payload, rank_snake_species
 from ml.symptom_engine import load_catalog, rank_selected_symptoms, score_symptoms
 
@@ -111,8 +115,24 @@ def _startup() -> None:
     ck = pick_wound_checkpoint(ROOT)
     if ck is not None:
         from ml.infer import load_wound_predictor
+        candidates = [ck]
+        alt = (
+            ROOT / "models" / WOUND_MOBILENET_FILENAME
+            if ck.name == WOUND_ENSEMBLE_FILENAME
+            else ROOT / "models" / WOUND_ENSEMBLE_FILENAME
+        )
+        if alt.is_file() and alt not in candidates:
+            candidates.append(alt)
 
-        _wound_predictor, _wound_dev = load_wound_predictor(ck)
+        _wound_predictor, _wound_dev = None, None
+        for cand in candidates:
+            try:
+                _wound_predictor, _wound_dev = load_wound_predictor(cand)
+                if _wound_predictor is not None:
+                    logger.info("Loaded wound checkpoint: %s", cand.name)
+                    break
+            except Exception:
+                logger.exception("Failed loading wound checkpoint %s; trying fallback if available", cand)
     else:
         _wound_predictor, _wound_dev = None, None
 

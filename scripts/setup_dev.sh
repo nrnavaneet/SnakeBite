@@ -36,8 +36,13 @@ python -m pip install --upgrade pip
 echo "→ Installing Python dependencies (this may take several minutes) …"
 pip install -r "$ROOT/requirements.txt"
 
-echo "→ Building ML assets (symptom + geo catalogs, geo_index.pkl) …"
-python3 -m ml.build_assets
+if [[ "${SETUP_BUILD_ASSETS:-0}" == "1" ]]; then
+  echo "→ Building ML assets (symptom + geo catalogs, geo_index.pkl) …"
+  python3 -m ml.build_assets
+else
+  echo "→ Skipping ML asset build (SETUP_BUILD_ASSETS=0)."
+  echo "   If needed later, run: make assets"
+fi
 
 if command -v flutter >/dev/null 2>&1; then
   echo "→ flutter pub get (mobile/snakebite_rx) …"
