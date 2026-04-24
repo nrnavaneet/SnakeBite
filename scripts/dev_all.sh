@@ -324,6 +324,16 @@ start_flutter_web() {
   [[ -z "$api_base" ]] && api_base="http://127.0.0.1:${API_PORT}"
   command -v flutter >/dev/null 2>&1 || { log "  flutter not in PATH — skipping web server."; return 1; }
   cd "$ROOT/mobile/snakebite_rx"
+  # Keep web/api_config.json aligned with the active API URL so public web tunnels
+  # do not fall back to localhost (mixed-content / unreachable API from HTTPS origin).
+  python3 - "$api_base" <<'PY'
+import json
+import pathlib
+import sys
+
+cfg = pathlib.Path("web/api_config.json")
+cfg.write_text(json.dumps({"apiBase": sys.argv[1]}, indent=2) + "\n", encoding="utf-8")
+PY
   flutter pub get >> /tmp/snakebite_flutter_web.log 2>&1 || true
 
   local -a flutter_args=(

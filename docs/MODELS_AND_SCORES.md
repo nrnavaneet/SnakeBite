@@ -6,7 +6,7 @@ Outputs are always over:
 
 `cytotoxic` · `hemotoxic` · `neurotoxic` · `non_venomous` · `not_snakebite`
 
-Same labels are used for wound CNN, symptom KB, geo prior, and fused result.
+Same labels are used for wound CNN, symptom XGBoost model, Bayesian geo prior, and fused result.
 
 ## Wound image branch
 
@@ -17,8 +17,8 @@ Same labels are used for wound CNN, symptom KB, geo prior, and fused result.
 
 ## Symptom & geo branches
 
-- **Symptoms:** KB matrix maps selected symptoms → probability vector over the 5 classes.
-- **Geo:** Country/state → regional venom-type prior + species ranking (from GBIF-derived tables, **not** bite registries).
+- **Symptoms:** XGBoost multiclass model maps selected symptom set → probability vector over the 5 classes (catalog fallback only if model asset is missing).
+- **Geo:** Country/state → Bayesian (Dirichlet-smoothed) regional venom-type prior + species ranking (GBIF-derived, **not** bite registries).
 
 ## Multimodal fusion (`ml/fusion.py`)
 

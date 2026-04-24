@@ -1,12 +1,16 @@
-"""Score venom-type priors from selected clinical symptoms (knowledge base CSV)."""
+"""Score venom-type priors from selected clinical symptoms (XGBoost + catalog utilities)."""
 from __future__ import annotations
 
 import json
+import pickle
+import platform
+import sys
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MultiLabelBinarizer
 
 from ml.config import CLASSES, CLASS_TO_IDX, MODELS, SYMPTOM_CSV
 from ml.symptom_plain_labels import attach_plain_labels
@@ -20,6 +24,30 @@ VENOM_MAP = {
     "myotoxic": "hemotoxic",  # coarse: muscle involvement → hemotoxic lean
     "unknown": None,
 }
+
+
+def _xgb_runtime_allowed() -> bool:
+    """
+    Guard known unstable runtime combo:
+    - macOS + Python 3.13 + OpenMP-backed XGBoost can segfault in libomp.
+    Allow explicit override with SNAKEBITE_FORCE_XGB=1.
+    """
+    import os
+
+    if os.environ.get("SNAKEBITE_FORCE_XGB", "").strip() == "1":
+        return True
+    return not (platform.system() == "Darwin" and sys.version_info >= (3, 13))
+
+
+def _get_xgb_classifier() -> Any | None:
+    """Lazy import XGBoost to avoid loading libomp at module import time."""
+    if not _xgb_runtime_allowed():
+        return None
+    try:
+        from xgboost import XGBClassifier
+    except Exception:
+        return None
+    return XGBClassifier
 
 
 def load_symptom_table() -> pd.DataFrame:
@@ -47,7 +75,7 @@ def load_symptom_table() -> pd.DataFrame:
 
 
 def build_symptom_catalog(df: pd.DataFrame) -> tuple[list[str], np.ndarray]:
-    """Rows: symptoms, cols: CLASSES weights (sum of CSV weights per class)."""
+    """Rows: symptoms, cols: CLASSES aggregate weights (used for ranking/explainability)."""
     rows: list[tuple[str, np.ndarray]] = []
     for sym, g in df.groupby("symptom"):
         vec = np.zeros(len(CLASSES), dtype=np.float64)
@@ -67,6 +95,50 @@ def build_symptom_catalog(df: pd.DataFrame) -> tuple[list[str], np.ndarray]:
     else:
         mat = np.stack([r[1] for r in rows], axis=0)
     return symptoms, mat
+
+
+def _train_xgb_symptom_model(df: pd.DataFrame, symptoms: list[str]) -> Any | None:
+    """Train multiclass XGBoost on symptom rows (single-symptom samples with row weights)."""
+    XGBClassifier = _get_xgb_classifier()
+    if XGBClassifier is None or not symptoms:
+        return None
+    rows = []
+    labels = []
+    weights = []
+    for _, r in df.iterrows():
+        vt = VENOM_MAP.get(str(r["venom_type"]).strip().lower())
+        sym = str(r.get("symptom") or "").strip()
+        if vt is None or not sym or sym not in symptoms:
+            continue
+        rows.append([sym])
+        labels.append(CLASS_TO_IDX[vt])
+        try:
+            w = float(r.get("weight") or 1.0)
+        except Exception:
+            w = 1.0
+        weights.append(max(1e-6, w))
+    if not rows:
+        return None
+    mlb = MultiLabelBinarizer(classes=symptoms)
+    X = mlb.fit_transform(rows).astype(np.float32)
+    y = np.asarray(labels, dtype=np.int64)
+    sw = np.asarray(weights, dtype=np.float32)
+    model = XGBClassifier(
+        objective="multi:softprob",
+        num_class=len(CLASSES),
+        n_estimators=180,
+        max_depth=4,
+        learning_rate=0.08,
+        subsample=0.9,
+        colsample_bytree=0.9,
+        reg_lambda=1.0,
+        random_state=42,
+        tree_method="hist",
+        eval_metric="mlogloss",
+        n_jobs=1,
+    )
+    model.fit(X, y, sample_weight=sw)
+    return model
 
 
 def rank_selected_symptoms(
@@ -116,6 +188,23 @@ def score_symptoms(selected: list[str], symptoms: list[str], mat: np.ndarray) ->
     idx = [symptoms.index(s) for s in selected if s in symptoms]
     if not idx:
         return np.ones(len(CLASSES), dtype=np.float64) / len(CLASSES)
+
+    xgb_path = MODELS / "symptom_xgb.pkl"
+    if _xgb_runtime_allowed() and xgb_path.is_file():
+        try:
+            blob = pickle.loads(xgb_path.read_bytes())
+            model = blob.get("model")
+            vocab = blob.get("symptoms") or []
+            if model is not None and vocab and all(s in set(vocab) for s in selected):
+                mlb = MultiLabelBinarizer(classes=vocab)
+                X = mlb.fit_transform([selected]).astype(np.float32)
+                proba = np.asarray(model.predict_proba(X)[0], dtype=np.float64)
+                proba = np.maximum(proba, 1e-8)
+                return proba / proba.sum()
+        except Exception:
+            pass
+
+    # Fallback catalog scoring for missing model or out-of-vocabulary symptoms.
     v = mat[idx].sum(axis=0)
     v = np.maximum(v, 1e-8)
     return v / v.sum()
@@ -132,8 +221,15 @@ def save_catalog(path: Path | None = None) -> Path:
         "symptoms": symptoms,
         "weight_rows": mat.tolist(),
         "items": items,
+        "model_type": "xgboost_symptom_classifier",
     }
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+    xgb = _train_xgb_symptom_model(df, symptoms)
+    if xgb is not None:
+        xgb_payload = {"symptoms": symptoms, "model": xgb}
+        (MODELS / "symptom_xgb.pkl").write_bytes(pickle.dumps(xgb_payload))
+
     return path
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build symptom_catalog.json and geo_index.pkl (no GPU). Run once before serving."""
+"""Build symptom catalog/model and Bayesian geo priors (no GPU). Run once before serving."""
 from __future__ import annotations
 
 from ml.geo_model import build_geo_index
@@ -9,10 +9,10 @@ from ml.symptom_engine import save_catalog
 
 
 def main() -> None:
-    print("Building symptom catalog...")
+    print("Building symptom catalog + XGBoost symptom model...")
     p = save_catalog()
     print("  wrote", p)
-    print("Building geo region priors (country/state)...")
+    print("Building Bayesian geo region priors (country/state)...")
     gr = build_geo_region_json()
     print("  wrote", gr)
     print("Building geo species table (region × venom → species)...")

@@ -14,7 +14,7 @@ This doc explains **design intent** — not a clinical validation report. Tune w
 
 ## Why symptom + geo + context, not image alone?
 
-- A photo **cannot** show systemic neurotoxic progression, coagulopathy, or many hemotoxic signs. **Symptoms** (checklist → KB matrix) encode that side.
+- A photo **cannot** show systemic neurotoxic progression, coagulopathy, or many hemotoxic signs. **Symptoms** (checklist → XGBoost symptom classifier) encode that side.
 - **Geography** injects **species / regional priors** (GBIF-derived, **not** bite registries): it answers “what venom patterns occur in this region?” not “this patient was bitten here.”
 - **Context** (time since bite, circumstance, age, weight) adjusts a **weak heuristic prior** in log-space (e.g. early hours → slightly more local hemo/cyto emphasis; krait-like contexts → neuro bump). It is **not** a substitute for exam.
 
@@ -36,7 +36,7 @@ Constants: `W_WOUND`, `W_SYMPTOM`, … through `W_WOUND_CONFIDENT` / `W_UNCERTAI
 
 ### Why smooth symptom / geo probabilities?
 
-- Symptom KB can be **almost one-hot**. Taking `log` of tiny probabilities would **veto** other classes. **Floors** (`SYMPTOM_PROB_FLOOR`, `GEO_PROB_FLOOR`) renormalize so fusion stays stable.
+- Symptom model outputs can become highly peaked. Taking `log` of tiny probabilities would **veto** other classes. **Floors** (`SYMPTOM_PROB_FLOOR`, `GEO_PROB_FLOOR`) renormalize so fusion stays stable.
 - If the **wound argmax disagrees** with the **symptom argmax** but the wound is confident (≥ ~0.5 max), the symptom vector is **blended toward uniform** (`SYMPTOM_CONFLICT_UNIFORM_MIX`) so a single checked box cannot flip a strong image read.
 
 ---

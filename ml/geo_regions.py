@@ -19,11 +19,17 @@ def _map_vt(v: object) -> str | None:
     return s if s in GEO_CLASSES else None
 
 
-def _vec_to_prob(c4: np.ndarray) -> np.ndarray:
-    """4 venom counts → 5-class prob with small not_snakebite mass."""
+def _vec_to_prob_bayes(c4: np.ndarray, alpha4: np.ndarray) -> np.ndarray:
+    """Bayesian (Dirichlet-smoothed) regional prior over 4 venom buckets + not_snakebite tail."""
+    c4 = np.maximum(c4.astype(np.float64), 0.0)
+    alpha4 = np.maximum(alpha4.astype(np.float64), 1e-8)
+    post = c4 + alpha4
+    post = post / post.sum()
     v = np.zeros(len(CLASSES), dtype=np.float64)
-    v[:4] = np.maximum(c4.astype(np.float64), 0.0)
-    v[4] = 0.05 * (v[:4].sum() + 1.0)
+    # Keep a small explicit mass for not_snakebite; renormalize venom buckets to remaining mass.
+    not_snakebite_mass = 0.05
+    v[:4] = post * (1.0 - not_snakebite_mass)
+    v[4] = not_snakebite_mass
     v = np.maximum(v, 1e-8)
     return v / v.sum()
 
@@ -54,7 +60,7 @@ def build_geo_region_json(out_path: Path | None = None) -> Path:
             pair[k] = 0
     pair = pair[[0, 1, 2, 3]]
 
-    region: dict[str, list[float]] = {}
+    region_counts: dict[str, np.ndarray] = {}
     country_tot: dict[str, np.ndarray] = {}
     glob = np.zeros(4, dtype=np.float64)
 
@@ -63,13 +69,21 @@ def build_geo_region_json(out_path: Path | None = None) -> Path:
         glob += c4
         country_tot[c] = country_tot.get(c, np.zeros(4)) + c4
         key = _key(c, s)
-        region[key] = _vec_to_prob(c4).tolist()
+        region_counts[key] = c4
+
+    # Dirichlet prior strength proportional to global class frequency.
+    g = np.maximum(glob, 1.0)
+    alpha4 = (g / g.sum()) * 200.0
+
+    region: dict[str, list[float]] = {}
+    for k, c4 in region_counts.items():
+        region[k] = _vec_to_prob_bayes(c4, alpha4).tolist()
 
     country_default: dict[str, list[float]] = {}
     for c, c4 in country_tot.items():
-        country_default[c] = _vec_to_prob(c4).tolist()
+        country_default[c] = _vec_to_prob_bayes(c4, alpha4).tolist()
 
-    default = _vec_to_prob(glob).tolist()
+    default = _vec_to_prob_bayes(glob, alpha4).tolist()
 
     # States per country for UI
     states_by_country: dict[str, list[str]] = {}
@@ -83,6 +97,7 @@ def build_geo_region_json(out_path: Path | None = None) -> Path:
     countries_sorted = sorted(country_tot.keys())
 
     payload: dict[str, Any] = {
+        "model_type": "bayesian_spatial_region_prior",
         "classes": list(CLASSES),
         "countries": countries_sorted,
         "states_by_country": states_by_country,

@@ -52,7 +52,7 @@ bash scripts/setup_dev.sh
 This will:
 
 1. Create **`.venv`** (if missing) and `pip install -r requirements.txt`
-2. Run **`python3 -m ml.build_assets`** (same as `make assets`) — symptom/geo JSON and `geo_index.pkl`
+2. (Optional) Run **`python3 -m ml.build_assets`** (`make assets`) to regenerate symptom XGBoost + Bayesian geo assets
 3. Run **`flutter pub get`** in `mobile/snakebite_rx` if `flutter` is on your `PATH`
 
 Then start the stack manually (two terminals):
@@ -122,12 +122,12 @@ Run all commands from the **repo root** with `source .venv/bin/activate` (except
 |---------|---------|
 | `make setup` | **Bootstrap:** venv, `pip install`, `make assets`, `flutter pub get` if available (`scripts/setup_dev.sh`) |
 | `make lab` | **Lab + tunnel:** kills prior PIDs + ports, starts fresh, waits **10s** (override: `LAB_OPEN_DELAY_SEC`) then **opens public HTTPS lab URL** (`LAB_OPEN=0` skips). No Flutter. |
-| `make verify` | Smoke-test stack (requires checkpoint + `data/` samples — see script output) |
+| `make verify` | Smoke-test stack (requires checkpoint + built assets under `models/`) |
 | `make assets` | Rebuild symptom/geo JSON + `geo_index.pkl` (`python3 -m ml.build_assets`) |
 | `make train` | Train wound ensemble → `models/wound_ensemble.pt` |
 | `make train-fast` | Shorter training run |
 | `make train-both` | Ensemble + MobileNet (`scripts/train_both_checkpoints.sh`) |
-| `make api` | Start FastAPI with **uvicorn** on **0.0.0.0:8000** (reload) |
+| `make api` | Start FastAPI with **uvicorn** on **0.0.0.0:8000** (stable mode, no reload) |
 | `make web-build` | Release Flutter web build → `mobile/snakebite_rx/build/web` (`scripts/build_web.sh`) |
 | `make serve-web` | Static server for `build/web` (default port **8090**; needs API separately) |
 | `make tunnel-api` | Public HTTPS tunnel to local port 8000 (`scripts/dev_tunnel.sh`; needs `cloudflared` etc.) |

@@ -1142,5 +1142,6 @@
       "label": "Blood clotting failure (VICC)",
       "category": "Bleeding & clotting"
     }
-  ]
+  ],
+  "model_type": "xgboost_symptom_classifier_with_matrix_fallback"
 }

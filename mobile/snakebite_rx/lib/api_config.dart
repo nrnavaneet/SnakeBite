@@ -81,7 +81,7 @@ Future<String> resolveApiBaseUrl() async {
     if (onPublicHost) {
       // Non-loopback HTTPS host: do not fall back to 127.0.0.1 from prefs or defaults.
       if (saved.isNotEmpty && !_isLoopbackUrl(saved)) return saved;
-      if (fromSite != null) return fromSite;
+      if (fromSite != null && !_isLoopbackUrl(fromSite)) return fromSite;
       return '';
     }
 
