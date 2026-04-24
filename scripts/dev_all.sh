@@ -50,6 +50,20 @@ log() { printf '%s\n' "$*"; }
 
 die() { log "ERROR: $*"; exit 1; }
 
+require_start_password() {
+  local expected="${DEV_ALL_PASSWORD:-112404}"
+  local entered=""
+  if [[ ! -t 0 ]]; then
+    die "Interactive terminal required for password prompt."
+  fi
+  printf "Enter password to start dev-all: "
+  stty -echo
+  IFS= read -r entered
+  stty echo
+  printf "\n"
+  [[ "$entered" == "$expected" ]] || die "Incorrect password."
+}
+
 is_windows_shell() {
   local u
   u="$(uname -s 2>/dev/null || true)"
@@ -76,6 +90,36 @@ lfs_install_hint() {
   fi
 }
 
+try_install_git() {
+  if command -v git >/dev/null 2>&1; then
+    return 0
+  fi
+  log "  git not found; attempting install..."
+  if [[ "$(uname -s)" == "Darwin" ]] && command -v brew >/dev/null 2>&1; then
+    brew install git >/dev/null 2>&1 || true
+  elif is_windows_shell && command -v winget >/dev/null 2>&1; then
+    winget install --id Git.Git -e --accept-package-agreements --accept-source-agreements >/dev/null 2>&1 || true
+  elif is_windows_shell && command -v choco >/dev/null 2>&1; then
+    choco install git -y >/dev/null 2>&1 || true
+  fi
+  command -v git >/dev/null 2>&1
+}
+
+try_install_git_lfs() {
+  if command -v git >/dev/null 2>&1 && git lfs version >/dev/null 2>&1; then
+    return 0
+  fi
+  log "  git-lfs not found; attempting install..."
+  if [[ "$(uname -s)" == "Darwin" ]] && command -v brew >/dev/null 2>&1; then
+    brew install git-lfs >/dev/null 2>&1 || true
+  elif is_windows_shell && command -v winget >/dev/null 2>&1; then
+    winget install --id GitHub.GitLFS -e --accept-package-agreements --accept-source-agreements >/dev/null 2>&1 || true
+  elif is_windows_shell && command -v choco >/dev/null 2>&1; then
+    choco install git-lfs -y >/dev/null 2>&1 || true
+  fi
+  command -v git >/dev/null 2>&1 && git lfs version >/dev/null 2>&1
+}
+
 ensure_checkpoints_resolved_from_lfs() {
   local files=("$ROOT/models/wound_ensemble.pt" "$ROOT/models/wound_mobilenet.pt")
   local need_lfs=0
@@ -91,17 +135,18 @@ ensure_checkpoints_resolved_from_lfs() {
   [[ "$need_lfs" == 1 ]] || return 0
 
   log "Detected Git LFS pointer checkpoint(s) under models/*.pt."
-  if ! command -v git >/dev/null 2>&1; then
+  if ! try_install_git; then
     log "  git not found; cannot auto-fetch LFS objects."
-    log "  Install and run: $(lfs_install_hint)"
+    log "  Install git + git-lfs, then run: git lfs install && git lfs pull"
     return 0
   fi
-  if ! git lfs version >/dev/null 2>&1; then
+  if ! try_install_git_lfs; then
     log "  git-lfs not installed."
     log "  Install and run: $(lfs_install_hint)"
     return 0
   fi
 
+  git lfs install >/dev/null 2>&1 || true
   log "  Running git lfs pull for wound checkpoints..."
   (
     cd "$ROOT"
@@ -356,6 +401,7 @@ EOF
 }
 
 # --- run ---
+require_start_password
 kill_snakebite_pids
 free_ports
 clean_scratch
